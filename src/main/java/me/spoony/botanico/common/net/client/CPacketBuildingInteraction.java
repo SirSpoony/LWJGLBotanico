@@ -1,9 +1,11 @@
-package me.spoony.botanico.common.net;
+package me.spoony.botanico.common.net.client;
 
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.ItemBuilding;
 import me.spoony.botanico.common.items.ItemSlot;
+import me.spoony.botanico.common.net.AutoPacketAdapter;
+import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.common.util.position.TilePosition;
 import me.spoony.botanico.server.level.ServerPlane;
 import me.spoony.botanico.server.net.BotanicoServer;

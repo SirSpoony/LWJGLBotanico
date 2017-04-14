@@ -1,7 +1,9 @@
 package me.spoony.botanico.client;
 
 import me.spoony.botanico.common.items.ItemSlot;
-import me.spoony.botanico.common.net.*;
+import me.spoony.botanico.common.net.client.CPacketInventoryButtonClick;
+import me.spoony.botanico.common.net.client.CPacketInventorySlotClick;
+import me.spoony.botanico.common.net.client.CPacketUseItem;
 import me.spoony.botanico.common.util.position.TilePosition;
 
 /**

@@ -1,6 +1,8 @@
-package me.spoony.botanico.common.net;
+package me.spoony.botanico.common.net.server;
 
 import me.spoony.botanico.client.BotanicoClient;
+import me.spoony.botanico.common.net.AutoPacketAdapter;
+import me.spoony.botanico.common.net.IClientHandler;
 import me.spoony.botanico.common.util.position.TilePosition;
 
 /**

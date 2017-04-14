@@ -1,6 +1,7 @@
 package me.spoony.botanico.client;
 
 import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.net.ServerNetworkManager;
 
 /**
  * Created by Colten on 12/28/2016.
@@ -19,6 +20,6 @@ public class ClientConnectionConfig {
     public ClientConnectionConfig(String playerName, String serverAddress) {
         this.playerName = playerName;
         this.serverAddress = serverAddress;
-        this.port = BotanicoServer.DEFAULT_PORT;
+        this.port = ServerNetworkManager.DEFAULT_PORT;
     }
 }

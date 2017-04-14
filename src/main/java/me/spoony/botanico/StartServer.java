@@ -29,7 +29,6 @@ public class StartServer {
         Scanner scanner = new Scanner(System.in);
         do {
             String command = scanner.nextLine();
-            server.sendConsoleCommand(command);
             if (!BotanicoServer.RUNNING) {
                 break;
             }

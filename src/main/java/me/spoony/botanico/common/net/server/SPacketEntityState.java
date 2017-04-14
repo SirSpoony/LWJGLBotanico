@@ -1,7 +1,9 @@
-package me.spoony.botanico.common.net;
+package me.spoony.botanico.common.net.server;
 
 import me.spoony.botanico.ClientOnly;
 import me.spoony.botanico.client.BotanicoClient;
+import me.spoony.botanico.common.net.AutoPacketAdapter;
+import me.spoony.botanico.common.net.IClientHandler;
 
 /**
  * Created by Colten on 12/30/2016.

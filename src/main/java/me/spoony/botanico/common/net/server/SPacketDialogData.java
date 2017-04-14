@@ -1,9 +1,13 @@
-package me.spoony.botanico.common.net;
+package me.spoony.botanico.common.net.server;
 
 import me.spoony.botanico.client.BotanicoClient;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.dialog.DialogKnappingStation;
+import me.spoony.botanico.common.net.IPacketInterpreter;
+import me.spoony.botanico.common.net.Packet;
+import me.spoony.botanico.common.net.PacketDecoder;
+import me.spoony.botanico.common.net.PacketEncoder;
 
 /**
  * Created by Colten on 12/2/2016.

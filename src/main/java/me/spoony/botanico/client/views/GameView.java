@@ -84,7 +84,7 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
 
             try {
                 fullscreenDialog = new GameViewFullscreenDialog("Starting Server...");
-                server.run().sync();
+                server.run();
                 fullscreenDialog = new GameViewFullscreenDialog("Starting Client...");
                 client.begin().sync();
                 fullscreenDialog = new GameViewFullscreenDialog("Letting Chunks Load...");

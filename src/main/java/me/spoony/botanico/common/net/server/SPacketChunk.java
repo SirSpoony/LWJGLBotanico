@@ -1,8 +1,12 @@
-package me.spoony.botanico.common.net;
+package me.spoony.botanico.common.net.server;
 
 import me.spoony.botanico.client.BotanicoClient;
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.level.Chunk;
+import me.spoony.botanico.common.net.IClientHandler;
+import me.spoony.botanico.common.net.Packet;
+import me.spoony.botanico.common.net.PacketDecoder;
+import me.spoony.botanico.common.net.PacketEncoder;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.util.position.ChunkPosition;
 

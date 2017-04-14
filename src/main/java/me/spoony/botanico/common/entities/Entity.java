@@ -82,7 +82,7 @@ public class Entity {
 
     @ServerOnly
     public void updateState() {
-        BotanicoServer.getCurrentInstance().packetHandler.sendEntityState(this);
+        BotanicoServer.getCurrentInstance().getClientManager().getPacketHandler().sendEntityState(this);
     }
 
     public void remove(IPlane level) {

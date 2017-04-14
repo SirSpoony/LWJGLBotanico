@@ -8,6 +8,7 @@ import me.spoony.botanico.client.graphics.gui.control.GUITextBox;
 import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.net.ServerNetworkManager;
 
 /**
  * Created by Colten on 11/18/2016.
@@ -87,7 +88,7 @@ public class MultiplayerConnectView extends MenuView
     public void connect() {
         try {
             String serverIP = guiIPTextField.text;
-            int port = BotanicoServer.DEFAULT_PORT;
+            int port = ServerNetworkManager.DEFAULT_PORT;
 
             if (guiIPTextField.text.contains(":")) {
                 String[] split = guiIPTextField.text.split(":");

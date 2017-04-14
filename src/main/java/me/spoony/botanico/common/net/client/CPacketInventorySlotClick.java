@@ -1,4 +1,4 @@
-package me.spoony.botanico.common.net;
+package me.spoony.botanico.common.net.client;
 
 import com.google.common.collect.Range;
 import me.spoony.botanico.common.dialog.Dialog;
@@ -6,6 +6,8 @@ import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.Item;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.items.ItemStack;
+import me.spoony.botanico.common.net.AutoPacketAdapter;
+import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.server.RemoteClient;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.net.BotanicoServer;

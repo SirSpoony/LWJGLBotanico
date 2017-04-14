@@ -15,6 +15,8 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import me.spoony.botanico.client.views.menu.KickedView;
 import me.spoony.botanico.common.net.*;
 import me.spoony.botanico.client.views.GameView;
+import me.spoony.botanico.common.net.client.CPacketHeartbeatPolo;
+import me.spoony.botanico.common.net.client.CPacketJoinRequest;
 
 /**
  * Created by Colten on 11/19/2016.

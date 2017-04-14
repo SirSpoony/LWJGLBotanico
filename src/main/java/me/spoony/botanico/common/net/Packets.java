@@ -3,6 +3,29 @@ package me.spoony.botanico.common.net;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import me.spoony.botanico.common.net.client.CPacketBuildingInteraction;
+import me.spoony.botanico.common.net.client.CPacketChangeDialog;
+import me.spoony.botanico.common.net.client.CPacketHeartbeatPolo;
+import me.spoony.botanico.common.net.client.CPacketInventoryButtonClick;
+import me.spoony.botanico.common.net.client.CPacketInventorySlotClick;
+import me.spoony.botanico.common.net.client.CPacketJoinRequest;
+import me.spoony.botanico.common.net.client.CPacketPlayerMove;
+import me.spoony.botanico.common.net.client.CPacketUseItem;
+import me.spoony.botanico.common.net.server.SPacketBuildingChange;
+import me.spoony.botanico.common.net.server.SPacketBuildingData;
+import me.spoony.botanico.common.net.server.SPacketChangeDialog;
+import me.spoony.botanico.common.net.server.SPacketChunk;
+import me.spoony.botanico.common.net.server.SPacketDialogData;
+import me.spoony.botanico.common.net.server.SPacketEntityMove;
+import me.spoony.botanico.common.net.server.SPacketEntityState;
+import me.spoony.botanico.common.net.server.SPacketHeartbeatMarco;
+import me.spoony.botanico.common.net.server.SPacketMessage;
+import me.spoony.botanico.common.net.server.SPacketNewEntity;
+import me.spoony.botanico.common.net.server.SPacketPlayerEID;
+import me.spoony.botanico.common.net.server.SPacketRemoveEntity;
+import me.spoony.botanico.common.net.server.SPacketSlot;
+import me.spoony.botanico.common.net.server.SPacketTeleport;
+import me.spoony.botanico.common.net.server.SPacketTileChange;
 
 /**
  * Created by Colten on 11/20/2016.

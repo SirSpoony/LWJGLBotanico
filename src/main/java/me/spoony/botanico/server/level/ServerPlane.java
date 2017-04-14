@@ -1,6 +1,5 @@
 package me.spoony.botanico.server.level;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import me.spoony.botanico.common.util.position.ChunkPosition;
@@ -15,19 +14,14 @@ import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.level.Chunk;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.nbt.*;
-import me.spoony.botanico.common.net.SPacketNewEntity;
-import me.spoony.botanico.common.net.SPacketRemoveEntity;
+import me.spoony.botanico.common.net.server.SPacketNewEntity;
+import me.spoony.botanico.common.net.server.SPacketRemoveEntity;
 import me.spoony.botanico.common.util.position.TilePosition;
-import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.levelgen.ChunkGeneratorOverworld;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.server.level.levelgen.IChunkGenerator;
 import me.spoony.botanico.server.net.BotanicoServer;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.util.*;
 
 public class ServerPlane implements IPlane {
@@ -78,7 +72,7 @@ public class ServerPlane implements IPlane {
         Chunk chunk = getChunk(position.toChunkPosition(new ChunkPosition()));
         chunk.setTile(position.getXInChunk(), position.getYInChunk(), tile);
 
-        server.packetHandler.sendTileChange(position, this, tile);
+        server.getClientManager().getPacketHandler().sendTileChange(position, this, tile);
     }
 
     @Override
@@ -92,7 +86,7 @@ public class ServerPlane implements IPlane {
         Building prevbuild = chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
         chunk.setBuilding(position.getXInChunk(), position.getYInChunk(), b);
 
-        server.packetHandler.sendBuildingChange(position, this, b);
+        server.getClientManager().getPacketHandler().sendBuildingChange(position, this, b);
 
         if (prevbuild != null) {
             prevbuild.destroy(this, position);
@@ -132,21 +126,17 @@ public class ServerPlane implements IPlane {
             pne.misc = ((EntityItemStack) e).stack.getItem().getID();
         }
 
-        server.sendPacketToAll(pne);
+        server.getClientManager().sendPacketToAll(pne);
 
         synchronized (entities) {
             entities.put(e.eid, e);
         }
     }
 
-    public void removeEntity(int eid) {
-        removeEntity(getEntity(eid));
-    }
-
     public void removeEntity(Entity e) {
         SPacketRemoveEntity pre = new SPacketRemoveEntity();
         pre.eid = e.eid;
-        server.sendPacketToAll(pre);
+        server.getClientManager().sendPacketToAll(pre);
 
         synchronized (entities) {
             entities.remove(e);
@@ -241,7 +231,7 @@ public class ServerPlane implements IPlane {
         Chunk chunk = getChunk(position.toChunkPosition());
         chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
 
-        server.packetHandler.sendBuildingDataChange(position, this, data);
+        server.getClientManager().getPacketHandler().sendBuildingDataChange(position, this, data);
     }
 
     public byte getBuildingData(TilePosition position) {

@@ -10,10 +10,10 @@ import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.*;
 import me.spoony.botanico.common.level.Chunk;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.net.SPacketMessage;
-import me.spoony.botanico.common.net.SPacketChangeDialog;
-import me.spoony.botanico.common.net.SPacketDialogData;
-import me.spoony.botanico.common.net.SPacketSlot;
+import me.spoony.botanico.common.net.server.SPacketMessage;
+import me.spoony.botanico.common.net.server.SPacketChangeDialog;
+import me.spoony.botanico.common.net.server.SPacketDialogData;
+import me.spoony.botanico.common.net.server.SPacketSlot;
 import me.spoony.botanico.common.util.Timer;
 import me.spoony.botanico.server.level.ServerPlane;
 import me.spoony.botanico.server.net.BotanicoServer;
@@ -79,7 +79,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
         Set<Chunk> chunksToUpdate = Sets.difference(shouldBeCommonChunks, commonChunks);
 
         for (Chunk c : chunksToUpdate) {
-            BotanicoServer.getCurrentInstance().packetHandler.sendChunk(c, this);
+            BotanicoServer.getCurrentInstance().getClientManager().getPacketHandler().sendChunk(c, this);
             commonChunks.add(c);
         }
     }
@@ -245,6 +245,6 @@ public class RemoteEntityPlayer extends EntityPlayer {
         }
         this.setPosition(position);
         System.out.println(position);
-        BotanicoServer.getCurrentInstance().packetHandler.sendTeleport(this);
+        BotanicoServer.getCurrentInstance().getClientManager().getPacketHandler().sendTeleport(this);
     }
 }

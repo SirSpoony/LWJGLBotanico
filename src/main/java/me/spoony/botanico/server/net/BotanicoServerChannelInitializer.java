@@ -20,78 +20,81 @@ import java.util.Iterator;
  * Created by Colten on 12/28/2016.
  */
 public class BotanicoServerChannelInitializer extends ChannelInitializer<SocketChannel> {
-    public BotanicoServer server;
 
-    public BotanicoServerChannelInitializer(BotanicoServer server) {
-        this.server = server;
-    }
+  public ServerNetworkManager manager;
 
-    @Override
-    protected void initChannel(SocketChannel ch) throws Exception {
-        ch.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(10));
+  public BotanicoServerChannelInitializer(ServerNetworkManager manager) {
+    this.manager = manager;
+  }
 
-        ch.pipeline().addLast(new FastLzFrameEncoder());
-        ch.pipeline().addLast(new FastLzFrameDecoder());
+  @Override
+  protected void initChannel(SocketChannel ch) throws Exception {
+    ch.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(10));
 
-        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1000000, 0, 4, 0, 4));
-        ch.pipeline().addLast(new LengthFieldPrepender(4));
+    ch.pipeline().addLast(new FastLzFrameEncoder());
+    ch.pipeline().addLast(new FastLzFrameDecoder());
 
-        ch.pipeline().addLast(new ChannelOutboundPacketEncoder() {
-            @Override
-            public void onCloseConnection(ChannelHandlerContext ctx, Throwable cause, String msg) {
-                for (RemoteClient findrc : server.remoteClients) {
-                    if (findrc.isSelf(ctx.channel())) {
-                        findrc.closeConnection();
-                    }
-                }
+    ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1000000, 0, 4, 0, 4));
+    ch.pipeline().addLast(new LengthFieldPrepender(4));
+
+    ch.pipeline().addLast(new ChannelOutboundPacketEncoder() {
+      @Override
+      public void onCloseConnection(ChannelHandlerContext ctx, Throwable cause, String msg) {
+        for (RemoteClient findrc : manager.getRemoteClients()) {
+          if (findrc.isSelf(ctx.channel())) {
+            findrc.closeConnection();
+          }
+        }
+      }
+    });
+
+    ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
+      @Override
+      public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        try {
+          ByteBuf receivedBuf = (ByteBuf) msg;
+          int id = receivedBuf.readInt();
+          Packet packet = Packets.getPacket(id);
+          packet.decode(PacketDecoder.start(receivedBuf));
+
+          RemoteClient rc = null;
+          for (RemoteClient findrc : manager.getRemoteClients()) {
+            if (findrc.isSelf(ctx.channel())) {
+              rc = findrc;
             }
-        });
+          }
 
-        ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
-            @Override
-            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                try {
-                    ByteBuf receivedBuf = (ByteBuf) msg;
-                    int id = receivedBuf.readInt();
-                    Packet packet = Packets.getPacket(id);
-                    packet.decode(PacketDecoder.start(receivedBuf));
-
-                    RemoteClient rc = null;
-                    for (RemoteClient findrc : server.remoteClients) {
-                        if (findrc.isSelf(ctx.channel())) rc = findrc;
-                    }
-
-                    if (packet instanceof IServerHandler) {
-                        ((IServerHandler) packet).onReceive(server, rc);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    ((ByteBuf) msg).release();
-                }
-            }
+          if (packet instanceof IServerHandler) {
+            manager.receivePacket(packet, rc);
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        } finally {
+          ((ByteBuf) msg).release();
+        }
+      }
 
 
-            @Override
-            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-                cause.printStackTrace();
-            }
-        });
+      @Override
+      public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+      }
+    });
 
-        ch.closeFuture().addListener((ChannelFutureListener) future -> {
-            Iterator<RemoteClient> rci = server.remoteClients.iterator();
-            while (rci.hasNext()) {
-                RemoteClient findrc = rci.next();
-                if (findrc.isSelf(ch)) {
-                    findrc.closeConnection();
-                    rci.remove();
-                }
-            }
-        });
+    ch.closeFuture().addListener((ChannelFutureListener) future -> {
+      Iterator<RemoteClient> rci = manager.getRemoteClients().iterator();
+      while (rci.hasNext()) {
+        RemoteClient findrc = rci.next();
+        if (findrc.isSelf(ch)) {
+          findrc.closeConnection();
+          rci.remove();
+        }
+      }
+    });
 
-        RemoteClient rc = new RemoteClient(ch);
-        server.remoteClients.add(rc);
+    RemoteClient rc = new RemoteClient(ch);
+    manager.getRemoteClients().add(rc);
 
-        server.log("Client connected at [" + ch.remoteAddress() + "]");
-    }
+    System.out.println("[ServerChannelInitializer] Client connected at [" + ch.remoteAddress() + "]");
+  }
 }
