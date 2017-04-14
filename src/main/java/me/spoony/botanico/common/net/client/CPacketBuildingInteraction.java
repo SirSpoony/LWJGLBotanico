@@ -7,51 +7,49 @@ import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
-import me.spoony.botanico.server.net.BotanicoServer;
-import me.spoony.botanico.server.RemoteClient;
+import me.spoony.botanico.server.BotanicoServer;
 
 /**
  * Created by Colten on 11/25/2016.
  */
-public class CPacketBuildingInteraction extends AutoPacketAdapter implements IServerHandler
-{
-    public static final byte CLICK = 0;
-    public static final byte CREATE = 1;
-    public static final byte DESTROY = 2;
+public class CPacketBuildingInteraction extends AutoPacketAdapter implements IServerHandler {
 
-    public long x;
-    public long y;
-    public byte type;
+  public static final byte CLICK = 0;
+  public static final byte CREATE = 1;
+  public static final byte DESTROY = 2;
 
-    @Override
-    public void onReceive(BotanicoServer server, RemoteClient client)
-    {
-        TilePosition position = new TilePosition(x, y);
-        EntityPlayer player = client.getPlayer();
-        if (type == CREATE) {
-            ItemSlot cursorSlot = client.getPlayer().getCursor();
-            if (!(cursorSlot.getStack().getItem() instanceof ItemBuilding)) {
-                System.err.println("Received building interaction but there is no building in the cursor");
-                return;
-            }
+  public long x;
+  public long y;
+  public byte type;
 
-            Building newBuilding = ((ItemBuilding)cursorSlot.getStack().getItem()).getBuilding();
+  @Override
+  public void onReceive(BotanicoServer server, RemoteEntityPlayer player) {
+    TilePosition position = new TilePosition(x, y);
+    if (type == CREATE) {
+      ItemSlot cursorSlot = player.getCursor();
+      if (!(cursorSlot.getStack().getItem() instanceof ItemBuilding)) {
+        System.err.println("Received building interaction but there is no building in the cursor");
+        return;
+      }
 
-            if (newBuilding.canCreate(player.getPlane(), position))
-            {
-                ((ServerPlane)player.getPlane()).setBuilding(position, newBuilding);
-                client.getPlayer().inventory.getStack(EntityPlayer.SLOT_CURSOR).increaseCount(-1);
-                client.getPlayer().updatePlayerInventorySlot(EntityPlayer.SLOT_CURSOR);
-            }
-        } else if (type == DESTROY) {
-            ((ServerPlane)player.getPlane()).breakBuildingAndDrop(position, client.getPlayer());
-        } else if (type == CLICK) {
-            if (player.getPlane().getBuilding(position) == null){
-                System.err.println("Received building interaction with null building, server and client possibly out of sync.");
-            } else {
-                player.getPlane().getBuilding(position).onClick(player.getPlane(), client.getPlayer(), position);
-            }
-        }
+      Building newBuilding = ((ItemBuilding) cursorSlot.getStack().getItem()).getBuilding();
+
+      if (newBuilding.canCreate(player.getPlane(), position)) {
+        player.getPlane().setBuilding(position, newBuilding);
+        player.inventory.getStack(EntityPlayer.SLOT_CURSOR).increaseCount(-1);
+        player.updatePlayerInventorySlot(EntityPlayer.SLOT_CURSOR);
+      }
+    } else if (type == DESTROY) {
+      player.getPlane().breakBuildingAndDrop(position, player);
+    } else if (type == CLICK) {
+      if (player.getPlane().getBuilding(position) == null) {
+        System.err.println(
+            "Received building interaction with null building, server and client possibly out of sync.");
+      } else {
+        player.getPlane().getBuilding(position).onClick(player.getPlane(), player, position);
+      }
     }
+  }
 }

@@ -1,9 +1,8 @@
 package me.spoony.botanico.server.level;
 
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.server.level.levelgen.ChunkGeneratorOverworld;
 import me.spoony.botanico.server.level.levelgen.ChunkGeneratorUnderworld;
-import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.BotanicoServer;
 
 /**
  * Created by Colten on 1/1/2017.

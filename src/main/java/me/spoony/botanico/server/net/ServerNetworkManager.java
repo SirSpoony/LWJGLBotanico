@@ -1,18 +1,21 @@
 package me.spoony.botanico.server.net;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Sets;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
+import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.common.net.Packet;
+import me.spoony.botanico.common.net.server.SPacketHeartbeatMarco;
 import me.spoony.botanico.common.util.Timer;
-import me.spoony.botanico.server.RemoteClient;
+import me.spoony.botanico.server.BotanicoServer;
+import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**
  * Created by Colten on 4/14/2017.
@@ -23,7 +26,8 @@ public class ServerNetworkManager implements ServerManager {
 
   public BotanicoServer server;
 
-  protected List<RemoteClient> remoteClients = Lists.newArrayList();
+  protected BiMap<RemoteEntityPlayer, Channel> players = HashBiMap.create();
+  protected Set<Channel> preChannels = Sets.newHashSet();
   protected Timer heartbeatTimer;
 
   public ServerPacketHandler packetHandler;
@@ -52,7 +56,21 @@ public class ServerNetworkManager implements ServerManager {
         .channel(NioServerSocketChannel.class)
         .childHandler(new BotanicoServerChannelInitializer(this));
 
-    ChannelFuture channelFuture = b.bind(DEFAULT_PORT);
+    b.bind(DEFAULT_PORT);
+
+    Thread heartbeat = new Thread(() -> {
+      while (server.RUNNING) {
+        sendPacketToAll(new SPacketHeartbeatMarco());
+
+        try {
+          Thread.sleep(15_000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }, "heartbeat");
+
+    heartbeat.start();
   }
 
   @Override
@@ -63,22 +81,31 @@ public class ServerNetworkManager implements ServerManager {
 
   @Override
   public void sendPacketToAll(Packet packet) {
-    for (RemoteClient rc : remoteClients) {
-      rc.sendPacket(packet);
+    for (RemoteEntityPlayer rc : getPlayers()) {
+      sendPacket(packet, rc);
     }
   }
 
   @Override
-  public void sendPacketToAll(Packet packet, Predicate<RemoteClient> predicate) {
-    for (RemoteClient rc : remoteClients) {
+  public void sendPacketToAll(Packet packet, Predicate<RemoteEntityPlayer> predicate) {
+    for (RemoteEntityPlayer rc : getPlayers()) {
       if (predicate.test(rc)) {
-        rc.sendPacket(packet);
+        sendPacket(packet, rc);
       }
     }
   }
 
   @Override
-  public void receivePacket(Packet packet, RemoteClient client) {
+  public void sendPacket(Packet packet, RemoteEntityPlayer player) {
+    sendPacket(packet, players.get(player));
+  }
+
+  public void sendPacket(Packet packet, Channel channel) {
+    channel.writeAndFlush(packet);
+  }
+
+  @Override
+  public void receivePacket(Packet packet, RemoteEntityPlayer client) {
     ((IServerHandler) packet).onReceive(server, client);
   }
 
@@ -88,7 +115,17 @@ public class ServerNetworkManager implements ServerManager {
   }
 
   @Override
-  public List<RemoteClient> getRemoteClients() {
-    return remoteClients;
+  public Set<RemoteEntityPlayer> getPlayers() {
+    return players.keySet();
+  }
+
+  public void initializePlayer(Channel channel, RemoteEntityPlayer player) {
+    if (!preChannels.contains(channel)) {
+      throw new RuntimeException("Unknown channel. Cannot create player.");
+    } else {
+      preChannels.remove(channel);
+    }
+
+    players.put(player, channel);
   }
 }

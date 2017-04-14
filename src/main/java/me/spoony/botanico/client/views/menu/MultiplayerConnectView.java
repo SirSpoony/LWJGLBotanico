@@ -7,7 +7,6 @@ import me.spoony.botanico.client.graphics.gui.control.GUIControlAlignmentType;
 import me.spoony.botanico.client.graphics.gui.control.GUITextBox;
 import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.client.views.GameView;
-import me.spoony.botanico.server.net.BotanicoServer;
 import me.spoony.botanico.server.net.ServerNetworkManager;
 
 /**

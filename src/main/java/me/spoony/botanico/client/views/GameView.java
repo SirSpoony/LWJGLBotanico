@@ -16,272 +16,280 @@ import me.spoony.botanico.client.graphics.*;
 import me.spoony.botanico.client.graphics.gui.*;
 import me.spoony.botanico.client.input.*;
 import me.spoony.botanico.common.util.DoubleRectangle;
-import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.BotanicoServer;
 
 import java.net.UnknownHostException;
 
 public class GameView extends ViewAdapter implements IView, BinaryInputListener {
-    protected BotanicoClient client;
-    protected BotanicoServer server;
-    protected ClientConnectionConfig connectionConfig;
-    public RendererGame rendererGame;
-    public RendererGUI rendererGUI;
 
-    private CommandLine commandLine;
-    private GameViewFullscreenDialog fullscreenDialog;
-    public DialogRenderer dialogRenderer;
+  protected BotanicoClient client;
+  protected BotanicoServer server;
+  protected ClientConnectionConfig connectionConfig;
+  public RendererGame rendererGame;
+  public RendererGUI rendererGUI;
 
-    protected static String debugValue;
-    protected static String debugValue2;
+  private CommandLine commandLine;
+  private GameViewFullscreenDialog fullscreenDialog;
+  public DialogRenderer dialogRenderer;
 
-    // ------------------------ //
-    // Renderers
-    // ------------------------ //
-    protected HotbarRenderer hotbarRenderer;
-    private CursorRenderer cursorRenderer;
+  protected static String debugValue;
+  protected static String debugValue2;
 
-    private float waittime;
+  // ------------------------ //
+  // Renderers
+  // ------------------------ //
+  protected HotbarRenderer hotbarRenderer;
+  private CursorRenderer cursorRenderer;
 
-    public GameView() {
-        connectionConfig = null;
-    }
+  private float waittime;
 
-    public GameView(ClientConnectionConfig connectionConfig) {
-        this.connectionConfig = connectionConfig;
-    }
+  public GameView() {
+    connectionConfig = null;
+  }
 
-    @Override
-    public void initialize() {
-        super.initialize();
+  public GameView(ClientConnectionConfig connectionConfig) {
+    this.connectionConfig = connectionConfig;
+  }
 
-        // BEGIN SERVER AND CLIENT
-        System.out.println("Initialize Client/Server");
-        waittime = -1;
+  @Override
+  public void initialize() {
+    super.initialize();
 
+    // BEGIN SERVER AND CLIENT
+    System.out.println("Initialize Client/Server");
+    waittime = -1;
 
+    if (connectionConfig != null) {
+      client = new BotanicoClient(this, connectionConfig);
 
-        if (connectionConfig != null) {
-            client = new BotanicoClient(this, connectionConfig);
-
-            fullscreenDialog = new GameViewFullscreenDialog("Connecting to Server...");
-            client.begin().addListener((ChannelFutureListener) future -> {
-                if (!future.isSuccess()) {
-                    StringBuilder errorMessage = new StringBuilder("Could not connect to server");
-                    if (future.cause() instanceof UnknownHostException) {
-                        errorMessage.append(" (Unknown Host).");
-                    } else {
-                        errorMessage.append(" (Connection Refused).");
-                    }
-                    BotanicoGame.setView(new KickedView(errorMessage.toString()));
-                } else {
-                    waittime = 0;
-                }
-            });
+      fullscreenDialog = new GameViewFullscreenDialog("Connecting to Server...");
+      client.begin().addListener((ChannelFutureListener) future -> {
+        if (!future.isSuccess()) {
+          StringBuilder errorMessage = new StringBuilder("Could not connect to server");
+          if (future.cause() instanceof UnknownHostException) {
+            errorMessage.append(" (Unknown Host).");
+          } else {
+            errorMessage.append(" (Connection Refused).");
+          }
+          BotanicoGame.setView(new KickedView(errorMessage.toString()));
         } else {
-            fullscreenDialog = new GameViewFullscreenDialog("beginning");
-            server = new BotanicoServer();
-            client = new BotanicoClient(this, null);
-
-            try {
-                fullscreenDialog = new GameViewFullscreenDialog("Starting Server...");
-                server.run();
-                fullscreenDialog = new GameViewFullscreenDialog("Starting Client...");
-                client.begin().sync();
-                fullscreenDialog = new GameViewFullscreenDialog("Letting Chunks Load...");
-                waittime = 0;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+          waittime = 0;
         }
+      });
+    } else {
+      fullscreenDialog = new GameViewFullscreenDialog("beginning");
+      server = new BotanicoServer();
+      client = new BotanicoClient(this, null);
 
-        // INITIALIZE GAMEVIEW
-        // initialize rest of gameview
-
-        commandLine = new CommandLine();
-        hotbarRenderer = new HotbarRenderer(GameView.getPlayer().getInventory());
-        cursorRenderer = new CursorRenderer(GameView.getPlayer());
-
-        Input.registerListener(this);
+      try {
+        fullscreenDialog = new GameViewFullscreenDialog("Starting Server...");
+        server.run();
+        fullscreenDialog = new GameViewFullscreenDialog("Starting Client...");
+        client.begin().sync();
+        fullscreenDialog = new GameViewFullscreenDialog("Letting Chunks Load...");
+        waittime = 0;
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
 
-    @Override
-    public void loadContent() {
-        super.loadContent();
+    // INITIALIZE GAMEVIEW
+    // initialize rest of gameview
 
-        rendererGame = new RendererGame();
-        rendererGUI = new RendererGUI();
+    commandLine = new CommandLine();
+    hotbarRenderer = new HotbarRenderer(GameView.getPlayer().getInventory());
+    cursorRenderer = new CursorRenderer(GameView.getPlayer());
 
-        GamePosition playerPosition = client.getLocalPlayer().position;
-        rendererGame.centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(), -1);
+    Input.registerListener(this);
+  }
+
+  @Override
+  public void loadContent() {
+    super.loadContent();
+
+    rendererGame = new RendererGame();
+    rendererGUI = new RendererGUI();
+
+    GamePosition playerPosition = client.getLocalPlayer().position;
+    rendererGame
+        .centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(), -1);
+  }
+
+  @Override
+  public void update(float delta) {
+    commandLine.update(delta);
+
+    client.getLocalLevel().update(delta);
+
+    GamePosition playerPosition = client.getLocalPlayer().position;
+    rendererGame.centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(),
+        delta * 16);
+
+    if (waittime > 2) {
+      waittime = -1;
+      fullscreenDialog = null;
+    } else {
+      if (waittime != -1) {
+        waittime += delta;
+      }
     }
 
-    @Override
-    public void update(float delta) {
-        commandLine.update(delta);
+    if (fullscreenDialog != null) {
+      fullscreenDialog.update(delta);
+    }
+    if (hasDialogOpen()) {
+      dialogRenderer.update(delta);
+    }
+  }
 
-        client.getLocalLevel().update(delta);
+  @Override
+  public void render() {
+    rendererGame.tint = hasDialogOpen();
 
-        GamePosition playerPosition = client.getLocalPlayer().position;
-        rendererGame.centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(), delta * 16);
+    rendererGame.begin();
 
-        if (waittime > 2) {
-            waittime = -1;
-            fullscreenDialog = null;
-        } else {
-            if (waittime != -1) waittime += delta;
-        }
+    client.getLocalLevel().render(rendererGame);
 
-        if (fullscreenDialog != null) {
-            fullscreenDialog.update(delta);
-        }
-        if (hasDialogOpen())
-            dialogRenderer.update(delta);
+    rendererGame.end();
+
+    rendererGUI.begin();
+
+    if (Botanico.DEBUG) {
+      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height), "FPS: " +
+          Math.round(BotanicoGame.FPS), TextColors.YELLOW, CallAlign.TOP_LEFT);
+
+      double x = client.getLocalPlayer().position.x;
+      double y = client.getLocalPlayer().position.y;
+
+      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 10), "Player X: " +
+          x, TextColors.WHITE, CallAlign.TOP_LEFT);
+      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 20), "Player Y: " +
+          y, TextColors.WHITE, CallAlign.TOP_LEFT);
+
+      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 35), "DBG 1: " +
+          debugValue, TextColors.WHITE, CallAlign.TOP_LEFT);
+      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 45), "DBG 2: " +
+          debugValue2, TextColors.WHITE, CallAlign.TOP_LEFT);
     }
 
-    @Override
-    public void render() {
-        rendererGame.tint = hasDialogOpen();
+    commandLine.render(rendererGUI);
 
-        rendererGame.begin();
-
-        client.getLocalLevel().render(rendererGame);
-
-        rendererGame.end();
-
-        rendererGUI.begin();
-
-        if (Botanico.DEBUG) {
-            rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height), "FPS: " +
-                    Math.round(BotanicoGame.FPS), TextColors.YELLOW, CallAlign.TOP_LEFT);
-
-            double x = client.getLocalPlayer().position.x;
-            double y = client.getLocalPlayer().position.y;
-
-            rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 10), "Player X: " +
-                    x, TextColors.WHITE, CallAlign.TOP_LEFT);
-            rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 20), "Player Y: " +
-                    y, TextColors.WHITE, CallAlign.TOP_LEFT);
-
-            rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 35), "DBG 1: " +
-                    debugValue, TextColors.WHITE, CallAlign.TOP_LEFT);
-            rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 45), "DBG 2: " +
-                    debugValue2, TextColors.WHITE, CallAlign.TOP_LEFT);
-        }
-
-
-        commandLine.render(rendererGUI);
-
-        if (hasDialogOpen()) {
-            rendererGUI.tint();
-            dialogRenderer.render(rendererGUI);
-        }
-
-        hotbarRenderer.render(rendererGUI);
-
-        cursorRenderer.render(rendererGUI);
-
-        if (fullscreenDialog != null) {
-            fullscreenDialog.render(rendererGUI);
-        }
-
-        rendererGUI.end();
+    if (hasDialogOpen()) {
+      rendererGUI.tint();
+      dialogRenderer.render(rendererGUI);
     }
 
-    @Override
-    public void unloadContent() {
-        Input.unregisterListener(this);
-        if (isRunningServer()) {
-            try {
-                getServer().close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        getClient().close();
+    hotbarRenderer.render(rendererGUI);
+
+    cursorRenderer.render(rendererGUI);
+
+    if (fullscreenDialog != null) {
+      fullscreenDialog.render(rendererGUI);
     }
 
-    @Override
-    @InputHandler(priority = InputPriority.GUI_MIDDLE)
-    public boolean onBinaryInputPressed(BinaryInput binaryInput) {
-        if (binaryInput == Input.ESCAPE) {
-            BotanicoGame.setView(new MainMenuView());
-        }
+    rendererGUI.end();
+  }
 
-        if (hotbarRenderer.onBinaryInputPressed(binaryInput)) return true;
-        if (hasDialogOpen()) {
-            dialogRenderer.onBinaryInputPressed(binaryInput);
-            return true;
-        }
+  @Override
+  public void unloadContent() {
+    Input.unregisterListener(this);
+    if (isRunningServer()) {
+      try {
+        getServer().close();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    getClient().close();
+  }
 
-        if (client.getLocalPlayer().onBinaryInputPressed(binaryInput)) return true;
-        return false;
+  @Override
+  @InputHandler(priority = InputPriority.GUI_MIDDLE)
+  public boolean onBinaryInputPressed(BinaryInput binaryInput) {
+    if (binaryInput == Input.ESCAPE) {
+      BotanicoGame.setView(new MainMenuView());
     }
 
-    public void openDialog(Dialog dialog) {
-        if (dialog != null) {
-            DialogRenderer renderer = DialogRenderers.newDialogRenderer(dialog);
-            renderer.open();
-            this.dialogRenderer = renderer;
-        }
+    if (hotbarRenderer.onBinaryInputPressed(binaryInput)) {
+      return true;
+    }
+    if (hasDialogOpen()) {
+      dialogRenderer.onBinaryInputPressed(binaryInput);
+      return true;
     }
 
-    public void forceCenterCameraOnPlayer() {
-        rendererGame.centerOn(new DoubleRectangle(client.getLocalPlayer().getPosition().x, client.getLocalPlayer().getPosition().y, 1, 2).getCenter(), 0);
+    if (client.getLocalPlayer().onBinaryInputPressed(binaryInput)) {
+      return true;
     }
+    return false;
+  }
 
-    public boolean hasDialogOpen() {
-        return dialogRenderer != null && dialogRenderer.isOpen();
+  public void openDialog(Dialog dialog) {
+    if (dialog != null) {
+      DialogRenderer renderer = DialogRenderers.newDialogRenderer(dialog);
+      renderer.open();
+      this.dialogRenderer = renderer;
     }
+  }
 
-    public Dialog getDialog() {
-        return hasDialogOpen() ? dialogRenderer.getDialog() : null;
-    }
+  public void forceCenterCameraOnPlayer() {
+    rendererGame.centerOn(new DoubleRectangle(client.getLocalPlayer().getPosition().x,
+        client.getLocalPlayer().getPosition().y, 1, 2).getCenter(), 0);
+  }
 
-    public static GameView get() {
-        return BotanicoGame.getGame();
-    }
+  public boolean hasDialogOpen() {
+    return dialogRenderer != null && dialogRenderer.isOpen();
+  }
 
-    public static BotanicoClient getClient() {
-        return BotanicoGame.getGame().client;
-    }
+  public Dialog getDialog() {
+    return hasDialogOpen() ? dialogRenderer.getDialog() : null;
+  }
 
-    public static BotanicoServer getServer() {
-        return BotanicoGame.getGame().server;
-    }
+  public static GameView get() {
+    return BotanicoGame.getGame();
+  }
 
-    public static boolean isRunningServer() {
-        return BotanicoGame.getGame().server != null;
-    }
+  public static BotanicoClient getClient() {
+    return BotanicoGame.getGame().client;
+  }
 
-    public static ClientEntityPlayer getPlayer() {
-        return getClient().getLocalPlayer();
-    }
+  public static BotanicoServer getServer() {
+    return BotanicoGame.getGame().server;
+  }
 
-    public static CursorRenderer getCursor() {
-        return BotanicoGame.getGame().cursorRenderer;
-    }
+  public static boolean isRunningServer() {
+    return BotanicoGame.getGame().server != null;
+  }
 
-    public static RendererGUI getRendererGUI() {
-        return BotanicoGame.getRendererGUI();
-    }
+  public static ClientEntityPlayer getPlayer() {
+    return getClient().getLocalPlayer();
+  }
 
-    public static RendererGame getRendererGame() {
-        return BotanicoGame.getGame().rendererGame;
-    }
+  public static CursorRenderer getCursor() {
+    return BotanicoGame.getGame().cursorRenderer;
+  }
 
-    public static CommandLine getCommandLine() {
-        return BotanicoGame.getGame().commandLine;
-    }
+  public static RendererGUI getRendererGUI() {
+    return BotanicoGame.getRendererGUI();
+  }
 
-    public static ClientPlane getClientLevel() {
-        return BotanicoGame.getGame().client.getLocalLevel();
-    }
+  public static RendererGame getRendererGame() {
+    return BotanicoGame.getGame().rendererGame;
+  }
 
-    public static void setDebugValue1(String value) {
-        debugValue = value;
-    }
+  public static CommandLine getCommandLine() {
+    return BotanicoGame.getGame().commandLine;
+  }
 
-    public static void setDebugValue2(String value) {
-        debugValue2 = value;
-    }
+  public static ClientPlane getClientLevel() {
+    return BotanicoGame.getGame().client.getLocalLevel();
+  }
+
+  public static void setDebugValue1(String value) {
+    debugValue = value;
+  }
+
+  public static void setDebugValue2(String value) {
+    debugValue2 = value;
+  }
 }

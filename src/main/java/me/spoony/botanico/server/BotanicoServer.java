@@ -1,12 +1,13 @@
-package me.spoony.botanico.server.net;
+package me.spoony.botanico.server;
 
 import me.spoony.botanico.server.level.ServerLevel;
+import me.spoony.botanico.server.net.ServerManager;
+import me.spoony.botanico.server.net.ServerNetworkManager;
 
 /**
  * Created by Colten on 11/18/2016.
  **/
 public class BotanicoServer {
-
 
   private static BotanicoServer CURRENT_INSTANCE;
   public static boolean RUNNING;

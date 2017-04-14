@@ -8,8 +8,6 @@ import me.spoony.botanico.common.entities.EntityItemStack;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.Item;
 import me.spoony.botanico.common.items.ItemStack;
-import me.spoony.botanico.server.level.ServerPlane;
-import me.spoony.botanico.server.net.BotanicoServer;
 
 /**
  * Created by Colten on 11/20/2016.
@@ -32,7 +30,7 @@ public class SPacketNewEntity extends AutoPacketAdapter implements IClientHandle
             client.getLocalLevel().addEntity(ep);
 
             if (eid == client.getLocalLevel().LOCAL_PLAYER_EID) {
-                client.getLocalLevel().resetLocalPlayer();
+                client.getLocalLevel().setLocalEID();
             }
 
             //log("Added EntityPlayer EID: "+eid);

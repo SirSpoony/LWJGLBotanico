@@ -51,7 +51,6 @@ public class ClientPlane implements IPlane {
         return localPlayer;
     }
 
-
     public void render(RendererGame rg) {
         this.renderer.render(rg);
     }
@@ -152,13 +151,8 @@ public class ClientPlane implements IPlane {
         entities.put(e.eid, e);
     }
 
-    public void resetLocalPlayer() {
-        Entity e = entities.get(LOCAL_PLAYER_EID);
-        GamePosition pos = e.getPosition();
-        entities.remove(LOCAL_PLAYER_EID);
-
+    public void setLocalEID() {
         localPlayer.eid = LOCAL_PLAYER_EID;
-        localPlayer.position.set(pos);
         entities.put(LOCAL_PLAYER_EID, localPlayer);
     }
 

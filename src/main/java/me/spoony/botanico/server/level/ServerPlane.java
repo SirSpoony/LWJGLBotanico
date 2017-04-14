@@ -20,7 +20,7 @@ import me.spoony.botanico.common.util.position.TilePosition;
 import me.spoony.botanico.server.level.levelgen.ChunkGeneratorOverworld;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.server.level.levelgen.IChunkGenerator;
-import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.BotanicoServer;
 
 import java.util.*;
 

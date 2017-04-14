@@ -1,7 +1,7 @@
 package me.spoony.botanico.server.level;
 
 import me.spoony.botanico.common.level.ILevel;
-import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.BotanicoServer;
 
 /**
  * Created by Colten on 1/1/2017.

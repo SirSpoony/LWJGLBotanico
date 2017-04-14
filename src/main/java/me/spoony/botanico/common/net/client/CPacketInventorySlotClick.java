@@ -3,14 +3,12 @@ package me.spoony.botanico.common.net.client;
 import com.google.common.collect.Range;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.entities.EntityPlayer;
-import me.spoony.botanico.common.items.Item;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IServerHandler;
-import me.spoony.botanico.server.RemoteClient;
 import me.spoony.botanico.server.RemoteEntityPlayer;
-import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.BotanicoServer;
 
 /**
  * Created by Colten on 11/24/2016.
@@ -22,9 +20,7 @@ public class CPacketInventorySlotClick extends AutoPacketAdapter implements ISer
     public byte clickType;
 
     @Override
-    public void onReceive(BotanicoServer server, RemoteClient client) {
-        RemoteEntityPlayer player = client.getPlayer();
-
+    public void onReceive(BotanicoServer server, RemoteEntityPlayer player) {
         ItemSlot clickedslot;
         ItemSlot cursorslot;
 

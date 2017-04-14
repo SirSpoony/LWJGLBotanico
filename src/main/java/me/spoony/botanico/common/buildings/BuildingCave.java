@@ -3,18 +3,16 @@ package me.spoony.botanico.common.buildings;
 import me.spoony.botanico.client.ClientPlane;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.RendererGame;
-import me.spoony.botanico.common.buildings.buildingentity.BuildingEntityBoiler;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.BMath;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
 import me.spoony.botanico.common.util.position.TilePosition;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
-import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.BotanicoServer;
 
 /**
  * Created by Colten on 12/30/2016.

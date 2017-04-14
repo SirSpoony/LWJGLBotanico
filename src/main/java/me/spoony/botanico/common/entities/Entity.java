@@ -1,6 +1,5 @@
 package me.spoony.botanico.common.entities;
 
-import com.google.common.base.MoreObjects;
 import me.spoony.botanico.ClientOnly;
 import me.spoony.botanico.ServerOnly;
 import me.spoony.botanico.client.ClientPlane;
@@ -10,7 +9,7 @@ import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.nbt.NBTCompoundTag;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.server.level.ServerPlane;
-import me.spoony.botanico.server.net.BotanicoServer;
+import me.spoony.botanico.server.BotanicoServer;
 
 import java.util.Random;
 

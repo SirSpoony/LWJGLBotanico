@@ -1,6 +1,7 @@
 package me.spoony.botanico.server.net;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -11,10 +12,16 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.compression.FastLzFrameDecoder;
 import io.netty.handler.codec.compression.FastLzFrameEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import me.spoony.botanico.common.entities.Entity;
+import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.net.*;
-import me.spoony.botanico.server.RemoteClient;
 
 import java.util.Iterator;
+import me.spoony.botanico.common.net.client.CPacketJoinRequest;
+import me.spoony.botanico.common.net.server.SPacketMessage;
+import me.spoony.botanico.common.net.server.SPacketNewEntity;
+import me.spoony.botanico.common.net.server.SPacketPlayerEID;
+import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**
  * Created by Colten on 12/28/2016.
@@ -28,27 +35,23 @@ public class BotanicoServerChannelInitializer extends ChannelInitializer<SocketC
   }
 
   @Override
-  protected void initChannel(SocketChannel ch) throws Exception {
-    ch.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(10));
+  protected void initChannel(SocketChannel newChannel) throws Exception {
+    newChannel.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(20));
 
-    ch.pipeline().addLast(new FastLzFrameEncoder());
-    ch.pipeline().addLast(new FastLzFrameDecoder());
+    newChannel.pipeline().addLast(new FastLzFrameEncoder());
+    newChannel.pipeline().addLast(new FastLzFrameDecoder());
 
-    ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1000000, 0, 4, 0, 4));
-    ch.pipeline().addLast(new LengthFieldPrepender(4));
+    newChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(1000000, 0, 4, 0, 4));
+    newChannel.pipeline().addLast(new LengthFieldPrepender(4));
 
-    ch.pipeline().addLast(new ChannelOutboundPacketEncoder() {
+    newChannel.pipeline().addLast(new ChannelOutboundPacketEncoder() {
       @Override
       public void onCloseConnection(ChannelHandlerContext ctx, Throwable cause, String msg) {
-        for (RemoteClient findrc : manager.getRemoteClients()) {
-          if (findrc.isSelf(ctx.channel())) {
-            findrc.closeConnection();
-          }
-        }
+
       }
     });
 
-    ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
+    newChannel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
       @Override
       public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {
@@ -57,15 +60,35 @@ public class BotanicoServerChannelInitializer extends ChannelInitializer<SocketC
           Packet packet = Packets.getPacket(id);
           packet.decode(PacketDecoder.start(receivedBuf));
 
-          RemoteClient rc = null;
-          for (RemoteClient findrc : manager.getRemoteClients()) {
-            if (findrc.isSelf(ctx.channel())) {
-              rc = findrc;
-            }
-          }
+          if (packet instanceof CPacketJoinRequest) {
+            CPacketJoinRequest request = (CPacketJoinRequest) packet;
 
-          if (packet instanceof IServerHandler) {
-            manager.receivePacket(packet, rc);
+            // when a new client sends a join request, this is where it is returned
+            RemoteEntityPlayer eplayer = new RemoteEntityPlayer(request.name,
+                manager.server.level.getOverworld()); // todo possibility of being in any plane
+            eplayer.getPlane().addEntity(eplayer);
+
+            manager.initializePlayer(ctx.channel(), eplayer);
+
+            SPacketPlayerEID peid = new SPacketPlayerEID();
+            peid.eid = eplayer.eid;
+            manager.sendPacket(peid, eplayer);
+
+            for (Entity ent : manager.server.level.getOverworld().getEntities()) {
+              SPacketNewEntity temppne = new SPacketNewEntity();
+              temppne.type = ent.getTypeID();
+              temppne.eid = ent.eid;
+              temppne.x = ent.position.x;
+              temppne.y = ent.position.y;
+              manager.sendPacket(temppne, ctx.channel());
+            }
+
+            eplayer.onJoin();
+
+          } else {
+            if (packet instanceof IServerHandler) {
+              manager.receivePacket(packet, manager.players.inverse().get(ctx.channel()));
+            }
           }
         } catch (Exception e) {
           e.printStackTrace();
@@ -81,20 +104,14 @@ public class BotanicoServerChannelInitializer extends ChannelInitializer<SocketC
       }
     });
 
-    ch.closeFuture().addListener((ChannelFutureListener) future -> {
-      Iterator<RemoteClient> rci = manager.getRemoteClients().iterator();
-      while (rci.hasNext()) {
-        RemoteClient findrc = rci.next();
-        if (findrc.isSelf(ch)) {
-          findrc.closeConnection();
-          rci.remove();
-        }
-      }
+    newChannel.closeFuture().addListener((ChannelFutureListener) future -> {
+      manager.players.inverse().remove(newChannel).onLeave();
+      manager.preChannels.remove(newChannel);
     });
 
-    RemoteClient rc = new RemoteClient(ch);
-    manager.getRemoteClients().add(rc);
+    manager.preChannels.add(newChannel);
 
-    System.out.println("[ServerChannelInitializer] Client connected at [" + ch.remoteAddress() + "]");
+    System.out.println(
+        "[ServerChannelInitializer] Client connected at [" + newChannel.remoteAddress() + "]");
   }
 }

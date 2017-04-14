@@ -1,10 +1,10 @@
 package me.spoony.botanico.server.net;
 
-import io.netty.channel.ChannelFuture;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import me.spoony.botanico.common.net.Packet;
-import me.spoony.botanico.server.RemoteClient;
+import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**
  * Created by Colten on 4/14/2017.
@@ -15,13 +15,15 @@ public interface ServerManager {
 
   void close();
 
-  public void sendPacketToAll(Packet packet);
+  void sendPacketToAll(Packet packet);
 
-  public void sendPacketToAll(Packet packet, Predicate<RemoteClient> predicate);
+  void sendPacketToAll(Packet packet, Predicate<RemoteEntityPlayer> predicate);
 
-  public List<RemoteClient> getRemoteClients();
+  Set<RemoteEntityPlayer> getPlayers();
 
-  void receivePacket(Packet packet, RemoteClient client);
+  void sendPacket(Packet packet, RemoteEntityPlayer player);
+
+  void receivePacket(Packet packet, RemoteEntityPlayer client);
 
   ServerPacketHandler getPacketHandler();
 }

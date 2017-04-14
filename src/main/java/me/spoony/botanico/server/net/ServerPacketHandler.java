@@ -12,6 +12,7 @@ import me.spoony.botanico.common.net.server.SPacketTeleport;
 import me.spoony.botanico.common.net.server.SPacketTileChange;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.server.BotanicoServer;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -31,7 +32,7 @@ public class ServerPacketHandler {
     pbc.x = position.x;
     pbc.y = position.y;
     pbc.building = building;
-    server.getClientManager().sendPacketToAll(pbc, client -> client.getPlayer().getPlane() == plane);
+    server.getClientManager().sendPacketToAll(pbc, p -> p.getPlane() == plane);
   }
 
   public void sendTileChange(TilePosition position, ServerPlane plane, Tile tile) {
@@ -39,7 +40,7 @@ public class ServerPacketHandler {
     pbc.x = position.x;
     pbc.y = position.y;
     pbc.tile = tile;
-    server.getClientManager().sendPacketToAll(pbc, client -> client.getPlayer().getPlane() == plane);
+    server.getClientManager().sendPacketToAll(pbc, p -> p.getPlane() == plane);
   }
 
   public void sendBuildingDataChange(TilePosition position, ServerPlane plane, byte data) {
@@ -47,7 +48,7 @@ public class ServerPacketHandler {
     pbd.x = position.x;
     pbd.y = position.y;
     pbd.data = data;
-    server.getClientManager().sendPacketToAll(pbd, client -> client.getPlayer().getPlane() == plane);
+    server.getClientManager().sendPacketToAll(pbd, p -> p.getPlane() == plane);
   }
 
   public void sendChunk(Chunk chunk, RemoteEntityPlayer player) {
@@ -61,14 +62,14 @@ public class ServerPacketHandler {
     packet.x = chunk.position.x;
     packet.y = chunk.position.y;
 
-    player.remoteClient.sendPacket(packet);
+    server.getClientManager().sendPacket(packet, player);
   }
 
   public void sendEntityState(Entity entity) {
     SPacketEntityState pes = new SPacketEntityState();
     pes.eid = entity.eid;
     pes.state = entity.getState();
-    server.getClientManager().sendPacketToAll(pes, client -> client.getPlayer().getPlane() == entity.getPlane());
+    server.getClientManager().sendPacketToAll(pes, p -> p.getPlane() == entity.getPlane());
   }
 
   public void sendTeleport(RemoteEntityPlayer player) {
@@ -76,6 +77,6 @@ public class ServerPacketHandler {
     teleport.x = player.getPosition().x;
     teleport.y = player.getPosition().y;
     teleport.plane = player.getPlane().getID();
-    player.remoteClient.sendPacket(teleport);
+    server.getClientManager().sendPacket(teleport, player);
   }
 }

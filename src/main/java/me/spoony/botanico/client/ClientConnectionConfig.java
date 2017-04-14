@@ -1,6 +1,5 @@
 package me.spoony.botanico.client;
 
-import me.spoony.botanico.server.net.BotanicoServer;
 import me.spoony.botanico.server.net.ServerNetworkManager;
 
 /**

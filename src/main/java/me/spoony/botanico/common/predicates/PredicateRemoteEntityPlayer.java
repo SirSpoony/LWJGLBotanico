@@ -7,5 +7,5 @@ import java.util.function.Predicate;
 /**
  * Created by Colten on 1/2/2017.
  */
-public abstract class PredicateRemoteEntityPlayer implements Predicate<RemoteEntityPlayer> {
+public interface PredicateRemoteEntityPlayer extends Predicate<RemoteEntityPlayer> {
 }
