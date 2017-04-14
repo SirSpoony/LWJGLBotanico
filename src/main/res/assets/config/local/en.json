@@ -1,0 +1,20 @@
+{
+  "start_message":"Collect sticks and rocks to begin!",
+  "item:tool_station":"Tool Station",
+  "item:knapping_station":"Knapping Station",
+
+  "item:dirt":"Dirt",
+  "item:wood":"Wood",
+  "item:rock":"Rock",
+  "item:seeds":"Seeds",
+
+  "item:rock_hoe":"Rock Hoe",
+  "item:rock_sword":"Rock Sword",
+  "item:rock_pickaxe":"Rock Pickaxe",
+  "item:rock_axe":"Rock Axe",
+
+  "item:rock_hoe_head":"Rock Hoe Head",
+  "item:rock_blade":"Rock Blade",
+  "item:rock_pickaxe_head":"Rock Pickaxe Head",
+  "item:rock_axe_head":"Rock Axe Head"
+}
