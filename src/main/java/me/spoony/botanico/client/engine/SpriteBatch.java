@@ -123,7 +123,7 @@ public class SpriteBatch {
             "}";
 
     public void begin() {
-        Preconditions.checkState(!rendering, "Cannot begin rendering without calling end()");
+        Preconditions.checkState(!rendering, "Cannot start rendering without calling end()");
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -136,7 +136,7 @@ public class SpriteBatch {
     }
 
     public void end() {
-        Preconditions.checkState(rendering, "Cannot end rendering without calling begin()");
+        Preconditions.checkState(rendering, "Cannot end rendering without calling start()");
 
         flush();
 

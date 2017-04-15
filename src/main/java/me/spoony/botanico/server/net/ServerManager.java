@@ -11,9 +11,9 @@ import me.spoony.botanico.server.RemoteEntityPlayer;
  */
 public interface ServerManager {
 
-  void run();
+  void start();
 
-  void close();
+  void stop();
 
   void sendPacketToAll(Packet packet);
 

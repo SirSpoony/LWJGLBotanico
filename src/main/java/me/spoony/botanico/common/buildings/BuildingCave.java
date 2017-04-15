@@ -50,7 +50,7 @@ public class BuildingCave extends Building {
         }
 
         if (serverPlane.getBuildingData(position) == (byte) 1) {
-            ((RemoteEntityPlayer)player).teleport(position.toGamePosition(), BotanicoServer.getCurrentInstance().level.getUnderworld());
+            ((RemoteEntityPlayer)player).teleport(position.toGamePosition(), serverPlane.getLevel().getUnderworld());
             return true;
         } else {
             ((RemoteEntityPlayer) player).sendMessage("You need rope first!");

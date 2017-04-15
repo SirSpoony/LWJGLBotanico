@@ -48,7 +48,6 @@ public class BuildingGrass extends Building {
     public ItemStack[] getDrops(IPlane level, TilePosition position) {
         int count = DROP_RAND.nextInt(8) - 6;
         Item item = DROP_RAND.nextBoolean() ? Items.HEMP_SEEDS : Items.WHEAT_SEEDS;
-        System.out.println(item);
         return count > 0 ? new ItemStack[]
                 {
                         new ItemStack(item, count)

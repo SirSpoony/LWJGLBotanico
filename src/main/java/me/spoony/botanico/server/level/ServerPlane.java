@@ -32,8 +32,8 @@ public class ServerPlane implements IPlane {
 
     public int seed;
 
-    BotanicoServer server;
-    ServerLevel level;
+    public BotanicoServer server;
+    public ServerLevel level;
 
     public ServerPlane(BotanicoServer server, ServerLevel level, long seed) {
         entities = Maps.newConcurrentMap();

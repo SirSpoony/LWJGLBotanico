@@ -190,7 +190,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
         }
 
         if (timer.step(1f / 16f)) {
-            if (client.channel != null && !lastPacketPosition.equals(position)) {
+            if (!lastPacketPosition.equals(position)) {
                 CPacketPlayerMove pem = new CPacketPlayerMove();
                 pem.x = this.position.x;
                 pem.y = this.position.y;

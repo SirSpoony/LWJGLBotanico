@@ -22,7 +22,7 @@ public class StartServer {
         Recipes.init();
 
         BotanicoServer server = new BotanicoServer();
-        server.run();
+        server.start();
 
         System.out.println("Listening for commands");
 

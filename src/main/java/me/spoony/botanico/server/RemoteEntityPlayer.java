@@ -76,7 +76,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
     Set<Chunk> chunksToUpdate = Sets.difference(shouldBeCommonChunks, commonChunks);
 
     for (Chunk c : chunksToUpdate) {
-      BotanicoServer.getCurrentInstance().getClientManager().getPacketHandler().sendChunk(c, this);
+      getPlane().server.getClientManager().getPacketHandler().sendChunk(c, this);
       commonChunks.add(c);
     }
   }
@@ -95,7 +95,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
       pps.dialogID = Dialog.PLAYER_INV_ID;
       pps.slotpos = i;
       pps.stack = inventory.getStack(i);
-      BotanicoServer.getCurrentInstance().getClientManager().sendPacket(pps, this);
+      getPlane().server.getClientManager().sendPacket(pps, this);
     }
   }
 
@@ -105,7 +105,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
       pps.dialogID = Dialog.PLAYER_INV_ID;
       pps.slotpos = i;
       pps.stack = inventory.getStack(i);
-      BotanicoServer.getCurrentInstance().getClientManager().sendPacket(pps, this);
+      getPlane().server.getClientManager().sendPacket(pps, this);
     }
   }
 
@@ -116,7 +116,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
       pps.dialogID = this.currentDialog.id;
       pps.slotpos = i;
       pps.stack = this.currentDialog.inventory.getStack(i);
-      BotanicoServer.getCurrentInstance().getClientManager().sendPacket(pps, this);
+      getPlane().server.getClientManager().sendPacket(pps, this);
     }
   }
 
@@ -139,7 +139,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
     SPacketChangeDialog pd = new SPacketChangeDialog();
     pd.dialogID = dialog.id;
     pd.operation = SPacketChangeDialog.OPEN_DIALOG;
-    BotanicoServer.getCurrentInstance().getClientManager().sendPacket(pd, this);
+    getPlane().server.getClientManager().sendPacket(pd, this);
 
     dialog.viewers.updateDialogAll();
     updatePlayerInventory();
@@ -150,7 +150,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
     SPacketChangeDialog pd = new SPacketChangeDialog();
     pd.dialogID = currentDialog.id;
     pd.operation = SPacketChangeDialog.CLOSE_DIALOG;
-    BotanicoServer.getCurrentInstance().getClientManager().sendPacket(pd, this);
+    getPlane().server.getClientManager().sendPacket(pd, this);
   }
 
   public void updateDialogData() {
@@ -159,7 +159,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
     }
     SPacketDialogData dd = new SPacketDialogData();
     dd.dialog = this.currentDialog;
-    BotanicoServer.getCurrentInstance().getClientManager().sendPacket(dd, this);
+    getPlane().server.getClientManager().sendPacket(dd, this);
   }
 
   public ItemStack giveItemStack(ItemStack stack, boolean ordrop) {
@@ -225,7 +225,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
   }
 
   public void sendMessage(String message) {
-    BotanicoServer.getCurrentInstance().getClientManager()
+    getPlane().server.getClientManager()
         .sendPacket(new SPacketMessage(message), this);
   }
 
@@ -244,6 +244,6 @@ public class RemoteEntityPlayer extends EntityPlayer {
     }
     this.setPosition(position);
     System.out.println(position);
-    BotanicoServer.getCurrentInstance().getClientManager().getPacketHandler().sendTeleport(this);
+    getPlane().server.getClientManager().getPacketHandler().sendTeleport(this);
   }
 }

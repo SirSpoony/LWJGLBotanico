@@ -23,150 +23,158 @@ import java.util.*;
  * Created by Colten on 11/20/2016.
  */
 public class ClientPlane implements IPlane {
-    public BotanicoClient client;
-    protected ClientEntityPlayer localPlayer;
 
-    private Map<Integer, Entity> entities;
-    private Map<ChunkPosition, Chunk> chunks;
+  public BotanicoClient client;
+  protected ClientEntityPlayer localPlayer;
 
-    private PlaneRenderer renderer;
+  private Map<Integer, Entity> entities;
+  private Map<ChunkPosition, Chunk> chunks;
 
-    public int LOCAL_PLAYER_EID = 0;
-    public int planeID;
+  private PlaneRenderer renderer;
 
-    public ClientPlane(BotanicoClient client) {
-        super();
+  public int LOCAL_PLAYER_EID = 0;
+  public int planeID;
 
-        entities = Maps.newConcurrentMap();
-        chunks = Maps.newConcurrentMap();
+  public ClientPlane(BotanicoClient client) {
+    super();
 
-        this.client = client;
+    entities = Maps.newConcurrentMap();
+    chunks = Maps.newConcurrentMap();
 
-        this.localPlayer = new ClientEntityPlayer(client, this);
+    this.client = client;
 
-        this.renderer = new PlaneRenderer(this);
+    this.localPlayer = new ClientEntityPlayer(client, this);
+
+    this.renderer = new PlaneRenderer(this);
+  }
+
+  public ClientEntityPlayer getLocalPlayer() {
+    return localPlayer;
+  }
+
+  public void render(RendererGame rg) {
+    this.renderer.render(rg);
+  }
+
+  public void update(float delta) {
+    synchronized (entities) {
+      Set<Integer> eids = Sets.newHashSet(entities.keySet());
+      for (Integer eid : eids) {
+        Entity e = getEntity(eid);
+        e.update(delta, this);
+      }
+    }
+  }
+
+  @Override
+  public Tile getTile(TilePosition position) {
+    Chunk chunk = getChunk(position.toChunkPosition());
+    if (chunk == null) {
+      return null;
     }
 
-    public ClientEntityPlayer getLocalPlayer() {
-        return localPlayer;
+    return chunk.getTile(position.getXInChunk(), position.getYInChunk());
+  }
+
+  @Override
+  public Building getBuilding(TilePosition position) {
+    Chunk chunk = getChunk(position.toChunkPosition());
+    if (chunk == null) {
+      return null;
     }
 
-    public void render(RendererGame rg) {
-        this.renderer.render(rg);
+    return chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
+  }
+
+  @Override
+  public byte getBuildingData(TilePosition position) {
+    Chunk chunk = getChunk(position.toChunkPosition());
+    if (chunk == null) {
+      return -1;
     }
 
-    public void update(float delta) {
-        synchronized (entities) {
-            Set<Integer> eids = Sets.newHashSet(entities.keySet());
-            for (Integer eid : eids) {
-                Entity e = getEntity(eid);
-                e.update(delta, this);
-            }
-        }
+    return chunk.getBuildingData(position.getXInChunk(), position.getYInChunk());
+  }
+
+  @Override
+  public Chunk getChunk(ChunkPosition position) {
+    synchronized (chunks) {
+      return chunks.get(position);
     }
+  }
 
-    @Override
-    public Tile getTile(TilePosition position) {
-        Chunk chunk = getChunk(position.toChunkPosition());
-        if (chunk == null) return null;
+  @Override
+  public int getID() {
+    return planeID;
+  }
 
-        return chunk.getTile(position.getXInChunk(), position.getYInChunk());
+  public void receiveBuildingUpdate(TilePosition position, Building b) {
+
+    Chunk chunk = getChunk(position.toChunkPosition());
+    Building prevb = chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
+    chunk.setBuilding(position.getXInChunk(), position.getYInChunk(), b);
+    if (b == null && prevb != null) {
+      GameView.getRendererGame().particleBuildingBreak(position, prevb.getBreakParticle());
     }
+  }
 
-    @Override
-    public Building getBuilding(TilePosition position) {
-        Chunk chunk = getChunk(position.toChunkPosition());
-        if (chunk == null) return null;
-
-        return chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
+  public void receiveTileUpdate(TilePosition position, Tile tile) {
+    Chunk chunk = getChunk(position.toChunkPosition());
+    chunk.setTile(position.getXInChunk(), position.getYInChunk(), tile);
+    if (tile == Tiles.FERTILIZED_GROUND) {
+      GameView.getRendererGame().particleBuildingBreak(position, BuildingBreakMaterial.DIRT);
     }
+  }
 
-    @Override
-    public byte getBuildingData(TilePosition position) {
-        Chunk chunk = getChunk(position.toChunkPosition());
-        if (chunk == null) return -1;
-
-        return chunk.getBuildingData(position.getXInChunk(), position.getYInChunk());
+  @Override
+  public Collection<Entity> getEntities() {
+    synchronized (entities) {
+      return entities.values();
     }
+  }
 
-    @Override
-    public Chunk getChunk(ChunkPosition position) {
-        synchronized (chunks) {
-            return chunks.get(position);
-        }
+  @Override
+  public Entity getEntity(int eid) {
+    return entities.getOrDefault(eid, null);
+  }
+
+  @Override
+  public boolean isLocal() {
+    return true;
+  }
+
+  public void removeEntity(int eid) {
+    synchronized (entities) {
+      entities.remove(eid);
     }
+  }
 
-    @Override
-    public int getID() {
-        return planeID;
+  public void removeEntity(Entity e) {
+    removeEntity(e.eid);
+  }
+
+  public void addEntity(Entity e) {
+    Preconditions.checkNotNull(e, "Cannot add null entity!");
+    entities.put(e.eid, e);
+  }
+
+  public void setLocalEID() {
+    // when the local player is added to the entity list, the remotentity that was created is removed automatically by entities.put
+    localPlayer.eid = LOCAL_PLAYER_EID;
+    addEntity(localPlayer);
+  }
+
+  public void receiveBuildingDataUpdate(TilePosition position, byte data) {
+    Chunk chunk = getChunk(position.toChunkPosition());
+    chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
+  }
+
+  public void receiveChunk(Chunk chunk) {
+    Chunk testChunk = getChunk(chunk.position);
+    if (testChunk != null) {
+      System.out.println("Overwriting chunk");
+      chunks.remove(testChunk.position);
     }
-
-    public void receiveBuildingUpdate(TilePosition position, Building b) {
-
-        Chunk chunk = getChunk(position.toChunkPosition());
-        Building prevb = chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
-        chunk.setBuilding(position.getXInChunk(), position.getYInChunk(), b);
-        if (b == null && prevb != null) {
-            GameView.getRendererGame().particleBuildingBreak(position, prevb.getBreakParticle());
-        }
-    }
-
-    public void receiveTileUpdate(TilePosition position, Tile tile) {
-        Chunk chunk = getChunk(position.toChunkPosition());
-        chunk.setTile(position.getXInChunk(), position.getYInChunk(), tile);
-        if (tile == Tiles.FERTILIZED_GROUND) {
-            GameView.getRendererGame().particleBuildingBreak(position, BuildingBreakMaterial.DIRT);
-        }
-    }
-
-    @Override
-    public Collection<Entity> getEntities() {
-        synchronized (entities) {
-            return entities.values();
-        }
-    }
-
-    @Override
-    public Entity getEntity(int eid) {
-        return entities.getOrDefault(eid, null);
-    }
-
-    @Override
-    public boolean isLocal() {
-        return true;
-    }
-
-    public void removeEntity(int eid) {
-        synchronized (entities) {
-            entities.remove(eid);
-        }
-    }
-
-    public void removeEntity(Entity e) {
-        removeEntity(e.eid);
-    }
-
-    public void addEntity(Entity e) {
-        Preconditions.checkNotNull(e, "Cannot add null entity!");
-        entities.put(e.eid, e);
-    }
-
-    public void setLocalEID() {
-        localPlayer.eid = LOCAL_PLAYER_EID;
-        entities.put(LOCAL_PLAYER_EID, localPlayer);
-    }
-
-    public void receiveBuildingDataUpdate(TilePosition position, byte data) {
-        Chunk chunk = getChunk(position.toChunkPosition());
-        chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
-    }
-
-    public void receiveChunk(Chunk chunk) {
-        Chunk testChunk = getChunk(chunk.position);
-        if (testChunk != null) {
-            System.out.println("Overwriting chunk");
-            chunks.remove(testChunk.position);
-        }
-        chunks.put(chunk.position, chunk);
-    }
+    chunks.put(chunk.position, chunk);
+  }
 }

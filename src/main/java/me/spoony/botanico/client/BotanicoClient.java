@@ -24,8 +24,6 @@ import me.spoony.botanico.common.net.client.CPacketJoinRequest;
 public class BotanicoClient {
 
   public GameView gameView;
-  public Channel channel;
-  public ClientConnectionConfig config;
 
   private ClientPlane localLevel;
 
@@ -39,19 +37,19 @@ public class BotanicoClient {
 
   public ClientPacketHandler packetHandler;
 
-  NioEventLoopGroup workerGroup;
+  private Channel channel;
+  private ClientConnectionConfig config;
+  private NioEventLoopGroup workerGroup;
 
   public BotanicoClient(GameView gameView, ClientConnectionConfig config) {
     this.gameView = gameView;
-
-    this.config = config != null ? config : new ClientConnectionConfig("{self}", "localhost");
+    this.config = config;
 
     packetHandler = new ClientPacketHandler(this);
-
     localLevel = new ClientPlane(this);
   }
 
-  public ChannelFuture begin() {
+  public void start() {
     final BotanicoClient self = this;
 
     workerGroup = new NioEventLoopGroup();
@@ -89,9 +87,7 @@ public class BotanicoClient {
                   Packet packet = Packets.getPacket(id);
                   packet.decode(PacketDecoder.start(receivedBuf));
 
-                  if (packet instanceof IClientHandler) {
-                    ((IClientHandler) packet).onReceive(self);
-                  }
+                  receivePacket(packet);
                 } catch (Exception e) {
                   e.printStackTrace();
                 } finally {
@@ -122,34 +118,33 @@ public class BotanicoClient {
       if (future.isSuccess()) {
         CPacketJoinRequest pjg = new CPacketJoinRequest();
         pjg.name = config.playerName;
-        sendPacket(pjg).addListener((ChannelFutureListener) future1 -> {
-          if (future1.isSuccess()) {
-            log("Connecting Client: SUCCESS");
-          } else {
-            log("Connecting Client [Packet Join]: FAILED");
-          }
-        });
+        sendPacket(pjg);
+        log("Connecting Client: Sent Join Request");
       } else {
         future.cause().printStackTrace();
         log("Connecting Client: FAILED");
-        close();
+        stop();
       }
     });
-
-    return channelFuture;
   }
 
-  public ChannelFuture sendPacket(Packet packet) {
+  public void sendPacket(Packet packet) {
     Preconditions.checkNotNull(channel != null, "Channel cannot equal null to send packet");
 
-    return channel.writeAndFlush(packet);
+    channel.writeAndFlush(packet);
+  }
+
+  public void receivePacket(Packet packet) {
+    if (packet instanceof IClientHandler) {
+      ((IClientHandler) packet).onReceive(this);
+    }
   }
 
   public void log(Object obj) {
     System.out.println("[Client] " + obj.toString());
   }
 
-  public void close() {
+  public void stop() {
     channel.close();
     workerGroup.shutdownGracefully();
   }

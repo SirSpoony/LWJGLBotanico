@@ -23,7 +23,6 @@ import java.net.UnknownHostException;
 public class GameView extends ViewAdapter implements IView, BinaryInputListener {
 
   protected BotanicoClient client;
-  protected BotanicoServer server;
   protected ClientConnectionConfig connectionConfig;
   public RendererGame rendererGame;
   public RendererGUI rendererGUI;
@@ -60,37 +59,21 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
     waittime = -1;
 
     if (connectionConfig != null) {
+      // external server
       client = new BotanicoClient(this, connectionConfig);
 
       fullscreenDialog = new GameViewFullscreenDialog("Connecting to Server...");
-      client.begin().addListener((ChannelFutureListener) future -> {
-        if (!future.isSuccess()) {
-          StringBuilder errorMessage = new StringBuilder("Could not connect to server");
-          if (future.cause() instanceof UnknownHostException) {
-            errorMessage.append(" (Unknown Host).");
-          } else {
-            errorMessage.append(" (Connection Refused).");
-          }
-          BotanicoGame.setView(new KickedView(errorMessage.toString()));
-        } else {
-          waittime = 0;
-        }
-      });
+      client.start();
+      waittime = 0;
     } else {
+      // integrated
       fullscreenDialog = new GameViewFullscreenDialog("beginning");
-      server = new BotanicoServer();
-      client = new BotanicoClient(this, null);
 
-      try {
-        fullscreenDialog = new GameViewFullscreenDialog("Starting Server...");
-        server.run();
-        fullscreenDialog = new GameViewFullscreenDialog("Starting Client...");
-        client.begin().sync();
-        fullscreenDialog = new GameViewFullscreenDialog("Letting Chunks Load...");
-        waittime = 0;
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+      client = new IntegratedBotanicoClient(this);
+      client.start();
+
+      fullscreenDialog = new GameViewFullscreenDialog("Letting Chunks Load...");
+      waittime = 0;
     }
 
     // INITIALIZE GAMEVIEW
@@ -193,14 +176,7 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
   @Override
   public void unloadContent() {
     Input.unregisterListener(this);
-    if (isRunningServer()) {
-      try {
-        getServer().close();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    getClient().close();
+    client.stop();
   }
 
   @Override
@@ -251,14 +227,6 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
 
   public static BotanicoClient getClient() {
     return BotanicoGame.getGame().client;
-  }
-
-  public static BotanicoServer getServer() {
-    return BotanicoGame.getGame().server;
-  }
-
-  public static boolean isRunningServer() {
-    return BotanicoGame.getGame().server != null;
   }
 
   public static ClientEntityPlayer getPlayer() {

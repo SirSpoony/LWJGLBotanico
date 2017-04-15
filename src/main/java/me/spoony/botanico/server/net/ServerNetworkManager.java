@@ -43,7 +43,7 @@ public class ServerNetworkManager implements ServerManager {
   }
 
   @Override
-  public void run() {
+  public void start() {
     boss = new NioEventLoopGroup(0, r -> {
       return new Thread(r, "Server Boss EventLoopGroup");
     });
@@ -74,7 +74,7 @@ public class ServerNetworkManager implements ServerManager {
   }
 
   @Override
-  public void close() {
+  public void stop() {
     boss.shutdownGracefully();
     worker.shutdownGracefully();
   }

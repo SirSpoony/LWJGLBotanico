@@ -9,35 +9,29 @@ import me.spoony.botanico.server.net.ServerNetworkManager;
  **/
 public class BotanicoServer {
 
-  private static BotanicoServer CURRENT_INSTANCE;
   public static boolean RUNNING;
 
   public ServerLevel level;
   protected Thread gameLoopThread;
 
-  ServerManager clientManager;
+  protected ServerManager clientManager;
 
   public BotanicoServer() {
     clientManager = new ServerNetworkManager(this);
 
     level = new ServerLevel(this);
-    BotanicoServer.CURRENT_INSTANCE = this;
   }
 
-  public static BotanicoServer getCurrentInstance() {
-    return BotanicoServer.CURRENT_INSTANCE;
-  }
-
-  public void run() {
-    clientManager.run();
+  public void start() {
+    clientManager.start();
 
     RUNNING = true;
 
     startUpdateThread();
   }
 
-  public void close() throws Exception {
-    clientManager.close();
+  public void stop() {
+    clientManager.stop();
 
     RUNNING = false;
   }
