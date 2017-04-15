@@ -23,13 +23,13 @@ public class HotbarRenderer implements GUIRenderable {
     private RendererItemSlot[] rendererItemSlots;
 
     public HotbarRenderer(Inventory inventory) {
-        textureregion = new IntRectangle(0, 0, 122, 20);
+        textureregion = new IntRectangle(0, 0, 158, 18);
         bounds = new GuiRectangle(0, 0, textureregion.width, textureregion.height);
 
-        rendererItemSlots = new RendererItemSlot[7];
+        rendererItemSlots = new RendererItemSlot[8];
 
         for (int i = 0; i < rendererItemSlots.length; i++) {
-            rendererItemSlots[i] = new RendererItemSlot(inventory.getSlot(i), 2 + i * 17, 2);
+            rendererItemSlots[i] = new RendererItemSlot(inventory.getSlot(i), 1 + i * 20, 1);
         }
     }
 
@@ -46,7 +46,7 @@ public class HotbarRenderer implements GUIRenderable {
     @Override
     public void render(RendererGUI rg) {
         bounds.setCenter(rg.guiViewport.getCenter());
-        bounds.y = 1;
+        bounds.y = 3;
 
         for (int i = 0; i < rendererItemSlots.length; i++) {
             rendererItemSlots[i].updatePosition(bounds.getPosition());
@@ -59,11 +59,11 @@ public class HotbarRenderer implements GUIRenderable {
 
         float damage = .5f;
 
-        rg.sprite(bounds.getPosition().add(0f, 21f), texture,
-                new IntRectangle(0, 20, 122, 10));
+        rg.sprite(bounds.getPosition().add(18f, 23f), texture,
+                new IntRectangle(0, 24, 122, 10));
 
-        rg.sprite(bounds.getPosition().add(0f, 21f), texture,
-                new IntRectangle(0, 30, (int) Math.floor(122 * damage), 8));
+        rg.sprite(bounds.getPosition().add(18f, 23f), texture,
+                new IntRectangle(0, 34, (int) Math.floor(122 * damage), 8));
 
         for (RendererItemSlot slot : rendererItemSlots) {
             slot.render(rg);

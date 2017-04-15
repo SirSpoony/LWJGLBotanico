@@ -50,8 +50,6 @@ public class BotanicoClient {
   }
 
   public void start() {
-    final BotanicoClient self = this;
-
     workerGroup = new NioEventLoopGroup();
 
     Bootstrap b = new Bootstrap();

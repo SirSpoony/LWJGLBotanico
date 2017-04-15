@@ -9,5 +9,5 @@ import java.util.Random;
  */
 public interface BuildingFeature
 {
-    void generate(Random random, long seed, boolean[][] biome, Chunk chunk);
+    void generate(Random random, long seed, boolean[] biome, Chunk chunk);
 }

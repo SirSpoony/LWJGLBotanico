@@ -21,86 +21,57 @@ import me.spoony.botanico.common.util.IntRectangle;
  * Created by Colten on 11/10/2016.
  */
 public class DialogRendererInventoryPlayer extends DialogRendererAdapter<DialogInventoryPlayer> {
-    public boolean showTrinket;
 
-    protected Inventory craftingInventory;
-    protected IntRectangle dialogTextureSource;
+  public boolean showTrinket;
 
-    @Override
-    public void init(DialogInventoryPlayer dialog) {
-        super.init(dialog);
+  protected Inventory craftingInventory;
+  protected IntRectangle dialogTextureSource;
 
-        this.showTrinket = false;
-        dialogTextureSource = new IntRectangle(0, 0, 130, 130);
-        this.dialogBounds.set(new GuiRectangle(0, 0, dialogTextureSource.width, dialogTextureSource.height));
+  @Override
+  public void init(DialogInventoryPlayer dialog) {
+    super.init(dialog);
 
-        Inventory inv = GameView.getClient().getLocalPlayer().inventory;
-        this.initPlayerItemSlots(inv, 6, 28);
+    this.showTrinket = false;
+    dialogTextureSource = new IntRectangle(0, 0, 231, 135);
+    this.dialogBounds
+        .set(new GuiRectangle(0, 0, dialogTextureSource.width, dialogTextureSource.height));
 
-        // RING SLOTS
-        RendererItemSlot ring1 = new RendererItemSlot(inv.getSlot(EntityPlayer.SLOT_RING1), 6, 6);
-        RendererItemSlot ring2 = new RendererItemSlot(inv.getSlot(EntityPlayer.SLOT_RING2), 23, 6);
+    Inventory inv = GameView.getClient().getLocalPlayer().inventory;
+    this.initPlayerItemSlots(inv, 4, 25);
 
-        rendererItemSlots.add(ring1);
-        rendererItemSlots.add(ring2);
+    // RING SLOTS
+    RendererItemSlot ring1 = new RendererItemSlot(inv.getSlot(EntityPlayer.SLOT_RING1), 4, 4);
+    RendererItemSlot ring2 = new RendererItemSlot(inv.getSlot(EntityPlayer.SLOT_RING2), 4 + 18, 4);
 
-        // CRAFTING INVENTORY
-        craftingInventory = dialog.inventory;
-        craftingInventory.getSlot(2).setMode(ItemSlotMode.TAKE_ONLY);
+    rendererItemSlots.add(ring1);
+    rendererItemSlots.add(ring2);
+  }
 
-        rendererItemSlots.add(new RendererItemSlot(craftingInventory.getSlot(0), 57, 6));
-        rendererItemSlots.add(new RendererItemSlot(craftingInventory.getSlot(1), 74, 6));
-        rendererItemSlots.add(new RendererItemSlot(craftingInventory.getSlot(2), 108, 6));
+  @Override
+  public void onBinaryInputPressed(BinaryInput bin) {
+    super.onBinaryInputPressed(bin);
+  }
+
+  @Override
+  public void update(float delta) {
+
+  }
+
+  @Override
+  public void render(RendererGUI rg) {
+    this.centerDialogBounds(rg.guiViewport);
+
+    if (!isOpen()) {
+      return;
     }
 
-    @Override
-    public void onBinaryInputPressed(BinaryInput bin) {
-        super.onBinaryInputPressed(bin);
+    rg.sprite(getDialogPosition(),
+        rg.getResourceManager().getTexture("dialog/dialog_inventory.png"), dialogTextureSource);
 
-        if (bin == Input.BUTTON_LEFT && craftingButtonContainsCursor() && dialog.canCraft()) {
-            GameView.getClient().packetHandler.sendDialogButtonPress(0);
-        }
-    }
+    this.renderItemSlots(rg);
 
-    protected boolean craftingButtonContainsCursor() {
-        if (offsetByDialogBounds(new GuiRectangle(91, 6, 16, 16))
-                .contains(Input.CURSOR_POS.toGuiPosition())) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void update(float delta) {
-        if (dialog.canCraft()) {
-            ItemStackExchange ise = new ItemStackExchange(craftingInventory.getStack(2), dialog.queryCraft().products[0]);
-            if (ise.mergeIntoOneStack()) {
-                craftingInventory.getSlot(2).setGhost(ise.to);
-                return;
-            }
-        }
-        craftingInventory.getSlot(2).setGhost(null);
-    }
-
-    @Override
-    public void render(RendererGUI rg) {
-        this.centerDialogBounds(rg.guiViewport);
-
-        if (!isOpen()) return;
-
-        rg.sprite(getDialogPosition(),
-                rg.getResourceManager().getTexture("dialog/dialog_inventory.png"), dialogTextureSource);
-
-        int buttontexture = dialog.canCraft() ? (craftingButtonContainsCursor() ? 1 : 0) : 2;
-
-        rg.sprite(offsetByDialogBounds(new GuiPosition(91, 6)),
-                rg.getResourceManager().getTexture("dialog/dialog_inventory.png"),
-                new IntRectangle(16 * buttontexture, 144, 16, 16));
-
-
-        this.renderItemSlots(rg);
-
-        rg.text(offsetByDialogBounds(new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)), "Inventory",
-                new TextColors(new Color(1/3f, 1/3f, 1/3f, 1)), CallAlign.BOTTOM_CENTER);
-    }
+    rg.text(offsetByDialogBounds(new GuiPosition(150 / 2, dialogTextureSource.height - 14)),
+        "Inventory",
+        new TextColors(new Color(173 / 255f, 100 / 255f, 0 / 255f, 1)), CallAlign.BOTTOM_CENTER);
+  }
 }

@@ -11,34 +11,35 @@ import me.spoony.botanico.common.util.position.TilePosition;
  * Created by Colten on 11/23/2016.
  */
 public class SPacketBuildingChange extends AutoPacketAdapter implements IClientHandler {
-    public long x;
-    public long y;
 
-    @NotTransferable
-    public Building building;
+  public long x;
+  public long y;
 
-    private int buildingid;
+  @NotTransferable
+  public Building building;
 
-    @Override
-    public void preEncode() {
-        if (building == null) {
-            buildingid = -1;
-        } else {
-            buildingid = building.getID();
-        }
+  private int buildingid;
+
+  @Override
+  public void preEncode() {
+    if (building == null) {
+      buildingid = -1;
+    } else {
+      buildingid = building.getID();
     }
+  }
 
-    @Override
-    public void postDecode() {
-        if (buildingid == -1) {
-            this.building = null;
-        } else {
-            this.building = Building.REGISTRY.getBuilding(buildingid);
-        }
+  @Override
+  public void postDecode() {
+    if (buildingid == -1) {
+      this.building = null;
+    } else {
+      this.building = Building.REGISTRY.getBuilding(buildingid);
     }
+  }
 
-    @Override
-    public void onReceive(BotanicoClient client) {
-        client.getLocalLevel().receiveBuildingUpdate(new TilePosition(x, y), building);
-    }
+  @Override
+  public void onReceive(BotanicoClient client) {
+    client.getLocalLevel().receiveBuildingUpdate(new TilePosition(x, y), building);
+  }
 }

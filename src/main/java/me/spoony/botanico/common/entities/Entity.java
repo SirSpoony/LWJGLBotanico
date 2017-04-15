@@ -9,7 +9,6 @@ import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.nbt.NBTCompoundTag;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.server.level.ServerPlane;
-import me.spoony.botanico.server.BotanicoServer;
 
 import java.util.Random;
 

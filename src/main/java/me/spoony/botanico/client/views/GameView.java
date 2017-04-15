@@ -1,6 +1,5 @@
 package me.spoony.botanico.client.views;
 
-import io.netty.channel.ChannelFutureListener;
 import me.spoony.botanico.Botanico;
 import me.spoony.botanico.client.*;
 import me.spoony.botanico.client.graphics.dialog.DialogRenderer;
@@ -10,15 +9,11 @@ import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.client.graphics.renderers.CursorRenderer;
 import me.spoony.botanico.client.graphics.renderers.HotbarRenderer;
-import me.spoony.botanico.client.views.menu.KickedView;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.client.graphics.*;
 import me.spoony.botanico.client.graphics.gui.*;
 import me.spoony.botanico.client.input.*;
 import me.spoony.botanico.common.util.DoubleRectangle;
-import me.spoony.botanico.server.BotanicoServer;
-
-import java.net.UnknownHostException;
 
 public class GameView extends ViewAdapter implements IView, BinaryInputListener {
 

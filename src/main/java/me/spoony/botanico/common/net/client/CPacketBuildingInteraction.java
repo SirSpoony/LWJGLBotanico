@@ -8,8 +8,7 @@ import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.common.util.position.TilePosition;
 import me.spoony.botanico.server.RemoteEntityPlayer;
-import me.spoony.botanico.server.level.ServerPlane;
-import me.spoony.botanico.server.BotanicoServer;
+import me.spoony.botanico.server.net.BotanicoServer;
 
 /**
  * Created by Colten on 11/25/2016.

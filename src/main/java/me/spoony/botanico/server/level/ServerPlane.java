@@ -1,5 +1,7 @@
 package me.spoony.botanico.server.level;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import me.spoony.botanico.common.util.position.ChunkPosition;
@@ -20,223 +22,222 @@ import me.spoony.botanico.common.util.position.TilePosition;
 import me.spoony.botanico.server.level.levelgen.ChunkGeneratorOverworld;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.server.level.levelgen.IChunkGenerator;
-import me.spoony.botanico.server.BotanicoServer;
+import me.spoony.botanico.server.net.BotanicoServer;
 
 import java.util.*;
 
 public class ServerPlane implements IPlane {
-    private final Map<Integer, Entity> entities;
-    private final Set<BuildingEntity> buildingEntities;
-    public IChunkGenerator chunkGenerator;
-    private final Map<ChunkPosition, Chunk> chunks;
 
-    public int seed;
+  private final Map<Integer, Entity> entities;
+  private final Set<BuildingEntity> buildingEntities;
+  protected IChunkGenerator chunkGenerator;
+  private final Map<ChunkPosition, Chunk> chunks;
 
-    public BotanicoServer server;
-    public ServerLevel level;
+  public int seed;
 
-    public ServerPlane(BotanicoServer server, ServerLevel level, long seed) {
-        entities = Maps.newConcurrentMap();
-        buildingEntities = Sets.newConcurrentHashSet();
-        chunks = Maps.newConcurrentMap();
-        chunkGenerator = new ChunkGeneratorOverworld(seed);
+  public BotanicoServer server;
+  public ServerLevel level;
 
-        this.server = server;
-        this.level = level;
+  public ServerPlane(BotanicoServer server, ServerLevel level, long seed) {
+    entities = Maps.newConcurrentMap();
+    buildingEntities = Sets.newConcurrentHashSet();
+    chunks = Maps.newConcurrentMap();
+    chunkGenerator = new ChunkGeneratorOverworld(seed);
 
-        System.out.println("Initialized: ServerLevel " + getClass().getSimpleName());
-    }
+    this.server = server;
+    this.level = level;
 
-    public void dispose() {
+    System.out.println("Initialized: ServerLevel " + getClass().getSimpleName());
+  }
 
-    }
+  public void dispose() {
 
-    @Override
-    public Chunk getChunk(ChunkPosition position) {
-        Chunk ret = chunks.get(position);
-        return ret != null ? ret : generateChunk(position);
-    }
+  }
 
-    @Override
-    public int getID() {
-        return IPlane.OVERWORLD;
-    }
+  @Override
+  public Chunk getChunk(ChunkPosition position) {
+    Chunk ret = chunks.get(position);
+    return ret != null ? ret : generateChunk(position);
+  }
 
-    public Chunk generateChunk(ChunkPosition position) {
-        Chunk newChunk = chunkGenerator.generateChunk(position);
-        chunks.put(position, newChunk);
-        return newChunk;
-    }
+  @Override
+  public int getID() {
+    return IPlane.OVERWORLD;
+  }
 
-    public void setTile(TilePosition position, Tile tile) {
-        Chunk chunk = getChunk(position.toChunkPosition(new ChunkPosition()));
-        chunk.setTile(position.getXInChunk(), position.getYInChunk(), tile);
+  public Chunk generateChunk(ChunkPosition position) {
+    Chunk newChunk = chunkGenerator.generateChunk(position);
+    chunks.put(position, newChunk);
+    return newChunk;
+  }
 
-        server.getClientManager().getPacketHandler().sendTileChange(position, this, tile);
-    }
+  public void setTile(TilePosition position, Tile tile) {
+    Chunk chunk = getChunk(position.toChunkPosition());
+    chunk.setTile(position.getXInChunk(), position.getYInChunk(), tile);
 
-    @Override
-    public Tile getTile(TilePosition position) {
-        return getChunk(position.toChunkPosition()).getTile(position.getXInChunk(), position.getYInChunk());
-    }
+    server.getClientManager().getPacketHandler().sendTileChange(position, this, tile);
+  }
 
-    public void setBuilding(TilePosition position, Building b) {
-        Chunk chunk = getChunk(position.toChunkPosition());
+  @Override
+  public Tile getTile(TilePosition position) {
+    return getChunk(position.toChunkPosition())
+        .getTile(position.getXInChunk(), position.getYInChunk());
+  }
 
-        Building prevbuild = chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
-        chunk.setBuilding(position.getXInChunk(), position.getYInChunk(), b);
+  public void setBuilding(TilePosition position, Building b) {
+    Chunk chunk = getChunk(position.toChunkPosition());
 
-        server.getClientManager().getPacketHandler().sendBuildingChange(position, this, b);
+    Building prevbuild = chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
+    chunk.setBuilding(position.getXInChunk(), position.getYInChunk(), b);
 
-        if (prevbuild != null) {
-            prevbuild.destroy(this, position);
-            if (prevbuild instanceof IBuildingEntityHost) {
-                BuildingEntity entity = getBuildingEntity(position);
-                if (entity == null)
-                    throw new RuntimeException("IBuildingEntityHost failed to create entity when it was created!");
-                entity.destroy();
-                removeBuildingEntity(position);
-            }
+    server.getClientManager().getPacketHandler().sendBuildingChange(position, this, b);
+
+    if (prevbuild != null) {
+      prevbuild.destroy(this, position);
+      if (prevbuild instanceof IBuildingEntityHost) {
+        BuildingEntity entity = getBuildingEntity(position);
+        if (entity == null) {
+          throw new RuntimeException(
+              "IBuildingEntityHost failed to create entity when it was created!");
         }
-        if (b != null) {
-            b.create(this, position);
-            if (b instanceof IBuildingEntityHost) {
-                IBuildingEntityHost entityHost = (IBuildingEntityHost) b;
-                BuildingEntity entity = entityHost.createNewEntity(this, position);
-                if (entity == null) throw new RuntimeException("IBuildingEntityHost returned null entity!");
-                entity.create();
-                addBuildingEntity(entity);
-            }
+        entity.destroy();
+        removeBuildingEntity(position);
+      }
+    }
+    if (b != null) {
+      b.create(this, position);
+      if (b instanceof IBuildingEntityHost) {
+        IBuildingEntityHost entityHost = (IBuildingEntityHost) b;
+        BuildingEntity entity = entityHost.createNewEntity(this, position);
+        if (entity == null) {
+          throw new RuntimeException("IBuildingEntityHost returned null entity!");
         }
+        entity.create();
+        addBuildingEntity(entity);
+      }
+    }
+  }
+
+  @Override
+  public Building getBuilding(TilePosition position) {
+    return getChunk(position.toChunkPosition())
+        .getBuilding(position.getXInChunk(), position.getYInChunk());
+  }
+
+  public void addEntity(Entity e) {
+    SPacketNewEntity pne = new SPacketNewEntity();
+
+    pne.eid = e.eid;
+    pne.type = e.getTypeID();
+    pne.x = e.position.x;
+    pne.y = e.position.y;
+    if (e instanceof EntityItemStack && ((EntityItemStack) e).stack != null) {
+      pne.misc = ((EntityItemStack) e).stack.getItem().getID();
     }
 
-    @Override
-    public Building getBuilding(TilePosition position) {
-        return getChunk(position.toChunkPosition()).getBuilding(position.getXInChunk(), position.getYInChunk());
+    server.getClientManager().sendPacketToAll(pne);
+
+    entities.put(e.eid, e);
+  }
+
+  public void removeEntity(Entity e) {
+    SPacketRemoveEntity pre = new SPacketRemoveEntity();
+    pre.eid = e.eid;
+    server.getClientManager().sendPacketToAll(pre);
+
+    entities.remove(e.eid);
+  }
+
+  public Collection<Entity> getEntities() {
+    return entities.values();
+  }
+
+  @Override
+  public Entity getEntity(int eid) {
+    return entities.getOrDefault(eid, null);
+  }
+
+  @Override
+  public boolean isLocal() {
+    return false;
+  }
+
+  public void addBuildingEntity(BuildingEntity e) {
+    buildingEntities.add(e);
+  }
+
+  public BuildingEntity getBuildingEntity(TilePosition position) {
+    for (BuildingEntity e : buildingEntities) {
+      if (e.position.equals(position)) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  public void removeBuildingEntity(TilePosition position) {
+    buildingEntities.remove(getBuildingEntity(position));
+  }
+
+  public void removeBuilding(TilePosition position) {
+    this.setBuilding(position, null);
+  }
+
+  public void update(float timeDiff) {
+    for (Chunk chunk : chunks.values()) {
+      chunk.update(timeDiff);
     }
 
-    public void addEntity(Entity e) {
-        SPacketNewEntity pne = new SPacketNewEntity();
-
-        pne.eid = e.eid;
-        pne.type = e.getTypeID();
-        pne.x = e.position.x;
-        pne.y = e.position.y;
-        if (e instanceof EntityItemStack && ((EntityItemStack) e).stack != null) {
-            pne.misc = ((EntityItemStack) e).stack.getItem().getID();
-        }
-
-        server.getClientManager().sendPacketToAll(pne);
-
-        synchronized (entities) {
-            entities.put(e.eid, e);
-        }
+    for (Entity e : entities.values()) {
+      e.update(timeDiff, this);
     }
 
-    public void removeEntity(Entity e) {
-        SPacketRemoveEntity pre = new SPacketRemoveEntity();
-        pre.eid = e.eid;
-        server.getClientManager().sendPacketToAll(pre);
-
-        synchronized (entities) {
-            entities.remove(e);
-        }
+    Iterator<BuildingEntity> i = buildingEntities.iterator();
+    while (i.hasNext()) {
+      BuildingEntity be = i.next();
+      if (be instanceof Updatable) {
+        ((Updatable) be).update(timeDiff);
+      }
     }
 
-    public Collection<Entity> getEntities() {
-        synchronized (entities) {
-            return entities.values();
-        }
+  }
+
+  public void dropItemStack(GamePosition position, ItemStack stack) {
+    Random randpos = new Random();
+    while (!stack.isEmpty()) {
+      ItemStack tempstack = ItemStack.clone(stack);
+      tempstack.setCount(1);
+      EntityItemStack eis = new EntityItemStack(
+          new GamePosition(position.x + ((-.5f + randpos.nextFloat()) / 2),
+              position.y + ((-.5f + randpos.nextFloat()) / 2)),
+          this,
+          tempstack, false);
+      addEntity(eis);
+      stack.increaseCount(-1);
     }
+  }
 
-    @Override
-    public Entity getEntity(int eid) {
-        return entities.getOrDefault(eid, null);
+  public void breakBuildingAndDrop(TilePosition position, EntityPlayer player) {
+    ItemStack[] ist = getBuilding(position).getDrops(this, position);
+    if (ist != null) {
+      for (ItemStack s : ist) {
+        dropItemStack(position.toGamePosition(new GamePosition()).add(.3f, .3f), s);
+      }
     }
+    setBuilding(position, null);
+  }
 
-    @Override
-    public boolean isLocal() {
-        return false;
-    }
+  public void setBuildingData(TilePosition position, byte data) {
+    Chunk chunk = getChunk(position.toChunkPosition());
+    chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
 
-    public void addBuildingEntity(BuildingEntity e) {
-        buildingEntities.add(e);
-    }
+    server.getClientManager().getPacketHandler().sendBuildingDataChange(position, this, data);
+  }
 
-    public BuildingEntity getBuildingEntity(TilePosition position) {
-        for (BuildingEntity e : buildingEntities) {
-            if (e.position.equals(position)) return e;
-        }
-        return null;
-    }
-
-    public void removeBuildingEntity(TilePosition position) {
-        buildingEntities.remove(getBuildingEntity(position));
-    }
-
-    public void removeBuilding(TilePosition position) {
-        this.setBuilding(position, null);
-    }
-
-    public void update(float timeDiff) {
-        synchronized (chunks) {
-            for (Chunk chunk : chunks.values()) {
-                chunk.update(timeDiff);
-            }
-        }
-
-
-        synchronized (entities) {
-            Set<Integer> eids = entities.keySet();
-            for (Integer eid : eids) {
-                Entity e = entities.get(eid);
-                e.update(timeDiff, this);
-            }
-        }
-
-        synchronized (buildingEntities) {
-            Iterator<BuildingEntity> i = buildingEntities.iterator();
-            while (i.hasNext()) {
-                BuildingEntity be = i.next();
-                if (be instanceof Updatable) ((Updatable) be).update(timeDiff);
-            }
-        }
-    }
-
-    public void dropItemStack(GamePosition position, ItemStack stack) {
-        Random randpos = new Random();
-        while (!stack.isEmpty()) {
-            ItemStack tempstack = ItemStack.clone(stack);
-            tempstack.setCount(1);
-            EntityItemStack eis = new EntityItemStack(
-                    new GamePosition(position.x + ((-.5f + randpos.nextFloat()) / 2), position.y + ((-.5f + randpos.nextFloat()) / 2)),
-                    this,
-                    tempstack, false);
-            addEntity(eis);
-            stack.increaseCount(-1);
-        }
-    }
-
-    public void breakBuildingAndDrop(TilePosition position, EntityPlayer player) {
-        ItemStack[] ist = getBuilding(position).getDrops(this, position);
-        if (ist != null) {
-            for (ItemStack s : ist) {
-                dropItemStack(position.toGamePosition(new GamePosition()).add(.3f, .3f), s);
-            }
-        }
-        setBuilding(position, null);
-    }
-
-    public void setBuildingData(TilePosition position, byte data) {
-        Chunk chunk = getChunk(position.toChunkPosition());
-        chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
-
-        server.getClientManager().getPacketHandler().sendBuildingDataChange(position, this, data);
-    }
-
-    public byte getBuildingData(TilePosition position) {
-        return getChunk(position.toChunkPosition()).getBuildingData(position.getXInChunk(), position.getYInChunk());
-    }
+  public byte getBuildingData(TilePosition position) {
+    return getChunk(position.toChunkPosition())
+        .getBuildingData(position.getXInChunk(), position.getYInChunk());
+  }
 
 /*    public NBTTag writeToNBT() {
         List<NBTTag> ret = Lists.newArrayList();
@@ -328,7 +329,7 @@ public class ServerPlane implements IPlane {
         }
     }*/
 
-    public ServerLevel getLevel() {
-        return this.level;
-    }
+  public ServerLevel getLevel() {
+    return this.level;
+  }
 }

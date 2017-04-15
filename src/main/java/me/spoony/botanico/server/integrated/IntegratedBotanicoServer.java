@@ -1,7 +1,7 @@
 package me.spoony.botanico.server.integrated;
 
 import me.spoony.botanico.client.IntegratedBotanicoClient;
-import me.spoony.botanico.server.BotanicoServer;
+import me.spoony.botanico.server.net.BotanicoServer;
 
 /**
  * Created by Colten on 4/14/2017.

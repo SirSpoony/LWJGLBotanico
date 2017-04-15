@@ -5,7 +5,7 @@ import me.spoony.botanico.common.crafting.Recipes;
 import me.spoony.botanico.common.items.Item;
 import me.spoony.botanico.common.net.Packets;
 import me.spoony.botanico.common.tiles.Tile;
-import me.spoony.botanico.server.BotanicoServer;
+import me.spoony.botanico.server.net.BotanicoServer;
 
 import java.util.Scanner;
 

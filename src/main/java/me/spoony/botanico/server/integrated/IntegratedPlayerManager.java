@@ -1,7 +1,6 @@
 package me.spoony.botanico.server.integrated;
 
 import com.google.common.collect.Sets;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import me.spoony.botanico.client.IntegratedBotanicoClient;
@@ -9,14 +8,14 @@ import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.common.net.Packet;
 import me.spoony.botanico.common.net.server.SPacketPlayerEID;
 import me.spoony.botanico.server.RemoteEntityPlayer;
-import me.spoony.botanico.server.net.ServerManager;
+import me.spoony.botanico.server.ServerManager;
 import me.spoony.botanico.server.net.ServerPacketHandler;
-import org.lwjgl.system.CallbackI.P;
 
 /**
  * Created by Colten on 4/14/2017.
  */
 public class IntegratedPlayerManager implements ServerManager {
+
   public IntegratedBotanicoServer server;
   public ServerPacketHandler packetHandler;
 

@@ -12,36 +12,36 @@ import java.util.Random;
 /**
  * Created by Colten on 11/26/2016.
  */
-public class Biome
-{
-    private ArrayList<BuildingFeature> buildingFeatures;
-    private Tile tile;
+public class Biome {
 
-    public Biome() {
-        this.buildingFeatures = Lists.newArrayList();
-        this.tile = Tiles.GROUND;
-    }
+  private ArrayList<BuildingFeature> buildingFeatures;
+  private Tile tile;
 
-    public void generate(Random random, long seed, boolean[][] biome, Chunk chunk) {
-        for (int xi = 0; xi < 32; xi++)
-        {
-            for (int yi = 0; yi < 32; yi++)
-            {
-                if (!biome[xi][yi]) continue;
-                chunk.tiles[xi][yi] = tile;
-            }
+  public Biome() {
+    this.buildingFeatures = Lists.newArrayList();
+    this.tile = Tiles.GROUND;
+  }
+
+  public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
+    for (int xi = 0; xi < 32; xi++) {
+      for (int yi = 0; yi < 32; yi++) {
+        if (!biome[xi * 32 + yi]) {
+          continue;
         }
-
-        for (BuildingFeature bf : buildingFeatures) {
-            bf.generate(random, seed, biome, chunk);
-        }
+        chunk.tiles[xi * 32 + yi] = tile;
+      }
     }
 
-    public void addBuildingFeature(BuildingFeature bf) {
-        buildingFeatures.add(bf);
+    for (BuildingFeature bf : buildingFeatures) {
+      bf.generate(random, seed, biome, chunk);
     }
+  }
 
-    public void setTile(Tile tile) {
-        this.tile = tile;
-    }
+  public void addBuildingFeature(BuildingFeature bf) {
+    buildingFeatures.add(bf);
+  }
+
+  public void setTile(Tile tile) {
+    this.tile = tile;
+  }
 }

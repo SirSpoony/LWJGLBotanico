@@ -13,7 +13,6 @@ public class SPacketBuildingData extends AutoPacketAdapter implements IClientHan
     public long y;
     public byte data;
 
-
     @Override
     public void onReceive(BotanicoClient client) {
         client.getLocalLevel().receiveBuildingDataUpdate(new TilePosition(x, y), data);

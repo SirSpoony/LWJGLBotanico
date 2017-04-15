@@ -5,7 +5,7 @@ import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.common.util.position.TilePosition;
-import me.spoony.botanico.server.BotanicoServer;
+import me.spoony.botanico.server.net.BotanicoServer;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**

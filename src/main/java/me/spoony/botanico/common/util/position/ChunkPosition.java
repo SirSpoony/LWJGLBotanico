@@ -12,7 +12,7 @@ import java.math.RoundingMode;
  * Created by Colten on 12/31/2016.
  */
 public class ChunkPosition {
-    public long x, y;
+    public final long x, y;
 
     public ChunkPosition() {
         x = 0;
@@ -25,36 +25,13 @@ public class ChunkPosition {
     }
 
     public ChunkPosition(TilePosition position) {
-        this();
-        set(position);
+        x = DoubleMath.roundToLong(position.x / 32d, RoundingMode.FLOOR);
+        y = DoubleMath.roundToLong(position.y / 32d, RoundingMode.FLOOR);
     }
 
     public ChunkPosition(long x, long y) {
         this.x = x;
         this.y = y;
-    }
-
-    public ChunkPosition(ChunkPosition position) {
-        this();
-        set(position);
-    }
-
-    public ChunkPosition set(GamePosition position) {
-        x = DoubleMath.roundToLong(position.x / 32d, RoundingMode.FLOOR);
-        y = DoubleMath.roundToLong(position.y / 32d, RoundingMode.FLOOR);
-        return this;
-    }
-
-    public ChunkPosition set(TilePosition position) {
-        x = DoubleMath.roundToLong(position.x / 32d, RoundingMode.FLOOR);
-        y = DoubleMath.roundToLong(position.y / 32d, RoundingMode.FLOOR);
-        return this;
-    }
-
-    public ChunkPosition set(ChunkPosition position) {
-        this.x = position.x;
-        this.y = position.y;
-        return this;
     }
 
     @Override

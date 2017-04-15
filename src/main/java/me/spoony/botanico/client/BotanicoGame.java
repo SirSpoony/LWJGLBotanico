@@ -22,144 +22,155 @@ import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
 
 public final class BotanicoGame {
-    public static Window WINDOW;
 
-    public static boolean RUNNING;
-    private static long LAST_LOOP_TIME;
-    public static double DELTA;
-    public static double FPS;
+  public static Window WINDOW;
 
-    private static IView nextView;
-    private static IView view;
-    private static final ResourceManager RESOURCE_MANAGER;
+  public static boolean RUNNING;
+  private static long LAST_LOOP_TIME;
+  public static double DELTA;
+  public static double FPS;
 
-    static {
-        RESOURCE_MANAGER = new ResourceManager();
+  private static IView nextView;
+  private static IView view;
+  private static final ResourceManager RESOURCE_MANAGER;
+
+  public static long getLastLoopTime() {
+    return LAST_LOOP_TIME;
+  }
+
+  static {
+    RESOURCE_MANAGER = new ResourceManager();
+  }
+
+  public static IView getView() {
+    synchronized (view) {
+      return view;
+    }
+  }
+
+  public static void setView(IView view) {
+    System.out.println("Changing View to " + view.getClass().getSimpleName());
+    nextView = view;
+  }
+
+  public static void start() {
+    System.out.println("Creating window");
+    BotanicoGame.WINDOW = new Window(960, 640, "Botanico");
+    BotanicoGame.WINDOW.init();
+    System.out.println("Showing window");
+    BotanicoGame.WINDOW.show();
+
+    BotanicoGame.setView(new LoadingView());
+
+    //Config.init("assets/config/");
+
+    // INITIALIZE REGISTRIES
+    System.out.println("Initializing registries");
+    Input.init();
+    Packets.init();
+    Tile.initRegistry();
+    Building.initRegistry();
+    Item.initRegistry();
+    Recipes.init();
+
+    try {
+      GLFWErrorCallback.createPrint(System.err).set();
+
+      System.out.println("Starting render loop");
+      BotanicoGame.run();
+
+      System.out.println("Shutting down!");
+      BotanicoGame.getView().unloadContent();
+
+      Callbacks.glfwFreeCallbacks(WINDOW.getHandle());
+      GLFW.glfwDestroyWindow(WINDOW.getHandle());
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      GLFW.glfwTerminate();
+      GLFW.glfwSetErrorCallback(null).free();
+      System.out.println("Safely shut down!");
+    }
+  }
+
+  public static void update(float delta) {
+    if (nextView != null) {
+      if (view != null) {
+        view.unloadContent();
+      }
+      view = nextView;
+      view.initialize();
+      nextView = null;
     }
 
-    public static IView getView() {
-        synchronized (view) {
-            return view;
-        }
+    if (view == null) {
+      return;
     }
 
-    public static void setView(IView view) {
-        System.out.println("Changing View to "+view.getClass().getSimpleName());
-        nextView = view;
+    if (!view.isContentLoaded()) {
+      view.loadContent();
+    } else {
+      view.update(delta);
+    }
+  }
+
+  public static void render() {
+    glClearColor(1f, 1, 1f, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glfwPollEvents();
+
+    if (view == null) {
+      return;
     }
 
-    public static void start() {
-        System.out.println("Creating window");
-        BotanicoGame.WINDOW = new Window(960, 640, "Botanico");
-        BotanicoGame.WINDOW.init();
-        System.out.println("Showing window");
-        BotanicoGame.WINDOW.show();
-
-        BotanicoGame.setView(new LoadingView());
-
-        //Config.init("assets/config/");
-
-        // INITIALIZE REGISTRIES
-        System.out.println("Initializing registries");
-        Input.init();
-        Packets.init();
-        Tile.initRegistry();
-        Building.initRegistry();
-        Item.initRegistry();
-        Recipes.init();
-
-        try {
-            GLFWErrorCallback.createPrint(System.err).set();
-
-            System.out.println("Starting render loop");
-            BotanicoGame.run();
-
-            System.out.println("Shutting down!");
-            BotanicoGame.getView().unloadContent();
-
-            Callbacks.glfwFreeCallbacks(WINDOW.getHandle());
-            GLFW.glfwDestroyWindow(WINDOW.getHandle());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            GLFW.glfwTerminate();
-            GLFW.glfwSetErrorCallback(null).free();
-            System.out.println("Safely shut down!");
-        }
+    if (view.isContentLoaded()) {
+      view.render();
     }
 
-    public static void update(float delta) {
-        if (nextView != null) {
-            if (view != null) view.unloadContent();
-            view = nextView;
-            view.initialize();
-            nextView = null;
-        }
+    glfwSwapBuffers(WINDOW.getHandle());
+  }
 
-        if (view == null) return;
+  private static void run() {
+    RUNNING = true;
+    while (RUNNING) {
 
-        if (!view.isContentLoaded()) {
-            view.loadContent();
-        } else {
-            view.update(delta);
-        }
-    }
+      long time = System.nanoTime();
+      DELTA = (time - LAST_LOOP_TIME) / 1_000_000_000d;
+      FPS = 1d / DELTA;
+      LAST_LOOP_TIME = time;
 
-    public static void render() {
-        glClearColor(1f, 1, 1f, 1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glfwPollEvents();
-
-        if (view == null) return;
-
-        if (view.isContentLoaded()) {
-            view.render();
-        }
-
-        glfwSwapBuffers(WINDOW.getHandle());
-    }
-
-    private static void run() {
-        RUNNING = true;
-        while (RUNNING) {
-
-            long time = System.nanoTime();
-            DELTA = (time - LAST_LOOP_TIME) / 1_000_000_000d;
-            FPS = 1d/DELTA;
-            LAST_LOOP_TIME = time;
-
-            if (WINDOW.shouldClose()) {
-                RUNNING = false;
-            }
-
-            update((float)DELTA);
-            render();
-        }
-    }
-
-    public static ResourceManager getResourceManager() {
-        return RESOURCE_MANAGER;
-    }
-
-    public static synchronized GameView getGame() {
-        synchronized (view) {
-            if (view instanceof GameView) {
-                return (GameView) view;
-            }
-            return null;
-        }
-    }
-
-    public static void close() {
+      if (WINDOW.shouldClose()) {
         RUNNING = false;
-    }
+      }
 
-    public static RendererGUI getRendererGUI() {
-        if (getView() instanceof GameView) {
-            return getGame().rendererGUI;
-        } else if (getView() instanceof MenuView) {
-            return ((MenuView) getView()).getRendererGUI();
-        }
-        return null;
+      update((float) DELTA);
+      render();
     }
+  }
+
+  public static ResourceManager getResourceManager() {
+    return RESOURCE_MANAGER;
+  }
+
+  public static synchronized GameView getGame() {
+    synchronized (view) {
+      if (view instanceof GameView) {
+        return (GameView) view;
+      }
+      return null;
+    }
+  }
+
+  public static void close() {
+    RUNNING = false;
+  }
+
+  public static RendererGUI getRendererGUI() {
+    if (getView() instanceof GameView) {
+      return getGame().rendererGUI;
+    } else if (getView() instanceof MenuView) {
+      return ((MenuView) getView()).getRendererGUI();
+    }
+    return null;
+  }
 }

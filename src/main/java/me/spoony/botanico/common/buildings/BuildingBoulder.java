@@ -7,10 +7,9 @@ import me.spoony.botanico.server.level.ServerPlane;
 /**
  * Created by Colten on 11/9/2016.
  */
-public class BuildingBoulder extends Building
-{
-    public BuildingBoulder(int id)
-    {
+public class BuildingBoulder extends Building {
+
+    public BuildingBoulder(int id) {
         super(id);
 
         name = "boulder";
@@ -20,16 +19,16 @@ public class BuildingBoulder extends Building
     }
 
     @Override
-    public void destroy(IPlane level, TilePosition position)
-    {
-        if (level.isLocal()) return;
-        ServerPlane serverLevel = (ServerPlane)level;
+    public void destroy(IPlane level, TilePosition position) {
+        if (level.isLocal()) {
+            return;
+        }
+        ServerPlane serverLevel = (ServerPlane) level;
         serverLevel.setBuilding(position, Buildings.ROCKS);
     }
 
     @Override
-    public BuildingBreakMaterial getBreakParticle()
-    {
+    public BuildingBreakMaterial getBreakParticle() {
         return BuildingBreakMaterial.ROCK;
     }
 }

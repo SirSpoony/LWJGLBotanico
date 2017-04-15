@@ -1,6 +1,8 @@
 package me.spoony.botanico.client;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import me.spoony.botanico.common.util.position.ChunkPosition;
@@ -27,7 +29,7 @@ public class ClientPlane implements IPlane {
   public BotanicoClient client;
   protected ClientEntityPlayer localPlayer;
 
-  private Map<Integer, Entity> entities;
+  private BiMap<Integer, Entity> entities;
   private Map<ChunkPosition, Chunk> chunks;
 
   private PlaneRenderer renderer;
@@ -38,7 +40,7 @@ public class ClientPlane implements IPlane {
   public ClientPlane(BotanicoClient client) {
     super();
 
-    entities = Maps.newConcurrentMap();
+    entities = HashBiMap.create();
     chunks = Maps.newConcurrentMap();
 
     this.client = client;
@@ -109,7 +111,6 @@ public class ClientPlane implements IPlane {
   }
 
   public void receiveBuildingUpdate(TilePosition position, Building b) {
-
     Chunk chunk = getChunk(position.toChunkPosition());
     Building prevb = chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
     chunk.setBuilding(position.getXInChunk(), position.getYInChunk(), b);

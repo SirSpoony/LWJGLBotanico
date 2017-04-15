@@ -10,32 +10,33 @@ import me.spoony.botanico.common.util.position.TilePosition;
 /**
  * Created by Colten on 11/10/2016.
  */
-public class BuildingFlower extends Building
-{
-    int subid;
-    public BuildingFlower(int id, String name, int subid)
-    {
-        super(id);
-        this.name = name;
-        shouldCollide = false;
+public class BuildingFlower extends Building {
 
-        this.alwaysBehindCharacter = false;
-        this.textureName = "building/flower.png";
-        this.hardness = .1f;
+  int subid;
 
-        this.subid = subid;
-    }
+  public BuildingFlower(int id, String name, int subid) {
+    super(id);
+    this.name = name;
+    shouldCollide = false;
 
-    @Override
-    public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d, boolean highlight)
-    {
-        rg.sprite(new GamePosition(position), rg.getResourceManager().getTexture(textureName),
-                new IntRectangle(subid*16, 0, 16, 16), highlight ? new Color(.8f,.8f,.8f,1) : Color.WHITE, position.y + (alwaysBehindCharacter ? 1 : 0));
-    }
+    this.alwaysBehindCharacter = false;
+    this.textureName = "building/flower.png";
+    this.hardness = .1f;
 
-    @Override
-    public BuildingBreakMaterial getBreakParticle()
-    {
-        return BuildingBreakMaterial.PLANT;
-    }
+    this.subid = subid;
+  }
+
+  @Override
+  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+      boolean highlight) {
+    rg.sprite(new GamePosition(position), rg.getResourceManager().getTexture(textureName),
+        new IntRectangle(subid * 16, 0, 16, 16),
+        highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE,
+        position.y + (alwaysBehindCharacter ? 1 : 0));
+  }
+
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.PLANT;
+  }
 }

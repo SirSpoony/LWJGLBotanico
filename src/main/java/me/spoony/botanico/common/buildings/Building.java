@@ -18,170 +18,178 @@ import me.spoony.botanico.common.util.position.TilePosition;
  * Created by Colten on 11/8/2016.
  */
 public class Building {
-    public static final BuildingRegistry REGISTRY = new BuildingRegistry();
 
-    protected String name;
-    protected boolean shouldCollide;
-    protected DoubleRectangle collisionBounds;
-    protected String textureName;
-    protected boolean alwaysBehindCharacter;
-    protected float hardness;
+  public static final BuildingRegistry REGISTRY = new BuildingRegistry();
 
-    public int getID()
-    {
-        return id;
+  protected String name;
+  protected boolean shouldCollide;
+  protected DoubleRectangle collisionBounds;
+  protected String textureName;
+  protected boolean alwaysBehindCharacter;
+  protected float hardness;
+
+  public int getID() {
+    return id;
+  }
+
+  public void setID(int id) {
+    this.id = id;
+  }
+
+  protected int id;
+
+  public static void initRegistry() {
+    REGISTRY.registerBuilding(new BuildingWorkbench(0));
+
+    REGISTRY.registerBuilding(new BuildingFlower(1, "flower_orange", 0));
+    REGISTRY.registerBuilding(new BuildingFlower(2, "flower_red", 1));
+
+    REGISTRY.registerBuilding(new BuildingGrass(3));
+    REGISTRY.registerBuilding(new BuildingDirtMound(4));
+    REGISTRY.registerBuilding(new BuildingRocks(5));
+    REGISTRY.registerBuilding(new BuildingSticksPile(6));
+
+    REGISTRY.registerBuilding(new BuildingBoulder(7));
+    REGISTRY.registerBuilding(new BuildingTree(8));
+    REGISTRY.registerBuilding(new BuildingTreeCold(9));
+
+    REGISTRY.registerBuilding(new BuildingToolStation(10));
+
+    REGISTRY.registerBuilding(new BuildingKnappingStation(11));
+
+    REGISTRY.registerBuilding(new BuildingWheat(12));
+
+    REGISTRY.registerBuilding(new BuildingJar(13));
+
+    REGISTRY.registerBuilding(new BuildingMysticFlower(14));
+    REGISTRY.registerBuilding(new BuildingEnergyPipe(15));
+
+    REGISTRY.registerBuilding(new BuildingCave(16));
+
+    REGISTRY.registerBuilding(new BuildingFurnace(17));
+    REGISTRY.registerBuilding(new BuildingBoiler(18));
+
+    REGISTRY.registerBuilding(new BuildingFluidPipe(19));
+
+    REGISTRY.registerBuilding(new BuildingHemp(20));
+    REGISTRY.registerBuilding(new BuildingCaveRope(21));
+
+    REGISTRY.registerBuilding(new BuildingCopperOre(22));
+    REGISTRY.registerBuilding(new BuildingCoalOre(23));
+
+    REGISTRY.registerBuilding(new BuildingBush(24));
+    REGISTRY.registerBuilding(new BuildingReeds(25));
+  }
+
+  public Building(int id) {
+    name = "unnamed";
+    shouldCollide = true;
+    collisionBounds = new DoubleRectangle(0, 0, 1, 1);
+    textureName = "missing_texture";
+    alwaysBehindCharacter = false;
+    hardness = .5f;
+    this.id = id;
+  }
+
+  public String getLocalizedName() {
+    return "[" + name + "]";
+  }
+
+  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte extra,
+      boolean highlight) {
+    Texture texture = BotanicoGame.getResourceManager().getTexture(textureName);
+    rg.sprite(new GamePosition(position), texture,
+        new IntRectangle(0, 0, texture.getWidth(), texture.getHeight()),
+        highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE,
+        position.y + (alwaysBehindCharacter ? 1 : 0));
+  }
+
+  public void create(IPlane level, TilePosition position) {
+    // TODO
+  }
+
+  public boolean canCreate(IPlane level, TilePosition position) {
+    if (level.getBuilding(position) != null) {
+      return false;
     }
-
-    public void setID(int id)
-    {
-        this.id = id;
+    if (level.getTile(position) == Tiles.WATER) {
+      return false;
     }
-
-    protected int id;
-
-    public static void initRegistry()
-    {
-        REGISTRY.registerBuilding(new BuildingWorkbench(0));
-
-        REGISTRY.registerBuilding(new BuildingFlower(1, "flower_orange", 0));
-        REGISTRY.registerBuilding(new BuildingFlower(2, "flower_red", 1));
-
-        REGISTRY.registerBuilding(new BuildingGrass(3));
-        REGISTRY.registerBuilding(new BuildingDirtMound(4));
-        REGISTRY.registerBuilding(new BuildingRocks(5));
-        REGISTRY.registerBuilding(new BuildingSticksPile(6));
-
-        REGISTRY.registerBuilding(new BuildingBoulder(7));
-        REGISTRY.registerBuilding(new BuildingTree(8));
-        REGISTRY.registerBuilding(new BuildingTreeCold(9));
-
-        REGISTRY.registerBuilding(new BuildingToolStation(10));
-
-        REGISTRY.registerBuilding(new BuildingKnappingStation(11));
-
-        REGISTRY.registerBuilding(new BuildingWheat(12));
-
-        REGISTRY.registerBuilding(new BuildingJar(13));
-
-        REGISTRY.registerBuilding(new BuildingMysticFlower(14));
-        REGISTRY.registerBuilding(new BuildingEnergyPipe(15));
-
-        REGISTRY.registerBuilding(new BuildingCave(16));
-
-        REGISTRY.registerBuilding(new BuildingFurnace(17));
-        REGISTRY.registerBuilding(new BuildingBoiler(18));
-
-        REGISTRY.registerBuilding(new BuildingFluidPipe(19));
-
-        REGISTRY.registerBuilding(new BuildingHemp(20));
-        REGISTRY.registerBuilding(new BuildingCaveRope(21));
-
-        REGISTRY.registerBuilding(new BuildingCopperOre(22));
-        REGISTRY.registerBuilding(new BuildingCoalOre(23));
+    if (level.getTile(position) == Tiles.DEEP_WATER) {
+      return false;
     }
+    return true;
+  }
 
-    public Building(int id) {
-        name = "unnamed";
-        shouldCollide = true;
-        collisionBounds = new DoubleRectangle(0,0,1,1);
-        textureName = "missing_texture";
-        alwaysBehindCharacter = false;
-        hardness = .5f;
-        this.id = id;
-    }
+  public void destroy(IPlane level, TilePosition position) {
 
-    public String getLocalizedName() {
-//        return Config.getLocalization().get("building:"+name, "["+name+"]");
-        return "["+name+"]";
-    }
+  }
 
-    public void render(RendererGame rg, ClientPlane level, TilePosition position, byte extra, boolean highlight) {
-        Texture texture = BotanicoGame.getResourceManager().getTexture(textureName);
-        rg.sprite(new GamePosition(position), texture,
-                new IntRectangle(0,0,texture.getWidth(), texture.getHeight()),
-                highlight ? new Color(.8f,.8f,.8f,1) : Color.WHITE,  position.y + (alwaysBehindCharacter ? 1 : 0));
-    }
+  public boolean onClick(IPlane level, EntityPlayer player, TilePosition position) {
+    return false;
+  }
 
-    public void create(IPlane level, TilePosition position) {
-        // TODO
-    }
+  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+    return getDrops();
+  }
 
-    public boolean canCreate(IPlane level, TilePosition position) {
-        if (level.getBuilding(position) != null) return false;
-        if (level.getTile(position) == Tiles.WATER) return false;
-        if (level.getTile(position) == Tiles.DEEP_WATER) return false;
-        return true;
-    }
+  public float getHardness(IPlane level, TilePosition position) {
+    return getHardness();
+  }
 
-    public void destroy(IPlane level, TilePosition position) {
+  public String getName() {
+    return name;
+  }
 
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public boolean onClick(IPlane level, EntityPlayer player, TilePosition position){
-        return false;
-    }
+  public boolean shouldCollide() {
+    return shouldCollide;
+  }
 
-    public ItemStack[] getDrops(IPlane level, TilePosition position){
-        return getDrops();
-    }
+  public void setShouldCollide(boolean shouldCollide) {
+    this.shouldCollide = shouldCollide;
+  }
 
-    public float getHardness(IPlane level, TilePosition position){
-        return getHardness();
-    }
+  public DoubleRectangle getCollisionBounds() {
+    return collisionBounds;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setCollisionBounds(DoubleRectangle collisionBounds) {
+    this.collisionBounds = collisionBounds;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getTextureName() {
+    return textureName;
+  }
 
-    public boolean shouldCollide() {
-        return shouldCollide;
-    }
+  public void setTextureName(String textureName) {
+    this.textureName = textureName;
+  }
 
-    public void setShouldCollide(boolean shouldCollide) {
-        this.shouldCollide = shouldCollide;
-    }
+  public boolean isAlwaysBehindCharacter() {
+    return alwaysBehindCharacter;
+  }
 
-    public DoubleRectangle getCollisionBounds() {
-        return collisionBounds;
-    }
+  public void setAlwaysBehindCharacter(boolean alwaysBehindCharacter) {
+    this.alwaysBehindCharacter = alwaysBehindCharacter;
+  }
 
-    public void setCollisionBounds(DoubleRectangle collisionBounds) {
-        this.collisionBounds = collisionBounds;
-    }
+  public float getHardness() {
+    return hardness;
+  }
 
-    public String getTextureName() {
-        return textureName;
-    }
+  public void setHardness(float hardness) {
+    this.hardness = hardness;
+  }
 
-    public void setTextureName(String textureName) {
-        this.textureName = textureName;
-    }
+  public ItemStack[] getDrops() {
+    return null;
+  }
 
-    public boolean isAlwaysBehindCharacter() {
-        return alwaysBehindCharacter;
-    }
-
-    public void setAlwaysBehindCharacter(boolean alwaysBehindCharacter) {
-        this.alwaysBehindCharacter = alwaysBehindCharacter;
-    }
-
-    public float getHardness() {
-        return hardness;
-    }
-
-    public void setHardness(float hardness) {
-        this.hardness = hardness;
-    }
-
-    public ItemStack[] getDrops() {
-        return null;
-    }
-
-    public BuildingBreakMaterial getBreakParticle() {
-        return BuildingBreakMaterial.DEFAULT;
-    }
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.DEFAULT;
+  }
 }

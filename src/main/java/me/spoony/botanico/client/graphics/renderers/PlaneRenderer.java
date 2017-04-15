@@ -35,6 +35,7 @@ public class PlaneRenderer implements GameRenderable {
   @Override
   public void render(RendererGame rg) {
     // FANCY RENDERING VOODOO, IT WILL BREAK
+    // OK NVM THIS IS SOME RLLY SHITTY CODE HOLY SHIT
 
     if (level.getID() == IPlane.UNDERWORLD) {
       rg.nightCycle = 0;
@@ -54,9 +55,10 @@ public class PlaneRenderer implements GameRenderable {
     Texture tileTexture = rg.getResourceManager().getTexture("tiles.png");
 
     Tile[][] tiles = new Tile[tileViewWidth][tileViewHeight];
+    TilePosition pos = new TilePosition();
     for (int x = firstTileX; x < lastTileX; x++) {
       for (int y = firstTileY; y < lastTileY; y++) {
-        tiles[x - firstTileX][y - firstTileY] = level.getTile(new TilePosition(x, y));
+        tiles[x - firstTileX][y - firstTileY] = level.getTile(pos.set(x, y));
       }
     }
 
@@ -80,18 +82,12 @@ public class PlaneRenderer implements GameRenderable {
         adjtiles.setTile(Direction.DOWN_LEFT,  tiles[x - firstTileX - 1][y - firstTileY - 1]);
 
         final int randtexture = Tile.perm[Math.abs(5 * x + y) & 255];
-        final TileRenderRule region = tile.renderRules.findRenderRule(adjtiles);
+        final TileRenderRule relevantRule = tile.renderRules.findRenderRule(adjtiles);
 
-        IntRectangle foreground = null;
-        IntRectangle background = null;
+        IntRectangle foreground = tile.foregroundRegion(adjtiles, relevantRule, randtexture);
+        IntRectangle background = tile.backgroundRegion(adjtiles, relevantRule, randtexture);
 
-        if (region != null) {
-          foreground = region.getForeground(randtexture);
-          background = region.getBackground();
-        } else {
-          foreground = tile.renderRules.getDefaultRegions()[randtexture % tile.renderRules
-              .getDefaultRegions().length];
-        }
+
 
         if (background != null) {
           rg.sprite(new GamePosition(x, y), tileTexture,

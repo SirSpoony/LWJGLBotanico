@@ -38,10 +38,6 @@ public class RemoteEntityPlayer extends EntityPlayer {
     super(plane);
 
     this.inventory = new Inventory(EntityPlayer.INVENTORY_SIZE, Dialog.PLAYER_INV_ID);
-    this.inventory.getSlot(EntityPlayer.SLOT_PICKAXE).setRestriction(ItemSlotRestriction.PICKAXE);
-    this.inventory.getSlot(EntityPlayer.SLOT_HOE).setRestriction(ItemSlotRestriction.HOE);
-    this.inventory.getSlot(EntityPlayer.SLOT_AXE).setRestriction(ItemSlotRestriction.AXE);
-    this.inventory.getSlot(EntityPlayer.SLOT_SWORD).setRestriction(ItemSlotRestriction.BLADE);
     this.inventory.getSlot(EntityPlayer.SLOT_RING1).setRestriction(ItemSlotRestriction.RING);
     this.inventory.getSlot(EntityPlayer.SLOT_RING2).setRestriction(ItemSlotRestriction.RING);
     this.currentDialog = null;
@@ -171,7 +167,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
       }
       return null;
     } else {
-      ItemStack retstack = inventory.addItem(stack, Range.closed(0, 41));
+      ItemStack retstack = inventory.addItem(stack, Range.closed(EntityPlayer.NORMAL_INVENTORY_MIN, EntityPlayer.NORMAL_INVENTORY_MAX));
       updateQueuedPlayerInventory();
       if (retstack != null) {
         return stack;

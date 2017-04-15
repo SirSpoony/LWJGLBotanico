@@ -12,7 +12,6 @@ import me.spoony.botanico.common.net.server.SPacketTeleport;
 import me.spoony.botanico.common.net.server.SPacketTileChange;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.util.position.TilePosition;
-import me.spoony.botanico.server.BotanicoServer;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -56,9 +55,9 @@ public class ServerPacketHandler {
     Preconditions.checkNotNull(chunk);
 
     SPacketChunk packet = new SPacketChunk();
-    packet.buildings = chunk.buildings;
-    packet.tiles = chunk.tiles;
-    packet.buildingdata = chunk.buildingData;
+    packet.buildings = chunk.buildings.clone();
+    packet.tiles = chunk.tiles.clone();
+    packet.buildingdata = chunk.buildingData.clone();
     packet.x = chunk.position.x;
     packet.y = chunk.position.y;
 

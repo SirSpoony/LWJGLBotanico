@@ -14,8 +14,8 @@ import me.spoony.botanico.common.net.IServerHandler;
 import me.spoony.botanico.common.net.Packet;
 import me.spoony.botanico.common.net.server.SPacketHeartbeatMarco;
 import me.spoony.botanico.common.util.Timer;
-import me.spoony.botanico.server.BotanicoServer;
 import me.spoony.botanico.server.RemoteEntityPlayer;
+import me.spoony.botanico.server.ServerManager;
 
 /**
  * Created by Colten on 4/14/2017.
@@ -106,7 +106,7 @@ public class ServerNetworkManager implements ServerManager {
 
   @Override
   public void receivePacket(Packet packet, RemoteEntityPlayer client) {
-    ((IServerHandler) packet).onReceive(server, client);
+        ((IServerHandler) packet).onReceive(server, client);
   }
 
   @Override

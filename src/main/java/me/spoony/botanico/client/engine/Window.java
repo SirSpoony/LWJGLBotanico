@@ -60,7 +60,7 @@ public class Window {
         glfwSetWindowPos(handle, windowposx, windowposy);
 
         glfwMakeContextCurrent(handle);
-        glfwSwapInterval(1);
+        glfwSwapInterval(1); //vsync
 
         glfwSetWindowSizeCallback(handle, (window, width1, height1) -> {
             this.width = width1;

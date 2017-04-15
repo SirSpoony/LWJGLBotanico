@@ -36,12 +36,8 @@ public class TilePosition {
         this.y = 0;
     }
 
-    public ChunkPosition toChunkPosition(ChunkPosition position) {
-        return position.set(this);
-    }
-
     public ChunkPosition toChunkPosition() {
-        return toChunkPosition(new ChunkPosition());
+        return new ChunkPosition(this);
     }
 
     public int getXInChunk() {

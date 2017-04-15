@@ -1,7 +1,9 @@
-package me.spoony.botanico.server;
+package me.spoony.botanico.server.net;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import me.spoony.botanico.server.ServerManager;
 import me.spoony.botanico.server.level.ServerLevel;
-import me.spoony.botanico.server.net.ServerManager;
 import me.spoony.botanico.server.net.ServerNetworkManager;
 
 /**
@@ -40,6 +42,7 @@ public class BotanicoServer {
     gameLoopThread = new Thread(() -> {
       long lastTime = System.nanoTime();
       while (RUNNING) {
+
         float delta = ((System.nanoTime() - lastTime) / 1_000_000_000f);
         lastTime = System.nanoTime();
         level.update(delta);

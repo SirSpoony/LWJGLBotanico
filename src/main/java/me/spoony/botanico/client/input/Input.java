@@ -37,6 +37,7 @@ public class Input
     public static BinaryInput INV_KEY_5 = new BinaryInput(BinaryInputType.KEY, GLFW_KEY_5);
     public static BinaryInput INV_KEY_6 = new BinaryInput(BinaryInputType.KEY, GLFW_KEY_6);
     public static BinaryInput INV_KEY_7 = new BinaryInput(BinaryInputType.KEY, GLFW_KEY_7);
+    public static BinaryInput INV_KEY_8 = new BinaryInput(BinaryInputType.KEY, GLFW_KEY_8);
 
     public static BinaryInput INV_KEY_SWORD = new BinaryInput(BinaryInputType.KEY, GLFW_KEY_Z);
     public static BinaryInput INV_KEY_HOE = new BinaryInput(BinaryInputType.KEY, GLFW_KEY_X);
@@ -126,6 +127,7 @@ public class Input
         BINARY_INPUTS.add(INV_KEY_5);
         BINARY_INPUTS.add(INV_KEY_6);
         BINARY_INPUTS.add(INV_KEY_7);
+        BINARY_INPUTS.add(INV_KEY_8);
 
         BINARY_INPUTS.add(INV_KEY_SWORD);
         BINARY_INPUTS.add(INV_KEY_HOE);

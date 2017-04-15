@@ -1,49 +1,57 @@
 apply plugin: 'java'
+apply plugin: 'application'
 
 sourceSets.main.java.srcDirs = ["src/main/java"]
 sourceSets.main.resources.srcDirs = ["src/main/res"]
 sourceSets.test.java.srcDirs = ["src/test/java"]
 sourceSets.test.resources.srcDirs = ["src/test/res"]
 
-project.ext.lwjglVersion = "3.1.0"
+mainClassName = "me.spoony.botanico.StartClient"
+
+project.ext.lwjglVersion = "3.1.1"
 
 project.ext.lwjglNatives = "natives-windows"
 project.ext.lwjglNatives1 = "natives-linux"
 project.ext.lwjglNatives2 = "natives-macos"
-
 
 repositories {
     jcenter()
 }
 
 dependencies {
-	compile "org.lwjgl:lwjgl:${lwjglVersion}"
-	compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
-	compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
-	compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
-	compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
-	compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
-	runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
-	runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
-	runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:${lwjglNatives}"
-	runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
-	runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives}"
+
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives1}"
     runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives1}"
     runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:${lwjglNatives1}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives1}"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives1}"
     runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives1}"
+
     runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives2}"
     runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives2}"
     runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:${lwjglNatives2}"
     runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives2}"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives2}"
     runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:${lwjglNatives2}"
-	
-	compile 'com.google.guava:guava:20.0'
-	compile 'com.google.code.gson:gson:2.8.0'
-    compile 'io.netty:netty-all:4.1.6.Final'
-	
-	compile 'org.joml:joml:1.7.1'
+
+    compile 'com.google.guava:guava:21.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'io.netty:netty-all:4.1.9.Final'
+
+    compile 'org.joml:joml:1.9.2'
 
     testCompile 'junit:junit:4.12'
 }

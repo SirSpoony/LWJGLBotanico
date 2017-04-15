@@ -8,7 +8,6 @@ import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.IntRectangle;
 import me.spoony.botanico.common.util.position.TilePosition;
 import me.spoony.botanico.server.RemoteEntityPlayer;
-import me.spoony.botanico.server.BotanicoServer;
 import me.spoony.botanico.server.level.ServerPlane;
 
 /**

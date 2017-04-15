@@ -1,6 +1,6 @@
 package me.spoony.botanico.common.net;
 
-import me.spoony.botanico.server.BotanicoServer;
+import me.spoony.botanico.server.net.BotanicoServer;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**

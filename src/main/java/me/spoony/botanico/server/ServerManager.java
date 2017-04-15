@@ -1,10 +1,11 @@
-package me.spoony.botanico.server.net;
+package me.spoony.botanico.server;
 
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import me.spoony.botanico.common.net.Packet;
 import me.spoony.botanico.server.RemoteEntityPlayer;
+import me.spoony.botanico.server.net.ServerPacketHandler;
 
 /**
  * Created by Colten on 4/14/2017.
