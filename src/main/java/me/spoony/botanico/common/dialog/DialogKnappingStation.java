@@ -1,18 +1,15 @@
 package me.spoony.botanico.common.dialog;
 
 import com.google.common.collect.Range;
-import me.spoony.botanico.common.buildings.buildingentity.BuildingEntityKnappingStation;
-import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.*;
 import me.spoony.botanico.common.net.IPacketInterpreter;
 import me.spoony.botanico.common.net.PacketDecoder;
 import me.spoony.botanico.common.net.PacketEncoder;
-import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**
  * Created by Colten on 11/27/2016.
  */
-public class DialogKnappingStation extends Dialog implements DialogCrafting, IPacketInterpreter {
+public class DialogKnappingStation extends Dialog implements IPacketInterpreter {
     public static final byte BLADE = 0;
     public static final byte HOE = 1;
     public static final byte PICKAXE = 2;

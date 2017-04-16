@@ -66,6 +66,8 @@ public class CPacketInventorySlotClick extends AutoPacketAdapter implements ISer
       return;
     }
 
+    player.currentDialog.onItemSlotInteraction();
+
     player.updateQueuedPlayerInventory(); //update modified player inv slots
     if (player.currentDialog != null) {
       player.currentDialog.viewers.updateDialogAll(); //update entire dialog for all viewers

@@ -27,7 +27,6 @@ public class DialogRendererKnappingStation extends DialogRendererAdapter<DialogK
 
     protected IntRectangle dialogTextureSource;
     private Set<DialogButtonKnappingStation> knappingModeButtons;
-    private DialogCraftingButton craftingButton;
 
     @Override
     public void init(DialogKnappingStation dialog) {
@@ -42,9 +41,6 @@ public class DialogRendererKnappingStation extends DialogRendererAdapter<DialogK
         this.initPlayerItemSlots(player.inventory, 6, 6);
         this.rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(0), 176, 40));
         this.rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(1), 210, 40));
-
-        craftingButton = new DialogCraftingButton(193, 40, dialog,
-                TEXTURE_LOCATION, new IntRectangle(0, 128, 16, 16));
 
         knappingModeButtons = Sets.newHashSet();
         knappingModeButtons.add(new DialogButtonKnappingStation(142, 74, 0, "Blade"));
@@ -62,10 +58,6 @@ public class DialogRendererKnappingStation extends DialogRendererAdapter<DialogK
         for (DialogButton db : knappingModeButtons) {
             db.updatePosition(this);
             db.checkClick(bin);
-        }
-
-        if (bin == Input.BUTTON_LEFT && craftingButton.isHighlighted() && dialog.canCraft()) {
-            GameView.getClient().packetHandler.sendDialogButtonPress(0);
         }
     }
 
@@ -88,9 +80,6 @@ public class DialogRendererKnappingStation extends DialogRendererAdapter<DialogK
 
         rendererGUI.sprite(getDialogPosition(),
                 dialogTexture, dialogTextureSource);
-
-        craftingButton.updatePosition(this);
-        craftingButton.render(rendererGUI);
 
         for (DialogButtonKnappingStation db : knappingModeButtons) {
             db.updatePosition(this);

@@ -22,8 +22,6 @@ import me.spoony.botanico.common.util.IntRectangle;
  */
 public class DialogRendererInventoryPlayer extends DialogRendererAdapter<DialogInventoryPlayer> {
 
-  public boolean showTrinket;
-
   protected Inventory craftingInventory;
   protected IntRectangle dialogTextureSource;
 
@@ -31,7 +29,6 @@ public class DialogRendererInventoryPlayer extends DialogRendererAdapter<DialogI
   public void init(DialogInventoryPlayer dialog) {
     super.init(dialog);
 
-    this.showTrinket = false;
     dialogTextureSource = new IntRectangle(0, 0, 231, 135);
     this.dialogBounds
         .set(new GuiRectangle(0, 0, dialogTextureSource.width, dialogTextureSource.height));
@@ -45,6 +42,18 @@ public class DialogRendererInventoryPlayer extends DialogRendererAdapter<DialogI
 
     rendererItemSlots.add(ring1);
     rendererItemSlots.add(ring2);
+
+    // CRAFTING SLOTS
+    craftingInventory = dialog.inventory;
+    craftingInventory.getSlot(2).setMode(ItemSlotMode.TAKE_ONLY);
+
+    for (int i = 0; i < 4; i++) {
+      rendererItemSlots.add(new RendererItemSlot(craftingInventory.getSlot(i), 157 + i * 18, 97));
+    }
+
+    for (int i = 4; i < 16; i++) {
+      rendererItemSlots.add(new RendererItemSlot(craftingInventory.getSlot(i), 157 + (i%4) * 18, 76-((i/4)-1)*18));
+    }
   }
 
   @Override
@@ -60,10 +69,6 @@ public class DialogRendererInventoryPlayer extends DialogRendererAdapter<DialogI
   @Override
   public void render(RendererGUI rg) {
     this.centerDialogBounds(rg.guiViewport);
-
-    if (!isOpen()) {
-      return;
-    }
 
     rg.sprite(getDialogPosition(),
         rg.getResourceManager().getTexture("dialog/dialog_inventory.png"), dialogTextureSource);

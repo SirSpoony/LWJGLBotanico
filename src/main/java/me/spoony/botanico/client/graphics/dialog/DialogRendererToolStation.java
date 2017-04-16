@@ -19,64 +19,59 @@ import me.spoony.botanico.common.util.IntRectangle;
  * Created by Colten on 11/12/2016.
  */
 public class DialogRendererToolStation extends DialogRendererAdapter {
-    protected IntRectangle dialogTextureSource;
-    private RendererGUI renderer;
-    private DialogCraftingButton craftingButton;
 
+  protected IntRectangle dialogTextureSource;
+  private RendererGUI renderer;
 
-    @Override
-    public void init(Dialog dialog) {
-        super.init(dialog);
-        ClientEntityPlayer player = GameView.getClient().getLocalPlayer();
+  @Override
+  public void init(Dialog dialog) {
+    super.init(dialog);
+    ClientEntityPlayer player = GameView.getClient().getLocalPlayer();
 
-        this.dialogTextureSource = new IntRectangle(0, 0, 198, 108);
-        this.dialogBounds.set(new GuiRectangle(0, 0, dialogTextureSource.width, dialogTextureSource.height));
+    this.dialogTextureSource = new IntRectangle(0, 0, 198, 108);
+    this.dialogBounds
+        .set(new GuiRectangle(0, 0, dialogTextureSource.width, dialogTextureSource.height));
 
-        this.initPlayerItemSlots(player.inventory, 6, 6);
+    this.initPlayerItemSlots(player.inventory, 6, 6);
 
-        rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(0), 142, 23));
-        rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(1), 142, 40));
-        rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(2), 142, 57));
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(0), 142, 23));
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(1), 142, 40));
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(2), 142, 57));
 
-        rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(3), 176, 40));
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(3), 176, 40));
+  }
 
-        craftingButton = new DialogCraftingButton(159, 40, (DialogToolStation) dialog,
-                "dialog/dialog_tool_station.png", new IntRectangle(0, 128, 16, 16));
+  @Override
+  public void onBinaryInputPressed(BinaryInput bin) {
+    super.onBinaryInputPressed(bin);
+  }
+
+  @Override
+  public void update(float delta) {
+    if (((DialogToolStation) dialog).canCraft()) {
+      dialog.inventory.getSlot(3).setGhost(((DialogToolStation) dialog).queryCraft().products[0]);
+    } else {
+      dialog.inventory.getSlot(3).setGhost(null);
+    }
+  }
+
+  @Override
+  public void render(RendererGUI rendererGUI) {
+    centerDialogBounds(rendererGUI.guiViewport);
+
+    if (!isOpen()) {
+      return;
     }
 
-    @Override
-    public void onBinaryInputPressed(BinaryInput bin) {
-        super.onBinaryInputPressed(bin);
+    rendererGUI.sprite(getDialogPosition(),
+        rendererGUI.getResourceManager().getTexture("dialog/dialog_tool_station.png"),
+        dialogTextureSource);
 
-        if (bin == Input.BUTTON_LEFT && craftingButton.isHighlighted() && ((DialogToolStation) dialog).canCraft()) {
-            GameView.getClient().packetHandler.sendDialogButtonPress(0);
-        }
-    }
+    this.renderItemSlots(rendererGUI);
 
-    @Override
-    public void update(float delta) {
-        if (((DialogToolStation) dialog).canCraft()) {
-            dialog.inventory.getSlot(3).setGhost(((DialogToolStation) dialog).queryCraft().products[0]);
-        } else {
-            dialog.inventory.getSlot(3).setGhost(null);
-        }
-    }
-
-    @Override
-    public void render(RendererGUI rendererGUI) {
-        centerDialogBounds(rendererGUI.guiViewport);
-
-        if (!isOpen()) return;
-
-        rendererGUI.sprite(getDialogPosition(),
-                rendererGUI.getResourceManager().getTexture("dialog/dialog_tool_station.png"), dialogTextureSource);
-
-        craftingButton.updatePosition(this);
-        craftingButton.render(rendererGUI);
-
-        this.renderItemSlots(rendererGUI);
-
-        rendererGUI.text(offsetByDialogBounds(new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)), "Tool Station",
-                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
-    }
+    rendererGUI.text(offsetByDialogBounds(
+        new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)),
+        "Tool Station",
+        new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
+  }
 }
