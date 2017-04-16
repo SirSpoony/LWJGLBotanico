@@ -9,34 +9,33 @@ import me.spoony.botanico.common.util.position.TilePosition;
 /**
  * Created by Colten on 11/20/2016.
  */
-public class ClientPacketHandler
-{
-    BotanicoClient client;
+public class ClientPacketHandler {
 
-    public ClientPacketHandler(BotanicoClient client)
-    {
-        this.client = client;
-    }
+  BotanicoClient client;
 
-    public void sendDialogButtonPress(int buttonid) {
-        CPacketInventoryButtonClick pibc = new CPacketInventoryButtonClick();
-        pibc.buttonID = buttonid;
-        pibc.dialogID = client.gameView.getDialog().id;
-        client.sendPacket(pibc);
-    }
+  public ClientPacketHandler(BotanicoClient client) {
+    this.client = client;
+  }
 
-    public void sendItemSlotExchange(ItemSlot slot, byte type) {
-        CPacketInventorySlotClick pic = new CPacketInventorySlotClick();
-        pic.dialogID = slot.getDialogID();
-        pic.slotpos = slot.getSlotIndex();
-        pic.clickType = type;
-        client.sendPacket(pic);
-    }
+  public void sendDialogButtonPress(int buttonid) {
+    CPacketInventoryButtonClick pibc = new CPacketInventoryButtonClick();
+    pibc.buttonID = buttonid;
+    pibc.dialogID = client.gameView.getDialog().id;
+    client.sendPacket(pibc);
+  }
 
-    public void sendUseItem(TilePosition position) {
-        CPacketUseItem put = new CPacketUseItem();
-        put.x = position.x;
-        put.y = position.y;
-        client.sendPacket(put);
-    }
+  public void sendItemSlotExchange(ItemSlot slot, byte type) {
+    CPacketInventorySlotClick pic = new CPacketInventorySlotClick();
+    pic.inventoryID = slot.getInventory().id;
+    pic.slotpos = slot.getSlotIndex();
+    pic.clickType = type;
+    client.sendPacket(pic);
+  }
+
+  public void sendUseItem(TilePosition position) {
+    CPacketUseItem put = new CPacketUseItem();
+    put.x = position.x;
+    put.y = position.y;
+    client.sendPacket(put);
+  }
 }

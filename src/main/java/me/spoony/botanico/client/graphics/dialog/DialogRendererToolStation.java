@@ -48,13 +48,7 @@ public class DialogRendererToolStation extends DialogRendererAdapter {
 
   @Override
   public void update(float delta) {
-    if (((DialogToolStation) dialog).canCraft()) {
-      dialog.inventory.getSlot(3).setGhost(((DialogToolStation) dialog).queryCraft().products[0]);
-    } else {
-      dialog.inventory.getSlot(3).setGhost(null);
-    }
   }
-
   @Override
   public void render(RendererGUI rendererGUI) {
     centerDialogBounds(rendererGUI.guiViewport);

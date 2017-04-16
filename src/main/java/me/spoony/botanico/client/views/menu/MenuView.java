@@ -19,115 +19,113 @@ import java.util.Random;
 /**
  * Created by Colten on 11/26/2016.
  */
-public class MenuView extends ViewAdapter implements BinaryInputListener, TextInputListener
-{
-    private static float bg_offset;
-    BackgroundType bgtype;
+public class MenuView extends ViewAdapter implements BinaryInputListener, TextInputListener {
 
-    List<IGUIControl> controlList;
-    private RendererGUI rendererGUI;
+  private static float bg_offset;
+  BackgroundType bgtype;
 
-    public RendererGUI getRendererGUI()
-    {
-        return rendererGUI;
-    }
+  List<IGUIControl> controlList;
+  private RendererGUI rendererGUI;
 
-    public MenuView() {
-        controlList = Lists.newArrayList();
-    }
+  public RendererGUI getRendererGUI() {
+    return rendererGUI;
+  }
 
-    @Override
-    public void loadContent()
-    {
-        super.loadContent();
+  public MenuView() {
+    controlList = Lists.newArrayList();
+  }
 
-        bgtype = BackgroundType.TILE;
-        rendererGUI = new RendererGUI();
+  @Override
+  public void loadContent() {
+    super.loadContent();
 
-        Input.registerListener((BinaryInputListener) this);
-        Input.registerListener((TextInputListener) this);
-    }
+    bgtype = BackgroundType.TILE;
+    rendererGUI = new RendererGUI();
 
-    @Override
-    public void unloadContent()
-    {
-        super.unloadContent();
+    Input.registerListener((BinaryInputListener) this);
+    Input.registerListener((TextInputListener) this);
+  }
 
-        Input.unregisterListener((BinaryInputListener) this);
-        Input.unregisterListener((TextInputListener) this);
-    }
+  @Override
+  public void unloadContent() {
+    super.unloadContent();
 
-    @Override
-    public void update(float delta)
-    {
-        super.update(delta);
+    Input.unregisterListener((BinaryInputListener) this);
+    Input.unregisterListener((TextInputListener) this);
+  }
 
-        bg_offset+=delta/120f;
-    }
+  @Override
+  public void update(float delta) {
+    super.update(delta);
 
-    @Override
-    public void render()
-    {
-        super.render();
+    bg_offset += delta / 120f;
+  }
 
-        rendererGUI.begin();
+  @Override
+  public void render() {
+    super.render();
 
-        if (bgtype == BackgroundType.TILE) {
-            Random rand = new Random(1);
-            for (int x = 0;x<Math.ceil(rendererGUI.guiViewport.width/16f);x++) {
-                for (int y = 0;y<Math.ceil(rendererGUI.guiViewport.height/16f);y++) {
-                    rendererGUI.sprite(new GuiPosition(x*16, y*16), rendererGUI.getResourceManager().getTexture("tiles.png"),
-                            new IntRectangle(32+16*(rand.nextInt()&1),16+16*(rand.nextInt()&1),16,16));
-                }
-            }
-        } else if (bgtype == BackgroundType.CLOUDS) {
-            float x = bg_offset%1*512;
-            rendererGUI.sprite(new GuiRectangle(x+512,0,512,512), getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
-                    new IntRectangle(0,0,256,256), Color.WHITE);
-            rendererGUI.sprite(new GuiRectangle(x,0,512,512), getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
-                    new IntRectangle(0,0,256,256), Color.WHITE);
-            rendererGUI.sprite(new GuiRectangle(x-512,0,512,512), getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
-                    new IntRectangle(0,0,256,256), Color.WHITE);
-            rendererGUI.sprite(new GuiRectangle(x-512*2,0,512,512), getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
-                    new IntRectangle(0,0,256,256), Color.WHITE);
+    rendererGUI.begin();
+
+    if (bgtype == BackgroundType.TILE) {
+      Random rand = new Random(1);
+      for (int x = 0; x < Math.ceil(rendererGUI.guiViewport.width / 16f); x++) {
+        for (int y = 0; y < Math.ceil(rendererGUI.guiViewport.height / 16f); y++) {
+          rendererGUI.sprite(new GuiPosition(x * 16, y * 16),
+              rendererGUI.getResourceManager().getTexture("tiles.png"),
+              new IntRectangle(32 + 16 * (rand.nextInt() & 1), 16 + 16 * (rand.nextInt() & 1), 16,
+                  16));
         }
-
-
-        for (IGUIControl control:controlList) {
-            control.render(rendererGUI);
-        }
-
-        rendererGUI.end();
+      }
+    } else if (bgtype == BackgroundType.CLOUDS) {
+      float x = bg_offset % 1 * 512;
+      rendererGUI.sprite(new GuiRectangle(x + 512, 0, 512, 512),
+          getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
+          new IntRectangle(0, 0, 256, 256), Color.WHITE);
+      rendererGUI.sprite(new GuiRectangle(x, 0, 512, 512),
+          getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
+          new IntRectangle(0, 0, 256, 256), Color.WHITE);
+      rendererGUI.sprite(new GuiRectangle(x - 512, 0, 512, 512),
+          getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
+          new IntRectangle(0, 0, 256, 256), Color.WHITE);
+      rendererGUI.sprite(new GuiRectangle(x - 512 * 2, 0, 512, 512),
+          getRendererGUI().getResourceManager().getTexture("cloud_bg.png"),
+          new IntRectangle(0, 0, 256, 256), Color.WHITE);
     }
 
-    @Override
-    public boolean onBinaryInputPressed(BinaryInput binaryInput)
-    {
-        for (IGUIControl control:controlList) {
-            if (control instanceof IClickable) {
-                IClickable clickable = (IClickable) control;
-                clickable.checkClick(binaryInput);
-            }
-        }
-        return false;
+    for (IGUIControl control : controlList) {
+      control.render(rendererGUI);
     }
 
-    public void addControl(IGUIControl control) {
-        this.controlList.add(control);
-    }
+    rendererGUI.end();
+  }
 
-    public void setBackground(BackgroundType type) {
-        this.bgtype = type;
+  @Override
+  public boolean onBinaryInputPressed(BinaryInput binaryInput) {
+    for (IGUIControl control : controlList) {
+      if (control instanceof IClickable) {
+        IClickable clickable = (IClickable) control;
+        clickable.checkClick(binaryInput);
+      }
     }
+    return false;
+  }
 
-    @Override
-    public void onCharTyped(char character)
-    {
-        for (IGUIControl control:controlList) {
-            if (control instanceof ITextInputable) {
-                ITextInputable textInputable = (ITextInputable) control;
-                textInputable.onCharTyped(character);
-            }
-        }
+  public void addControl(IGUIControl control) {
+    this.controlList.add(control);
+  }
+
+  public void setBackground(BackgroundType type) {
+    this.bgtype = type;
+  }
+
+  @Override
+  public void onCharTyped(char character) {
+    for (IGUIControl control : controlList) {
+      if (control instanceof ITextInputable) {
+        ITextInputable textInputable = (ITextInputable) control;
+        textInputable.onCharTyped(character);
+      }
     }
+  }
 }

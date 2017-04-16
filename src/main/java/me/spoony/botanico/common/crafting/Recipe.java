@@ -6,72 +6,32 @@ import me.spoony.botanico.common.items.ItemStack;
  * Created by Colten on 11/10/2016.
  */
 public class Recipe {
-    public ItemStack[] ingredients;
-    public ItemStack[] products;
-    public ItemStack tool;
-    public boolean shapeless;
 
-    public Recipe(ItemStack[] ingredients, ItemStack[] product, boolean shapeless) {
-        this.ingredients = ingredients;
-        this.tool = null;
-        this.products = product;
-        this.shapeless = shapeless;
-    }
+  public CraftingIngredient[] ingredients;
+  public ItemStack product;
 
-    protected ItemStack[] toProducts(ItemStack[] ingredients, ItemStack tool) {
-        if (!ItemStack.match(this.tool, tool) && !(tool == null && tool == null)) return null;
-        if (shapeless) {
-            for (ItemStack mystack : this.ingredients) {
-                boolean match = false;
-                for (ItemStack querystack : ingredients) {
-                    if (ItemStack.match(mystack, querystack) && querystack.getCount() >= mystack.getCount()) {
-                        match = true;
-                    }
-                }
-                if (match == false) return null;
-            }
-        } else {
-            for (int i = 0; i < this.ingredients.length; i++) {
-                if (ItemStack.match(ingredients[i], this.ingredients[i]) && ingredients[i].getCount() >= this.ingredients[i].getCount()) {
+  public Recipe(ItemStack product, CraftingIngredient... ingredients) {
+    this.product = product;
+    this.ingredients = ingredients;
+  }
 
-                } else {
-                    return null;
-                }
-            }
+  public boolean test(CraftingQuery query) {
+    for (CraftingIngredient ingredient : ingredients) {
+      boolean found = false;
+      for (ItemStack stack : query.ingredients) {
+        if (stack == null) {
+          continue;
         }
-        return products;
-    }
-
-    protected ItemStack[] toIngredients(ItemStack[] ingredients) {
-        ItemStack[] ret = new ItemStack[ingredients.length];
-        for (int i = 0; i < ingredients.length; i++) {
-            if (shapeless) {
-                for (ItemStack ingredient : this.ingredients) {
-                    if (ItemStack.match(ingredients[i], ingredient)) {
-                        ItemStack retstack = ItemStack.clone(ingredients[i]);
-                        retstack.increaseCount(-ingredient.getCount());
-                        ret[i] = retstack;
-                    }
-                }
-            } else {
-                if (ItemStack.match(ingredients[i], this.ingredients[i]) && ingredients[i].getCount() > this.ingredients[i].getCount()) {
-                    ItemStack retstack = ItemStack.clone(ingredients[i]);
-                    retstack.increaseCount(-this.ingredients[i].getCount());
-                    ret[i] = retstack;
-                }
-            }
+        if (stack.getItem() == ingredient.item && stack.getCount() >= ingredient.requiredAmount) {
+          found = true;
+          break;
         }
-        return ret;
+      }
+      if (!found) {
+        return false;
+      }
     }
-
-    public CraftingResult craft(CraftingQuery craftingQuery) {
-
-        if (toProducts(craftingQuery.ingredients, craftingQuery.tool) == null) return null;
-        CraftingResult ret = new CraftingResult();
-        ret.ingredients = toIngredients(craftingQuery.ingredients);
-        ret.products = toProducts(craftingQuery.ingredients, craftingQuery.tool);
-        ret.tool = craftingQuery.tool;
-        return ret;
-    }
+    return true;
+  }
 }
 

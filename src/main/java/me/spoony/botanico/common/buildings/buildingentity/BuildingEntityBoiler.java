@@ -40,8 +40,6 @@ public class BuildingEntityBoiler extends BuildingEntity implements Updatable {
         }
 
         dialog.burnProgress = dialog.currentBurnTime / dialog.initialBurnTime;
-
-        dialog.viewers.updateDialogAll();
     }
 
     public boolean ensureFuel() {

@@ -9,36 +9,29 @@ import java.util.Set;
 /**
  * Created by Colten on 12/4/2016.
  */
-public class DialogViewerManager
-{
-    public Set<EntityPlayer> viewers;
-    protected Dialog dialog;
+public class DialogViewerManager {
 
-    public DialogViewerManager(Dialog dialog) {
-        viewers = Sets.newHashSet();
-        this.dialog = dialog;
-    }
+  public Set<RemoteEntityPlayer> viewers;
+  protected Dialog dialog;
 
-    public void addViewer(EntityPlayer player) {
-        viewers.add(player);
-    }
+  public DialogViewerManager(Dialog dialog) {
+    viewers = Sets.newHashSet();
+    this.dialog = dialog;
+  }
 
-    public void removeViewer(EntityPlayer player)
-    {
-        viewers.remove(player);
-    }
+  public void addViewer(RemoteEntityPlayer player) {
+    viewers.add(player);
+  }
 
-    public void closeDialogAll() {
-        for (EntityPlayer viewer : viewers) {
-            if (viewer instanceof RemoteEntityPlayer) {
-                ((RemoteEntityPlayer) viewer).closeDialog();
-            }
-        }
-    }
+  public void removeViewer(RemoteEntityPlayer player) {
+    viewers.remove(player);
+  }
 
-    public void updateDialogAll() {
-        for (EntityPlayer viewer : viewers) {
-            dialog.updateViewer(viewer);
-        }
+  public void closeDialogAll() {
+    for (EntityPlayer viewer : viewers) {
+      if (viewer instanceof RemoteEntityPlayer) {
+        ((RemoteEntityPlayer) viewer).closeDialog();
+      }
     }
+  }
 }

@@ -17,7 +17,7 @@ package me.spoony.botanico.common.nbt;
  *       documentation and/or other materials provided with the distribution.
  *       
  *     * Neither the name of the JNBT team nor the names of its
- *       contributors may be used to endorse or promote products derived from
+ *       contributors may be used to endorse or promote product derived from
  *       this software without specific prior written permission.
  * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"

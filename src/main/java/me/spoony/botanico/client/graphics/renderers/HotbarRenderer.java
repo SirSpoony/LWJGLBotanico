@@ -9,7 +9,6 @@ import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.util.position.GuiRectangle;
 import me.spoony.botanico.client.input.BinaryInput;
 import me.spoony.botanico.client.input.Input;
-import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.Inventory;
 import me.spoony.botanico.common.util.IntRectangle;
 
@@ -40,7 +39,7 @@ public class HotbarRenderer implements GUIRenderable {
     }
     if (bounds.contains(Input.CURSOR_POS.toGuiPosition())) {
       for (RendererItemSlot slot : rendererItemSlots) {
-        slot.checkClick(bin);
+        slot.checkInteraction(bin);
       }
       return true;
     }

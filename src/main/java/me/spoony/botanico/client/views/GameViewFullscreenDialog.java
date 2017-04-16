@@ -30,7 +30,7 @@ public class GameViewFullscreenDialog {
       for (int y = 0; y < Math.ceil(rendererGUI.guiViewport.height / 16f); y++) {
         rendererGUI.sprite(new GuiPosition(x * 16, y * 16),
             rendererGUI.getResourceManager().getTexture("tiles.png"),
-            new IntRectangle(32 + 16 * (rand.nextInt() & 1), 16 + 16 * (rand.nextInt() & 1), 16,
+            new IntRectangle(240, 208, 16,
                 16));
       }
     }

@@ -114,7 +114,7 @@ public abstract class DialogRendererAdapter<T extends Dialog> implements DialogR
       if (slot == null) {
         continue;
       }
-      slot.checkClick(bin);
+      slot.checkInteraction(bin);
     }
   }
 

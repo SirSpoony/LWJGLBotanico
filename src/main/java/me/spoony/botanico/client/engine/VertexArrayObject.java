@@ -6,30 +6,31 @@ import static org.lwjgl.opengl.GL30.*;
  * Created by Colten on 12/26/2016.
  */
 public class VertexArrayObject {
-    private final int id;
 
-    public VertexArrayObject() {
-        id = glGenVertexArrays();
-    }
+  private final int id;
 
-    public void bind() {
-        glBindVertexArray(id);
-    }
+  public VertexArrayObject() {
+    id = glGenVertexArrays();
+  }
 
-    /**
-     * Deletes the VAO.
-     */
-    public void delete() {
-        glDeleteVertexArrays(id);
-    }
+  public void bind() {
+    glBindVertexArray(id);
+  }
 
-    /**
-     * Getter for the Vertex Array Object ID.
-     *
-     * @return Handle of the VAO
-     */
-    public int getID() {
-        return id;
-    }
+  /**
+   * Deletes the VAO.
+   */
+  public void delete() {
+    glDeleteVertexArrays(id);
+  }
+
+  /**
+   * Getter for the Vertex Array Object ID.
+   *
+   * @return Handle of the VAO
+   */
+  public int getID() {
+    return id;
+  }
 
 }

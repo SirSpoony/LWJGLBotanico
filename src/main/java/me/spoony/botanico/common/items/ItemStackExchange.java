@@ -5,25 +5,33 @@ package me.spoony.botanico.common.items;
  */
 public class ItemStackExchange {
 
-  public ItemStack to;
-  public ItemStack from;
+  private ItemStack slot;
+  private ItemStack cursor;
 
-  public ItemStackExchange(ItemStack to, ItemStack from) {
-    this.to = ItemStack.clone(to);
-    this.from = ItemStack.clone(from);
+  public ItemStack getTo() {
+    return slot;
+  }
+
+  public ItemStack getFrom() {
+    return cursor;
+  }
+
+  public ItemStackExchange(ItemStack slot, ItemStack cursor) {
+    this.slot = ItemStack.clone(slot);
+    this.cursor = ItemStack.clone(cursor);
   }
 
   public void exchangeHalf() {
-    if (from == null) {
-      from = ItemStack.split(to);
+    if (cursor == null) {
+      cursor = ItemStack.split(slot);
     } else {
-      if (ItemStack.match(to, from) && to.getCount() + 1 <= to.getItem().maxStackSize) {
-        to.increaseCount(1);
-        from.increaseCount(-1);
-      } else if (to == null) {
-        to = ItemStack.clone(from);
-        to.setCount(1);
-        from.increaseCount(-1);
+      if (ItemStack.match(slot, cursor) && slot.getCount() + 1 <= slot.getItem().maxStackSize) {
+        slot.increaseCount(1);
+        cursor.increaseCount(-1);
+      } else if (slot == null) {
+        slot = ItemStack.clone(cursor);
+        slot.setCount(1);
+        cursor.increaseCount(-1);
       } else {
         exchange();
       }
@@ -32,44 +40,44 @@ public class ItemStackExchange {
 
   public void exchange() {
     if (!merge()) {
-      ItemStack temp = ItemStack.clone(to);
-      to = ItemStack.clone(from);
-      from = ItemStack.clone(temp);
+      ItemStack a = ItemStack.clone(slot);
+      slot = ItemStack.clone(cursor);
+      cursor = ItemStack.clone(a);
     }
   }
 
   public boolean merge() {
-    if (from == null && to == null) {
+    if (cursor == null && slot == null) {
       return false; // no merge can take place if there is nothing to take from or merge to
     }
 
-    if (from == null) {
+    if (cursor == null) {
       return false; // no merge can take place if there is nothing to take from
     }
 
-    if (to == null) {
-      to = from;
-      from = null;
+    if (slot == null) {
+      slot = cursor;
+      cursor = null;
       return true; // add the from to to is easy because both are null
     }
 
-    if (!ItemStack.match(to, from)) {
+    if (!ItemStack.match(slot, cursor)) {
       return false; // if they don't match there is no way they can be merged
     }
 
-    int maxcount = to.getItem().maxStackSize;
-    int tocount = to.getCount();
-    int fromcount = from.getCount();
+    int maxcount = slot.getItem().maxStackSize;
+    int tocount = slot.getCount();
+    int fromcount = cursor.getCount();
 
     if (tocount + fromcount > maxcount) {
-      to.setCount(maxcount);
-      from.setCount(fromcount - (maxcount - tocount));
+      slot.setCount(maxcount);
+      cursor.setCount(fromcount - (maxcount - tocount));
       return true; // add the count of the from stack to the to stack with respect for maxstacksize
     }
 
     if (tocount + fromcount <= maxcount) {
-      to.setCount(tocount + fromcount);
-      from = null;
+      slot.setCount(tocount + fromcount);
+      cursor = null;
       return true;// take all of from and add it to to
     }
 
@@ -77,15 +85,15 @@ public class ItemStackExchange {
   }
 
   public boolean mergeIntoOneStack() {
-    ItemStack tempTo = ItemStack.clone(to);
-    ItemStack tempFrom = ItemStack.clone(from);
+    ItemStack tempTo = ItemStack.clone(slot);
+    ItemStack tempFrom = ItemStack.clone(cursor);
 
-    if (merge() && from == null) {
+    if (merge() && cursor == null) {
       return true;
     }
 
-    to = tempTo;
-    from = tempFrom;
+    slot = tempTo;
+    cursor = tempFrom;
     return false;
   }
 }

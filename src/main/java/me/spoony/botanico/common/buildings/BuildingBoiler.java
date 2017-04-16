@@ -53,7 +53,6 @@ public class BuildingBoiler extends Building implements IBuildingEntityHost {
             entity.dialog.waterProgress += .25f;
             entity.dialog.waterProgress = BMath.clamp(entity.dialog.waterProgress, 0, 1);
             heldStack.setItem(Items.BUCKET);
-            ((RemoteEntityPlayer) player).updatePlayerInventorySlot(EntityPlayer.SLOT_CURSOR);
             return true;
         }
 

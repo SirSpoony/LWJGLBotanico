@@ -53,7 +53,6 @@ public class BuildingCave extends Building {
       serverPlane.setBuildingData(position, (byte) 1);
       serverPlane.getLevel().getUnderworld().setBuilding(position, Buildings.CAVE_ROPE);
       heldStack.increaseCount(-1);
-      ((RemoteEntityPlayer) player).updatePlayerInventorySlot(EntityPlayer.SLOT_CURSOR);
       return true;
     }
 

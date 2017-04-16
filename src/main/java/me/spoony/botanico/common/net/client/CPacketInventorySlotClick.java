@@ -3,6 +3,7 @@ package me.spoony.botanico.common.net.client;
 import com.google.common.collect.Range;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.entities.EntityPlayer;
+import me.spoony.botanico.common.items.Inventory;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
@@ -16,61 +17,66 @@ import me.spoony.botanico.server.net.BotanicoServer;
 public class CPacketInventorySlotClick extends AutoPacketAdapter implements IServerHandler {
 
   public int slotpos;
-  public int dialogID;
+  public int inventoryID;
   public byte clickType;
 
   @Override
   public void onReceive(BotanicoServer server, RemoteEntityPlayer player) {
-    ItemSlot clickedslot;
-    ItemSlot cursorslot;
+    ItemSlot clickedSlot;
+    ItemSlot cursor;
 
-    if (dialogID == Dialog.PLAYER_INV_ID) {
-      if (clickType == 2 || clickType == 3) { //shiftclick
-        clickedslot = player.inventory.getSlot(slotpos);
-        if (clickedslot.getStack() == null) {
+    if (inventoryID == Inventory.PLAYER_ID) {
+      clickedSlot = player.inventory.getSlot(slotpos);
+      cursor = player.inventory.getSlot(EntityPlayer.SLOT_CURSOR);
+
+      if (clickType == ItemSlot.SHIFT_LEFT_CLICK || clickType == ItemSlot.SHIFT_RIGHT_CLICK) {
+        //shiftclick logic
+        if (clickedSlot.isEmpty()) {
           return;
         }
 
-        if (Range.closed(EntityPlayer.HOTBAR_INVENTORY_MIN, EntityPlayer.HOTBAR_INVENTORY_MAX)
-            .contains(slotpos)) { // if slot is hotbar
-          ItemStack leftover = player.inventory
-              .addItem(clickedslot.getStack(), Range.closed(EntityPlayer.HOTBAR_INVENTORY_MAX + 1,
+        if (slotpos >= EntityPlayer.HOTBAR_INVENTORY_MIN
+            && slotpos <= EntityPlayer.HOTBAR_INVENTORY_MAX) {
+          // if slot is hotbar
+
+          ItemStack remains = player.inventory
+              .addItem(clickedSlot.getStack(), Range.closed(EntityPlayer.HOTBAR_INVENTORY_MAX + 1,
                   EntityPlayer.NORMAL_INVENTORY_MAX));
-          clickedslot.setStack(leftover);
+          clickedSlot.setStack(remains);
         } else {
-          ItemStack leftover = player.inventory.addItem(clickedslot.getStack(),
+          // if slot is anything in the player inventory, except for the hotbar
+          ItemStack leftover = player.inventory.addItem(clickedSlot.getStack(),
               Range.closed(EntityPlayer.HOTBAR_INVENTORY_MIN, EntityPlayer.HOTBAR_INVENTORY_MAX));
-          clickedslot.setStack(leftover);
+          clickedSlot.setStack(leftover);
         }
       } else {
-        clickedslot = player.inventory.getSlot(slotpos);
-        cursorslot = player.inventory.getSlot(EntityPlayer.SLOT_CURSOR);
-
-        ItemSlot.exchange(clickedslot, cursorslot, clickType);
+        // normal click logic
+        ItemSlot.exchange(clickedSlot, cursor, clickType);
       }
-    } else if (player.currentDialog != null) {
-      if (clickType == 2 || clickType == 3) {
-        clickedslot = player.currentDialog.inventory.getSlot(slotpos);
+    } else if (player.currentDialog != null && inventoryID == player.currentDialog.id) {
+      clickedSlot = player.currentDialog.inventory.getSlot(slotpos);
+      cursor = player.inventory.getSlot(EntityPlayer.SLOT_CURSOR);
 
-        ItemStack leftover = player.inventory.addItem(clickedslot.getStack(),
+      if (clickType == ItemSlot.SHIFT_LEFT_CLICK || clickType == ItemSlot.SHIFT_RIGHT_CLICK) {
+        // shiftclick logic
+        if (clickedSlot.isEmpty()) {
+          return;
+        }
+
+        ItemStack leftover = player.inventory.addItem(clickedSlot.getStack(),
             Range.closed(EntityPlayer.HOTBAR_INVENTORY_MIN, EntityPlayer.NORMAL_INVENTORY_MAX));
-        clickedslot.setStack(leftover);
+        clickedSlot.setStack(leftover);
       } else {
-        clickedslot = player.currentDialog.inventory.getSlot(slotpos);
-        cursorslot = player.inventory.getSlot(EntityPlayer.SLOT_CURSOR);
-
-        ItemSlot.exchange(clickedslot, cursorslot, clickType);
+        // normal click logic
+        ItemSlot.exchange(clickedSlot, cursor, clickType);
       }
     } else {
       System.err.println("[ServerPacketHandler] Received unknown Inventory Slot Click");
       return;
     }
 
-    player.currentDialog.onItemSlotInteraction();
-
-    player.updateQueuedPlayerInventory(); //update modified player inv slots
-    if (player.currentDialog != null) {
-      player.currentDialog.viewers.updateDialogAll(); //update entire dialog for all viewers
+    if (player.currentDialog != null && inventoryID == player.currentDialog.id) {
+      player.currentDialog.onItemSlotInteraction(slotpos, clickType);
     }
   }
 }

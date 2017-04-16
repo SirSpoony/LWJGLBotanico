@@ -34,7 +34,7 @@ public class BuildingGrass extends Building {
         int val = hash(position.x, position.y) % 4;
         rg.sprite(position.toGamePosition(new GamePosition()), rg.getResourceManager().getTexture(textureName),
                 new IntRectangle(16 * val, 0, 16, 16),
-                highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE, position.y + (alwaysBehindCharacter ? 1 : 0));
+                highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE, position.y+1);
     }
 
     private long OffsetBasis = 216613626;

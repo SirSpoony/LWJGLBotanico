@@ -26,7 +26,6 @@ public class SPacketChangeDialog extends AutoPacketAdapter implements IClientHan
     public void onReceive(BotanicoClient client) {
         if (operation == SPacketChangeDialog.OPEN_DIALOG) {
             Dialog dialog = Dialog.fromID(dialogID);
-            dialog.onOpen(client.getLocalPlayer());
             GameView.get().openDialog(dialog);
         } else if (operation == SPacketChangeDialog.CLOSE_DIALOG) {
             if (dialogID == GameView.get().getDialog().id){

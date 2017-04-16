@@ -21,12 +21,10 @@ public class ItemBucket extends Item {
     public void onUse(IPlane level, EntityPlayer player, ItemSlot cursor, TilePosition position) {
         if (!(level instanceof ServerPlane)) return;
         ServerPlane sl = (ServerPlane) level;
-        RemoteEntityPlayer sp = (RemoteEntityPlayer) player;
 
         Tile clickedTile = sl.getTile(position);
         if (clickedTile == Tiles.WATER || clickedTile == Tiles.DEEP_WATER) {
             cursor.getStack().setItem(Items.WATER_BUCKET);
-            sp.updatePlayerInventorySlot(EntityPlayer.SLOT_CURSOR);
         }
     }
 }

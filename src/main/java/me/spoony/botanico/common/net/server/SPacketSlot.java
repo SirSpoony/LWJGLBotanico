@@ -11,47 +11,45 @@ import me.spoony.botanico.common.net.NotTransferable;
 /**
  * Created by Colten on 11/23/2016.
  */
-public class SPacketSlot extends AutoPacketAdapter implements IClientHandler
-{
-    public int dialogID;
-    public int slotpos;
-    @NotTransferable
-    public ItemStack stack;
+public class SPacketSlot extends AutoPacketAdapter implements IClientHandler {
 
-    private int stackcount;
-    private int stackid;
+  public int inventoryID;
+  public int slotpos;
+  @NotTransferable
+  public ItemStack stack;
 
-    @Override
-    public void preEncode()
-    {
-        if (stack == null) {
-            stackcount = 0;
-            stackid = 0;
-            return;
-        } else {
-            stackcount = stack.getCount();
-            stackid = stack.getItem().getID();
-            return;
-        }
+  private int stackcount;
+  private int stackid;
+
+  @Override
+  public void preEncode() {
+    if (stack == null) {
+      stackcount = 0;
+      stackid = 0;
+      return;
+    } else {
+      stackcount = stack.getCount();
+      stackid = stack.getItem().getID();
+      return;
     }
+  }
 
-    @Override
-    public void postDecode()
-    {
-        if (stackcount == 0) {
-            stack = null;
-        } else {
-            Item item = Item.REGISTRY.get(stackid);
-            this.stack = new ItemStack(item, stackcount);
-        }
+  @Override
+  public void postDecode() {
+    if (stackcount == 0) {
+      stack = null;
+    } else {
+      Item item = Item.REGISTRY.get(stackid);
+      this.stack = new ItemStack(item, stackcount);
     }
+  }
 
-    @Override
-    public void onReceive(BotanicoClient client) {
-        if (dialogID == Dialog.PLAYER_INV_ID) {
-            client.getLocalPlayer().inventory.setStack(slotpos, stack);
-        } else {
-            client.gameView.getDialog().inventory.setStack(slotpos, stack);
-        }
+  @Override
+  public void onReceive(BotanicoClient client) {
+    if (inventoryID == Dialog.PLAYER_INV_ID) {
+      client.getLocalPlayer().inventory.setStack(slotpos, stack);
+    } else {
+      client.gameView.getDialog().inventory.setStack(slotpos, stack);
     }
+  }
 }

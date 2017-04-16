@@ -13,28 +13,29 @@ import java.util.Scanner;
  * Created by Colten on 12/27/2016.
  */
 public class StartServer {
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println("Initialize Registries");
-        Packets.init();
-        Tile.initRegistry();
-        Building.initRegistry();
-        Item.initRegistry();
-        Recipes.init();
 
-        BotanicoServer server = new BotanicoServer();
-        server.start();
+  public static void main(String[] args) throws InterruptedException {
+    System.out.println("Initialize Registries");
+    Packets.init();
+    Tile.initRegistry();
+    Building.initRegistry();
+    Item.initRegistry();
+    Recipes.init();
 
-        System.out.println("Listening for commands");
+    BotanicoServer server = new BotanicoServer();
+    server.start();
 
-        Scanner scanner = new Scanner(System.in);
-        do {
-            String command = scanner.nextLine();
-            if (!BotanicoServer.RUNNING) {
-                break;
-            }
-        }
-        while (scanner.hasNext());
+    System.out.println("Listening for commands");
 
-        System.out.println("Stopped listening for commands");
+    Scanner scanner = new Scanner(System.in);
+    do {
+      String command = scanner.nextLine();
+      if (!BotanicoServer.RUNNING) {
+        break;
+      }
     }
+    while (scanner.hasNext());
+
+    System.out.println("Stopped listening for commands");
+  }
 }

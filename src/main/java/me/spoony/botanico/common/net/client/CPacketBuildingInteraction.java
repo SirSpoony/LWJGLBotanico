@@ -38,7 +38,6 @@ public class CPacketBuildingInteraction extends AutoPacketAdapter implements ISe
       if (newBuilding.canCreate(player.getPlane(), position)) {
         player.getPlane().setBuilding(position, newBuilding);
         player.inventory.getStack(EntityPlayer.SLOT_CURSOR).increaseCount(-1);
-        player.updatePlayerInventorySlot(EntityPlayer.SLOT_CURSOR);
       }
     } else if (type == DESTROY) {
       player.getPlane().breakBuildingAndDrop(position, player);

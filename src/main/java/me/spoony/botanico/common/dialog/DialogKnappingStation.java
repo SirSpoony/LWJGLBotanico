@@ -66,7 +66,7 @@ public class DialogKnappingStation extends Dialog implements IPacketInterpreter 
         ItemStackExchange ise = new ItemStackExchange(inventory.getStack(1), product);
         ise.mergeIntoOneStack();
 
-        inventory.setStack(1, ise.to);
+        inventory.setStack(1, ise.getTo());
     }
 
     @Override
@@ -74,10 +74,8 @@ public class DialogKnappingStation extends Dialog implements IPacketInterpreter 
         super.onButtonPressed(button);
         if (button == 0 && canCraft()) {
             this.craft();
-            viewers.updateDialogAll();
         } else if (Range.closed(1, 5).contains(button)) {
             this.setMode((byte) (button - 1));
-            viewers.updateDialogAll();
         }
     }
 

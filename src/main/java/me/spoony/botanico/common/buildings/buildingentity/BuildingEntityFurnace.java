@@ -44,8 +44,6 @@ public class BuildingEntityFurnace extends BuildingEntity implements Updatable {
             if (dialog.inventory.getStack(DialogFurnace.PRODUCT_SLOT_ID) == null) dialog.inventory.setStack(DialogFurnace.PRODUCT_SLOT_ID, new ItemStack(Items.CHARCOAL));
             else dialog.inventory.getStack(DialogFurnace.PRODUCT_SLOT_ID).increaseCount(1);
         }
-
-        dialog.viewers.updateDialogAll();
     }
 
     public boolean canSmelt() {

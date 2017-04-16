@@ -50,7 +50,7 @@ public class RendererItemSlot implements GUIRenderable {
 
   }
 
-  public void checkClick(BinaryInput binaryInput) {
+  public void checkInteraction(BinaryInput binaryInput) {
     GuiRectangle slotbounds = new GuiRectangle(renderposition.x, renderposition.y, 16, 16);
     if (!slotbounds.contains(Input.CURSOR_POS.toGuiPosition())) {
       return;
@@ -60,6 +60,7 @@ public class RendererItemSlot implements GUIRenderable {
     if (Input.SHIFT.isDown()) {
       clicktype += 2;
     }
+
     GameView.getClient().packetHandler.sendItemSlotExchange(itemSlot, clicktype);
   }
 

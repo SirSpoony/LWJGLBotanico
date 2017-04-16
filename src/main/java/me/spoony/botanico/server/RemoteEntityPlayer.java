@@ -3,6 +3,7 @@ package me.spoony.botanico.server;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Range;
 import com.google.common.collect.Sets;
+import me.spoony.botanico.common.net.Packet;
 import me.spoony.botanico.common.util.position.ChunkPosition;
 import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.dialog.Dialog;
@@ -40,6 +41,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
     this.inventory = new Inventory(EntityPlayer.INVENTORY_SIZE, Dialog.PLAYER_INV_ID);
     this.inventory.getSlot(EntityPlayer.SLOT_RING1).setRestriction(ItemSlotRestriction.RING);
     this.inventory.getSlot(EntityPlayer.SLOT_RING2).setRestriction(ItemSlotRestriction.RING);
+    this.inventory.viewers.add(this);
+
     this.currentDialog = null;
 
     this.commonChunks = Sets.newConcurrentHashSet();
@@ -82,63 +85,15 @@ public class RemoteEntityPlayer extends EntityPlayer {
     updateCommonChunks();
   }
 
-  public void updatePlayerInventorySlot(int... slot) {
-    for (int i : slot) {
-      if (i == -1) {
-        continue;
-      }
-      SPacketSlot pps = new SPacketSlot();
-      pps.dialogID = Dialog.PLAYER_INV_ID;
-      pps.slotpos = i;
-      pps.stack = inventory.getStack(i);
-      getPlane().server.getClientManager().sendPacket(pps, this);
-    }
-  }
-
-  public void updatePlayerInventory() {
-    for (int i = 0; i < inventory.getLength(); i++) {
-      SPacketSlot pps = new SPacketSlot();
-      pps.dialogID = Dialog.PLAYER_INV_ID;
-      pps.slotpos = i;
-      pps.stack = inventory.getStack(i);
-      getPlane().server.getClientManager().sendPacket(pps, this);
-    }
-  }
-
-  public void updateDialogInventory() {
-    Preconditions.checkState(currentDialog != null, "There is no dialog being displayed");
-    for (int i = 0; i < currentDialog.inventory.getLength(); i++) {
-      SPacketSlot pps = new SPacketSlot();
-      pps.dialogID = this.currentDialog.id;
-      pps.slotpos = i;
-      pps.stack = this.currentDialog.inventory.getStack(i);
-      getPlane().server.getClientManager().sendPacket(pps, this);
-    }
-  }
-
-  public void updateQueuedPlayerInventory() {
-    int[] slotsToUpdate = inventory.getSlotsToUpdate();
-    //System.out.println(Arrays.toString(slotsToUpdate));
-
-    for (int i = 0; i < slotsToUpdate.length; i++) {
-      ItemSlot slot = inventory.getSlot(slotsToUpdate[i]);
-      updatePlayerInventorySlot(slot.getSlotIndex());
-      slot.needsSync = false;
-    }
-    //System.out.println(Arrays.toString(inventory.getSlotsToUpdate()));
-  }
-
   public void openDialog(Dialog dialog) {
     this.currentDialog = dialog;
-    dialog.onOpen(this);
 
     SPacketChangeDialog pd = new SPacketChangeDialog();
     pd.dialogID = dialog.id;
     pd.operation = SPacketChangeDialog.OPEN_DIALOG;
     getPlane().server.getClientManager().sendPacket(pd, this);
 
-    dialog.viewers.updateDialogAll();
-    updatePlayerInventory();
+    dialog.onOpen(this);
   }
 
   public void closeDialog() {
@@ -167,8 +122,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
       }
       return null;
     } else {
-      ItemStack retstack = inventory.addItem(stack, Range.closed(EntityPlayer.NORMAL_INVENTORY_MIN, EntityPlayer.NORMAL_INVENTORY_MAX));
-      updateQueuedPlayerInventory();
+      ItemStack retstack = inventory.addItem(stack,
+          Range.closed(EntityPlayer.NORMAL_INVENTORY_MIN, EntityPlayer.NORMAL_INVENTORY_MAX));
       if (retstack != null) {
         return stack;
       } else {
@@ -205,7 +160,6 @@ public class RemoteEntityPlayer extends EntityPlayer {
         this.inventory.addItem(new ItemStack(Items.BUCKET, 1));*/
 
     this.inventory.addItem(new ItemStack(Items.BUCKET));
-    updateQueuedPlayerInventory();
   }
 
   public void onLeave() {
@@ -241,5 +195,9 @@ public class RemoteEntityPlayer extends EntityPlayer {
     this.setPosition(position);
     System.out.println(position);
     getPlane().server.getClientManager().getPacketHandler().sendTeleport(this);
+  }
+
+  public void sendPacket(Packet packet) {
+    getPlane().server.getClientManager().sendPacket(packet, this);
   }
 }

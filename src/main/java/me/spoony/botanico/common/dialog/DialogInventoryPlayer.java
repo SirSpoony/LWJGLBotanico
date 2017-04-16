@@ -1,10 +1,13 @@
 package me.spoony.botanico.common.dialog;
 
-import me.spoony.botanico.common.entities.EntityPlayer;
+import me.spoony.botanico.common.crafting.CraftingIngredient;
+import me.spoony.botanico.common.crafting.CraftingQuery;
+import me.spoony.botanico.common.crafting.Recipe;
+import me.spoony.botanico.common.crafting.Recipes;
 import me.spoony.botanico.common.items.Inventory;
+import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.items.ItemSlotMode;
 import me.spoony.botanico.common.items.ItemStack;
-import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**
@@ -20,34 +23,74 @@ public class DialogInventoryPlayer extends Dialog {
     }
   }
 
-  public void checkCrafting() {
-    for (int i = 0; i < 4; i++) {
-      if (inventory.getSlot(i).isEmpty()) {
-        continue;
-      }
+  public void updateCraftingGrid() {
+    for (int i = 4; i < 16; i++) {
+      this.inventory.setStack(i, null);
+    }
 
-      ItemStack stack = inventory.getSlot(i).getStack();
-      if (stack.getItem() == Items.WHEAT_SEEDS) {
-        inventory.setStack(4, new ItemStack(Items.DIRT));
+    CraftingQuery query = new CraftingQuery(new ItemStack[]{
+        this.inventory.getStack(0),
+        this.inventory.getStack(1),
+        this.inventory.getStack(2),
+        this.inventory.getStack(3),
+    });
+
+    Recipe[] recipes = Recipes.GENERAL_RECIPES.query(query);
+
+    for (int i = 0; i < recipes.length; i++) {
+      this.inventory.setStack(i + 4, ItemStack.clone(recipes[i].product));
+    }
+  }
+
+  public void removeIngredients(int slot) {
+    if (!inventory.getSlot(slot).isEmpty()) return;
+
+    CraftingQuery query = new CraftingQuery(new ItemStack[]{
+        this.inventory.getStack(0),
+        this.inventory.getStack(1),
+        this.inventory.getStack(2),
+        this.inventory.getStack(3),
+    });
+
+    Recipe[] recipes = Recipes.GENERAL_RECIPES.query(query);
+    if (recipes.length <= slot-4) return;
+    Recipe usedRecipe = recipes[slot - 4];
+
+    for (CraftingIngredient ingredient : usedRecipe.ingredients) {
+      for (ItemSlot ingredientSlot : new ItemSlot[]{
+          inventory.getSlot(0),
+          inventory.getSlot(1),
+          inventory.getSlot(2),
+          inventory.getSlot(3)}) {
+        if (ingredientSlot.getStack() == null) continue;
+        if (ingredientSlot.getStack().getItem() == ingredient.item
+            && ingredientSlot.getStack().getCount() >= ingredient.requiredAmount) {
+          ingredientSlot.getStack().increaseCount(-ingredient.requiredAmount);
+          break;
+        }
       }
     }
   }
 
   @Override
-  public void onClose(EntityPlayer player) {
+  public void onClose(RemoteEntityPlayer player) {
     super.onClose(player);
 
-    if (player instanceof RemoteEntityPlayer) {
-      RemoteEntityPlayer remoteEntityPlayer = (RemoteEntityPlayer) player;
-      for (int i = 0; i < 4; i++) {
-        remoteEntityPlayer.giveItemStack(inventory.getStack(i));
-        inventory.setStack(i, null);
-      }
+    for (int i = 0; i < 4; i++) {
+      player.giveItemStack(inventory.getStack(i));
+      inventory.setStack(i, null);
     }
   }
 
   @Override
-  public void onItemSlotInteraction() {
-    checkCrafting();
+  public void onItemSlotInteraction(int slot, byte type) {
+    if (slot >= 0 && slot < 4) {
+      updateCraftingGrid();
+    } else if (slot >= 4 && slot < 16) {
+      removeIngredients(slot);
+      updateCraftingGrid();
+    } else {
+      System.out.println("this shouldnt happen :O");
+    }
   }
 }

@@ -1,51 +1,55 @@
 package me.spoony.botanico.common.items;
 
-import me.spoony.botanico.common.entities.EntityPlayer;
+import com.google.common.base.Preconditions;
 
 /**
  * Created by Colten on 11/10/2016.
  */
 public class ItemSlot {
 
+  public static int LEFT_CLICK = 0;
+  public static int RIGHT_CLICK = 1;
+  public static int SHIFT_LEFT_CLICK = 2;
+  public static int SHIFT_RIGHT_CLICK = 3;
+
   protected Inventory inventory;
   private int slot;
   private ItemStack stack;
   private ItemStack ghost;
-  private int dialogID;
   private ItemSlotMode mode;
   private ItemSlotRestriction restriction;
-  public boolean needsSync;
 
-  public ItemSlot(Inventory inventory, int slot, int dialogID) {
+  public ItemSlot(Inventory inventory, int slot) {
+    Preconditions.checkNotNull(inventory);
+
     this.inventory = inventory;
     this.slot = slot;
-    this.dialogID = dialogID;
     this.mode = ItemSlotMode.NORMAL;
     this.restriction = ItemSlotRestriction.DEFAULT;
   }
 
-  public static void exchange(ItemSlot invslot, ItemSlot cursorslot, byte clicktype) {
-    ItemStack invslotstack = ItemStack.clone(invslot.getStack());
-    ItemStack cursorslotstack = ItemStack.clone(cursorslot.getStack());
+  public static void exchange(ItemSlot invSlot, ItemSlot cursor, byte clickType) {
+    ItemStack invSlotStack = ItemStack.clone(invSlot.getStack());
+    ItemStack cursorStack = ItemStack.clone(cursor.getStack());
 
-    if (cursorslotstack != null && !invslot.getRestriction().isValid(cursorslotstack)) {
+    if (cursorStack != null && !invSlot.getRestriction().isValid(cursorStack)) {
       return;
     }
 
-    if (invslot.getMode() == ItemSlotMode.NORMAL) {
-      ItemStackExchange exchange = new ItemStackExchange(invslotstack, cursorslotstack);
-      if (clicktype == 0 || clicktype == 2) {
+    if (invSlot.getMode() == ItemSlotMode.NORMAL) {
+      ItemStackExchange exchange = new ItemStackExchange(invSlotStack, cursorStack);
+      if (clickType == ItemSlot.LEFT_CLICK || clickType == ItemSlot.SHIFT_LEFT_CLICK) {
         exchange.exchange();
-      } else if (clicktype == 1 || clicktype == 3) {
+      } else if (clickType == ItemSlot.RIGHT_CLICK || clickType == ItemSlot.SHIFT_RIGHT_CLICK) {
         exchange.exchangeHalf();
       }
-      invslot.setStack(exchange.to);
-      cursorslot.setStack(exchange.from);
-    } else if (invslot.getMode() == ItemSlotMode.TAKE_ONLY) {
-      ItemStackExchange exchange = new ItemStackExchange(cursorslotstack, invslotstack);
+      invSlot.setStack(exchange.getTo());
+      cursor.setStack(exchange.getFrom());
+    } else if (invSlot.getMode() == ItemSlotMode.TAKE_ONLY) {
+      ItemStackExchange exchange = new ItemStackExchange(cursorStack, invSlotStack);
       exchange.merge();
-      cursorslot.setStack(exchange.to);
-      invslot.setStack(exchange.from);
+      cursor.setStack(exchange.getTo());
+      invSlot.setStack(exchange.getFrom());
     }
   }
 
@@ -64,9 +68,14 @@ public class ItemSlot {
 
   public void setStack(ItemStack stack) {
     this.stack = stack;
-    if (inventory != null) {
-      needsSync = true;
+    if (stack != null) {
+      this.stack.owner = this;
     }
+    onUpdate();
+  }
+
+  public void onUpdate() {
+    inventory.onSlotUpdate(slot);
   }
 
   public ItemStack getGhost() {
@@ -91,10 +100,6 @@ public class ItemSlot {
     return slot;
   }
 
-  public int getDialogID() {
-    return dialogID;
-  }
-
   public ItemSlotRestriction getRestriction() {
     return restriction;
   }
@@ -112,7 +117,8 @@ public class ItemSlot {
     if (stack == null) {
       return;
     }
-    if (stack.isEmpty())
+    if (stack.isEmpty()) {
       stack = null;
+    }
   }
 }

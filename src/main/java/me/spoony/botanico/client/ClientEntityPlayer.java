@@ -347,6 +347,9 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
       loadAnimation();
     }
 
+    rg.sprite(new GamePosition(position).add(0, -2 / 16f), spritesheet,
+        new IntRectangle(64, 0, 16, 32), position.y);
+
     if (animation == 1) {
       rg.sprite(position, spritesheet, rightAnimation.getSource(), position.y);
     } else if (animation == 0) {
@@ -356,9 +359,6 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     } else if (animation == 3) {
       rg.sprite(position, spritesheet, upAnimation.getSource(), position.y);
     }
-
-    rg.sprite(new GamePosition(position).add(0, -2 / 16f), spritesheet,
-        new IntRectangle(64, 0, 16, 32), position.y + 1);
 
     if (buildingDamageIndicator != null) {
       buildingDamageIndicator.render(rg);

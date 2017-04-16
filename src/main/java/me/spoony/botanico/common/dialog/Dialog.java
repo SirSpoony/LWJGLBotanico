@@ -1,5 +1,6 @@
 package me.spoony.botanico.common.dialog;
 
+import me.spoony.botanico.ServerOnly;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.Inventory;
 import me.spoony.botanico.server.RemoteEntityPlayer;
@@ -48,22 +49,31 @@ public class Dialog {
 
   }
 
-  public void onOpen(EntityPlayer player) {
+  @ServerOnly
+  public void onOpen(RemoteEntityPlayer player) {
     viewers.addViewer(player);
+    inventory.addViewer(player);
+    onAddViewer(player);
   }
 
-  public void onClose(EntityPlayer player) {
+  @ServerOnly
+  public void onClose(RemoteEntityPlayer player) {
     viewers.removeViewer(player);
+    inventory.removeViewer(player);
+    onRemoveViewer(player);
   }
 
-  public void updateViewer(EntityPlayer player) {
-    if (player instanceof RemoteEntityPlayer) {
-      ((RemoteEntityPlayer) player).updateDialogInventory();
-      ((RemoteEntityPlayer) player).updateDialogData();
-    }
+  @ServerOnly
+  public void onAddViewer(RemoteEntityPlayer player) {
+
   }
 
-  public void onItemSlotInteraction() {
+  @ServerOnly
+  public void onRemoveViewer(RemoteEntityPlayer player) {
+
+  }
+
+  public void onItemSlotInteraction(int slot, byte type) {
 
   }
 }

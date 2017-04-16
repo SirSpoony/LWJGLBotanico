@@ -37,6 +37,42 @@ public class PlaneRenderer implements GameRenderable {
     // FANCY RENDERING VOODOO, IT WILL BREAK
     // OK NVM THIS IS SOME RLLY SHITTY CODE HOLY SHIT
 
+    DoubleRectangle gameview = rg.gameViewport;
+
+    int firstTileX = (int) Math.floor(gameview.x) - 4;
+    int firstTileY = (int) Math.floor(gameview.y) - 4;
+    int lastTileX = (int) Math.ceil(gameview.x + gameview.width) + 4;
+    int lastTileY = (int) Math.ceil(gameview.y + gameview.height) + 4;
+
+    renderTiles(rg);
+
+    TilePosition highlightedBuilding = Input.CURSOR_POS.toGamePosition().toTilePosition();
+    if (!level.getLocalPlayer().canReach(highlightedBuilding.toGamePosition())) {
+      highlightedBuilding.set(Long.MAX_VALUE, Long.MAX_VALUE);
+    }
+
+    for (int x = firstTileX; x < lastTileX; x++) {
+      for (int y = firstTileY; y < lastTileY; y++) {
+        TilePosition currentPosition = new TilePosition(x, y);
+
+        Building b = level.getBuilding(currentPosition);
+        byte d = level.getBuildingData(currentPosition);
+
+        boolean shouldHighlight =
+            highlightedBuilding.equals(currentPosition) && !GameView.getPlayer().hasDialogOpen();
+        if (b != null) {
+          b.render(rg, level, currentPosition, d, shouldHighlight);
+        }
+      }
+    }
+
+    List<Entity> temptlist = Lists.newArrayList(level.getEntities()); // due to thread safety bugs
+    for (Entity e : temptlist) {
+      e.render(rg);
+    }
+  }
+
+  private void renderTiles(RendererGame rg) {
     if (level.getID() == IPlane.UNDERWORLD) {
       rg.nightCycle = 0;
     } else {
@@ -62,6 +98,8 @@ public class PlaneRenderer implements GameRenderable {
       }
     }
 
+    AdjacentTiles adjtiles = new AdjacentTiles();
+
     for (int x = firstTileX + 2; x < lastTileX - 2; x++) {
       for (int y = firstTileY + 2; y < lastTileY - 2; y++) {
         Tile tile = tiles[x - firstTileX][y - firstTileY];
@@ -69,8 +107,6 @@ public class PlaneRenderer implements GameRenderable {
         if (tile == null) {
           continue;
         }
-
-        AdjacentTiles adjtiles = new AdjacentTiles();
 
         adjtiles.setTile(Direction.DOWN,       tiles[x - firstTileX]    [y - firstTileY - 1]);
         adjtiles.setTile(Direction.DOWN_RIGHT, tiles[x - firstTileX + 1][y - firstTileY - 1]);
@@ -87,8 +123,6 @@ public class PlaneRenderer implements GameRenderable {
         IntRectangle foreground = tile.foregroundRegion(adjtiles, relevantRule, randtexture);
         IntRectangle background = tile.backgroundRegion(adjtiles, relevantRule, randtexture);
 
-
-
         if (background != null) {
           rg.sprite(new GamePosition(x, y), tileTexture,
               background, RendererGame.BACK_LAYER);
@@ -99,31 +133,6 @@ public class PlaneRenderer implements GameRenderable {
               foreground, RendererGame.BACK_LAYER);
         }
       }
-    }
-
-    TilePosition highlightedBuilding = Input.CURSOR_POS.toGamePosition().toTilePosition();
-    if (!level.getLocalPlayer().canReach(highlightedBuilding.toGamePosition())) {
-      highlightedBuilding.set(Long.MAX_VALUE, Long.MAX_VALUE);
-    }
-
-    for (int x = firstTileX; x < lastTileX; x++) {
-      for (int y = firstTileY; y < lastTileY; y++) {
-        TilePosition currentPosition = new TilePosition(x, y);
-
-        Building b = level.getBuilding(currentPosition);
-        byte d = level.getBuildingData(currentPosition);
-
-        boolean shouldHighlight =
-            highlightedBuilding.equals(currentPosition) && !GameView.getPlayer().hasDialogOpen();
-        if (b != null) {
-          b.render(rg, level, currentPosition, d, shouldHighlight);
-        }
-      }
-    }
-
-    List<Entity> temptlist = Lists.newArrayList(level.getEntities()); // due to thread safety bugs
-    for (Entity e : temptlist) {
-      e.render(rg);
     }
   }
 }
