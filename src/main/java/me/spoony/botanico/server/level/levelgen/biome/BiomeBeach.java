@@ -19,7 +19,7 @@ public class BiomeBeach extends Biome {
     this.addBuildingFeature(
         new BuildingFeatureSuround(Buildings.BOULDER, 1, Buildings.ROCKS, Tiles.SAND, 3));
 
-    this.addBuildingFeature(new BuildingFeaturePlant(.005f, Buildings.REEDS, 3, Tiles.SAND));
-
+    this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.REEDS, 2, Tiles.SAND));
+    this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.SEASHELL, 2, Tiles.SAND));
   }
 }

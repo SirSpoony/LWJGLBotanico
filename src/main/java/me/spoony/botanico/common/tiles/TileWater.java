@@ -34,7 +34,7 @@ public class TileWater extends TileConnected {
   @Override
   public IntRectangle backgroundRegion(AdjacentTiles adjtiles, TileRenderRule relevantRule,
       int randtexture) {
-    int val =(int) (BotanicoGame.getLastLoopTime()/200000000)&7;
+    int val =(int) (BotanicoGame.getLastLoopTime()/300000000)&7;
     return new IntRectangle(64+val*16, 96,16, 16);
   }
 }

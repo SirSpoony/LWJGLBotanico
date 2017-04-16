@@ -8,6 +8,6 @@ import me.spoony.botanico.common.tiles.Tiles;
 public class BiomeDeepLake extends Biome
 {
     public BiomeDeepLake() {
-        this.setTile(Tiles.DEEP_WATER);
+        this.setTile(Tiles.WATER);
     }
 }

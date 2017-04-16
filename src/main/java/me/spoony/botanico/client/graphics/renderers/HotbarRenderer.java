@@ -17,63 +17,69 @@ import me.spoony.botanico.common.util.IntRectangle;
  * Created by Colten on 12/17/2016.
  */
 public class HotbarRenderer implements GUIRenderable {
-    private GuiRectangle bounds;
-    private IntRectangle textureregion;
 
-    private RendererItemSlot[] rendererItemSlots;
+  private GuiRectangle bounds;
+  private IntRectangle textureregion;
 
-    public HotbarRenderer(Inventory inventory) {
-        textureregion = new IntRectangle(0, 0, 158, 18);
-        bounds = new GuiRectangle(0, 0, textureregion.width, textureregion.height);
+  private RendererItemSlot[] rendererItemSlots;
 
-        rendererItemSlots = new RendererItemSlot[8];
+  public HotbarRenderer(Inventory inventory) {
+    textureregion = new IntRectangle(0, 0, 158, 18);
+    bounds = new GuiRectangle(0, 0, textureregion.width, textureregion.height);
 
-        for (int i = 0; i < rendererItemSlots.length; i++) {
-            rendererItemSlots[i] = new RendererItemSlot(inventory.getSlot(i), 1 + i * 20, 1);
-        }
+    rendererItemSlots = new RendererItemSlot[8];
+
+    for (int i = 0; i < rendererItemSlots.length; i++) {
+      rendererItemSlots[i] = new RendererItemSlot(inventory.getSlot(i), 1 + i * 20, 1);
+    }
+  }
+
+  public boolean onBinaryInputPressed(BinaryInput bin) {
+    if (bin != Input.BUTTON_LEFT && bin != Input.BUTTON_RIGHT) {
+      return false;
+    }
+    if (bounds.contains(Input.CURSOR_POS.toGuiPosition())) {
+      for (RendererItemSlot slot : rendererItemSlots) {
+        slot.checkClick(bin);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public void render(RendererGUI rg) {
+    bounds.setCenter(rg.guiViewport.getCenter());
+    bounds.y = 3;
+
+    for (int i = 0; i < rendererItemSlots.length; i++) {
+      rendererItemSlots[i].updatePosition(bounds.getPosition());
     }
 
-    public boolean onBinaryInputPressed(BinaryInput bin) {
-        if (bin != Input.BUTTON_LEFT && bin != Input.BUTTON_RIGHT) return false;
-        if (bounds.contains(Input.CURSOR_POS.toGuiPosition())) {
-            for (RendererItemSlot slot : rendererItemSlots)
-                slot.checkClick(bin);
-            return true;
-        }
-        return false;
+    Texture texture = rg.getResourceManager().getTexture("hotbar.png");
+
+    rg.sprite(bounds.getPosition(), texture,
+        new IntRectangle(0, 0, textureregion.width, textureregion.height));
+
+    float damage = .5f;
+
+    rg.sprite(bounds.getPosition().add(18f, 21f), texture,
+        new IntRectangle(0, 24, 113, 14));
+
+    rg.sprite(bounds.getPosition().add(18f + 11, 25f), texture,
+        new IntRectangle(0, 42, (int) Math.floor(100 * damage), 6));
+
+    for (RendererItemSlot slot : rendererItemSlots) {
+      slot.render(rg);
     }
 
-    @Override
-    public void render(RendererGUI rg) {
-        bounds.setCenter(rg.guiViewport.getCenter());
-        bounds.y = 3;
-
-        for (int i = 0; i < rendererItemSlots.length; i++) {
-            rendererItemSlots[i].updatePosition(bounds.getPosition());
-        }
-
-        Texture texture = rg.getResourceManager().getTexture("hotbar.png");
-
-        rg.sprite(bounds.getPosition(), texture,
-                new IntRectangle(0, 0, textureregion.width, textureregion.height));
-
-        float damage = .5f;
-
-        rg.sprite(bounds.getPosition().add(18f, 23f), texture,
-                new IntRectangle(0, 24, 122, 10));
-
-        rg.sprite(bounds.getPosition().add(18f, 23f), texture,
-                new IntRectangle(0, 34, (int) Math.floor(122 * damage), 8));
-
-        for (RendererItemSlot slot : rendererItemSlots) {
-            slot.render(rg);
-        }
-
-        if (GameView.getPlayer().isMining()) {
-            ItemSlot slot = GameView.getPlayer().getCurrentBuildingDamageTool();
-            if (slot == null) return;
-            rg.sprite(bounds.getPosition().add(slot.getSlotIndex()*17, 0f), texture,
-                    new IntRectangle(124, 0, 20, 20));
-        }
+    if (GameView.getPlayer().isMining()) {
+      ItemSlot slot = GameView.getPlayer().getCurrentBuildingDamageTool();
+      if (slot == null) {
+        return;
+      }
+      rg.sprite(bounds.getPosition().add(slot.getSlotIndex() * 17, 0f), texture,
+          new IntRectangle(124, 0, 20, 20));
     }
+  }
 }

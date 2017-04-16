@@ -10,31 +10,28 @@ import java.util.Random;
 /**
  * Created by Colten on 11/10/2016.
  */
-public class BuildingRocks extends Building
-{
-    public BuildingRocks(int id)
-    {
-        super(id);
-        this.name = "rocks";
-        this.shouldCollide = false;
-        this.alwaysBehindCharacter = true;
-        this.textureName = "building/rocks.png";
+public class BuildingRocks extends Building {
 
-        this.hardness = 1;
-    }
+  public BuildingRocks(int id) {
+    super(id);
+    this.name = "rocks";
+    this.shouldCollide = false;
+    this.alwaysBehindCharacter = true;
+    this.textureName = "building/rocks.png";
 
-    @Override
-    public ItemStack[] getDrops(IPlane level, TilePosition position)
-    {
-        return new ItemStack[]
-                {
-                        new ItemStack(Items.ROCK, new Random().nextInt(2) + 1),
-                };
-    }
+    this.hardness = 1;
+  }
 
-    @Override
-    public BuildingBreakMaterial getBreakParticle()
-    {
-        return BuildingBreakMaterial.ROCK;
-    }
+  @Override
+  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+    return new ItemStack[]
+        {
+            new ItemStack(Items.ROCK, new Random().nextInt(2) + 1),
+        };
+  }
+
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.ROCK;
+  }
 }

@@ -79,6 +79,7 @@ public class Building {
 
     REGISTRY.registerBuilding(new BuildingBush(24));
     REGISTRY.registerBuilding(new BuildingReeds(25));
+    REGISTRY.registerBuilding(new BuildingSeashell(26));
   }
 
   public Building(int id) {
