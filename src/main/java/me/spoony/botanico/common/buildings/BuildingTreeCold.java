@@ -15,14 +15,13 @@ public class BuildingTreeCold extends Building {
     public BuildingTreeCold(int id) {
         super(id);
         this.name = "tree_cold";
-        this.textureName = "building/tree_cold.png";
         this.hardness = 10;
     }
 
     @Override
-    public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d, boolean highlight) {
-        rg.sprite(position.toGamePosition().add(-1, 0), rg.getResourceManager().getTexture(textureName),
-                new IntRectangle(0, 0, 46, 64), highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE, position.y);
+    public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d, Color color) {
+        rg.sprite(position.toGamePosition().add(0, 0), getTextureSheet(),
+                new IntRectangle(0, 0, 16, 16), color, position.y);
     }
 
     @Override

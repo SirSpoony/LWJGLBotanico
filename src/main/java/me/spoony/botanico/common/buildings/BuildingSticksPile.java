@@ -14,49 +14,41 @@ import java.util.Random;
 /**
  * Created by Colten on 11/10/2016.
  */
-public class BuildingSticksPile extends Building
-{
-    public BuildingSticksPile(int id)
-    {
-        super(id);
-        this.name = "sticks_pile";
-        shouldCollide = false;
+public class BuildingSticksPile extends Building {
 
-        this.textureName = "building/sticks_pile.png";
-        this.alwaysBehindCharacter = true;
+  public BuildingSticksPile(int id) {
+    super(id);
+    this.name = "sticks_pile";
+    this.shouldCollide = false;
+    this.hardness = .5f;
+  }
 
-        this.hardness = .5f;
-    }
+  @Override
+  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+      Color color) {
+    int val = hash(position.x, position.y) % 4;
+    rg.sprite(position.toGamePosition(), getTextureSheet(),
+        new IntRectangle(48 + 16 * val, 176, 16, 16), color,
+        position.y + 1);
+  }
 
-    @Override
-    public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d, boolean highlight)
-    {
-        int val = hash(position.x, position.y) % 4;
-        rg.sprite(position.toGamePosition(), rg.getResourceManager().getTexture(textureName),
-                new IntRectangle(16*val, 0, 16, 16), highlight ? new Color(.8f,.8f,.8f,1) : Color.WHITE,
-                position.y + (alwaysBehindCharacter ? 1 : 0));
-    }
+  private long OffsetBasis = 216613626;
+  private long FnvPrime = 16777619;
 
-    private long OffsetBasis = 216613626;
-    private long FnvPrime = 16777619;
+  public int hash(long a, long b) {
+    return Math.abs((int) ((((OffsetBasis ^ a) * FnvPrime) ^ b) * FnvPrime));
+  }
 
-    public int hash(long a, long b)
-    {
-        return Math.abs((int)((((OffsetBasis ^ a) * FnvPrime) ^ b) * FnvPrime));
-    }
+  @Override
+  public ItemStack[] getDrops(IPlane level, TilePosition tilePosition) {
+    return new ItemStack[]
+        {
+            new ItemStack(Items.WOOD, new Random().nextInt(3) + 1),
+        };
+  }
 
-    @Override
-    public ItemStack[] getDrops(IPlane level, TilePosition tilePosition)
-    {
-        return new ItemStack[]
-                {
-                        new ItemStack(Items.WOOD, new Random().nextInt(3) + 1),
-                };
-    }
-
-    @Override
-    public BuildingBreakMaterial getBreakParticle()
-    {
-        return BuildingBreakMaterial.WOOD;
-    }
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.WOOD;
+  }
 }

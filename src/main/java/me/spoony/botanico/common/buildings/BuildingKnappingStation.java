@@ -17,58 +17,60 @@ import java.util.List;
 /**
  * Created by Colten on 11/27/2016.
  */
-public class BuildingKnappingStation extends Building implements IBuildingEntityHost
-{
-    public BuildingKnappingStation(int id)
-    {
-        super(id);
-        this.name = "knapping_station";
-        this.collisionBounds = new DoubleRectangle(0, 0, 1, 1);
-        this.textureName = "building/knapping_station.png";
-        this.hardness = 1f;
+public class BuildingKnappingStation extends Building implements IBuildingEntityHost {
+
+  public BuildingKnappingStation(int id) {
+    super(id);
+    this.name = "knapping_station";
+    this.collisionBounds = new DoubleRectangle(0, 0, 1, 1);
+    this.setTextureBounds(0, 176, 16, 32);
+    this.hardness = 1f;
+  }
+
+  @Override
+  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+    if (!(level instanceof ServerPlane)) {
+      return null;
     }
-
-    @Override
-    public ItemStack[] getDrops(IPlane level, TilePosition position)
-    {
-        if (!(level instanceof ServerPlane)) return null;
-        ServerPlane serverLevel = (ServerPlane) level;
-        BuildingEntityKnappingStation bew = (BuildingEntityKnappingStation) serverLevel.getBuildingEntity(position);
-        List<ItemStack> items = new ArrayList<ItemStack>();
-        for (int i = 0; i < bew.getInventory().getLength(); i++)
-        {
-            if (bew.getInventory().getSlot(i).getStack() == null) continue;
-            items.add(bew.getInventory().getSlot(i).getStack());
-        }
-        items.add(new ItemStack(Items.KNAPPING_STATION));
-
-        return items.toArray(new ItemStack[items.size()]);
+    ServerPlane serverLevel = (ServerPlane) level;
+    BuildingEntityKnappingStation bew = (BuildingEntityKnappingStation) serverLevel
+        .getBuildingEntity(position);
+    List<ItemStack> items = new ArrayList<ItemStack>();
+    for (int i = 0; i < bew.getInventory().getLength(); i++) {
+      if (bew.getInventory().getSlot(i).getStack() == null) {
+        continue;
+      }
+      items.add(bew.getInventory().getSlot(i).getStack());
     }
+    items.add(new ItemStack(Items.KNAPPING_STATION));
 
-    @Override
-    public boolean onClick(IPlane level, EntityPlayer player, TilePosition position)
-    {
-        if (!(level instanceof ServerPlane)) return false;
-        ServerPlane serverLevel = (ServerPlane) level;
+    return items.toArray(new ItemStack[items.size()]);
+  }
 
-        BuildingEntityKnappingStation beks = (BuildingEntityKnappingStation)serverLevel.getBuildingEntity(position);
-        if (beks != null)
-        {
-            if (player instanceof RemoteEntityPlayer) {
-                ((RemoteEntityPlayer)player).openDialog(beks.dialog);
-            }
-        }
-        return false;
+  @Override
+  public boolean onClick(IPlane level, EntityPlayer player, TilePosition position) {
+    if (!(level instanceof ServerPlane)) {
+      return false;
     }
+    ServerPlane serverLevel = (ServerPlane) level;
 
-    @Override
-    public BuildingBreakMaterial getBreakParticle()
-    {
-        return BuildingBreakMaterial.WOOD;
+    BuildingEntityKnappingStation beks = (BuildingEntityKnappingStation) serverLevel
+        .getBuildingEntity(position);
+    if (beks != null) {
+      if (player instanceof RemoteEntityPlayer) {
+        ((RemoteEntityPlayer) player).openDialog(beks.dialog);
+      }
     }
+    return false;
+  }
 
-    @Override
-    public BuildingEntity createNewEntity(IPlane plane, TilePosition position) {
-        return new BuildingEntityKnappingStation(position, plane);
-    }
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.WOOD;
+  }
+
+  @Override
+  public BuildingEntity createNewEntity(IPlane plane, TilePosition position) {
+    return new BuildingEntityKnappingStation(position, plane);
+  }
 }

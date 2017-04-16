@@ -14,16 +14,10 @@ public class BuildingBush extends Building {
   public BuildingBush(int id) {
     super(id);
     this.name = "bush";
-    this.textureName = "building/bush.png";
+    this.setTextureBounds(48, 0, 32, 32);
     this.hardness = Float.MAX_VALUE;
     this.alwaysBehindCharacter = false;
     this.collisionBounds = new DoubleRectangle(0,0,2,1.5);
-  }
-
-  @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d, boolean highlight) {
-    rg.sprite(position.toGamePosition(), rg.getResourceManager().getTexture(textureName),
-        new IntRectangle(0, 0, 32, 32), highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE, position.y);
   }
 
   @Override

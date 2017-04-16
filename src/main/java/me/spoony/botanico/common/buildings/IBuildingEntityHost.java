@@ -8,5 +8,6 @@ import me.spoony.botanico.common.util.position.TilePosition;
  * Created by Colten on 12/30/2016.
  */
 public interface IBuildingEntityHost {
-    BuildingEntity createNewEntity(IPlane level, TilePosition position);
+
+  BuildingEntity createNewEntity(IPlane level, TilePosition position);
 }

@@ -18,18 +18,10 @@ public class BuildingCaveRope extends Building {
   public BuildingCaveRope(int id) {
     super(id);
     this.name = "cave_rope";
-    this.textureName = "building/cave_rope.png";
+    this.setTextureBounds(0, 32, 16, 64);
     this.hardness = Float.MAX_VALUE;
     this.alwaysBehindCharacter = true;
     this.shouldCollide = false;
-  }
-
-  @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
-      boolean highlight) {
-    rg.sprite(position.toGamePosition(), rg.getResourceManager().getTexture(textureName),
-        new IntRectangle(0, 0, 16, 64), highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE,
-        position.y);
   }
 
   @Override

@@ -46,4 +46,6 @@ public class Items
     public static Item ROPE = Item.REGISTRY.get("rope");
 
     public static Item COPPER_ORE = Item.REGISTRY.get("copper_ore");
+
+    public static Item WALL = Item.REGISTRY.get("wall");
 }

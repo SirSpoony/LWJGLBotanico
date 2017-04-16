@@ -29,6 +29,6 @@ public class BuildingDamageIndicator {
     IntRectangle source = new IntRectangle(0,
         (int) (27 - Math.floor((health / maxHealth) * 10) * 3), 12, 3);
     rg.sprite(getRenderPosition(), rg.getResourceManager().getTexture("damage_indicator.png"),
-        source, tilePosition.y);
+        source, tilePosition.y-10);
   }
 }

@@ -10,22 +10,23 @@ import me.spoony.botanico.server.level.ServerPlane;
  * Created by Colten on 1/2/2017.
  */
 public class BuildingCopperOre extends Building {
-    public BuildingCopperOre(int id) {
-        super(id);
 
-        name = "copper_ore";
-        this.textureName = "building/copper_ore.png";
+  public BuildingCopperOre(int id) {
+    super(id);
 
-        this.hardness = 10;
-    }
+    name = "copper_ore";
+    this.setTextureBounds(16, 112, 16, 16);
 
-    @Override
-    public BuildingBreakMaterial getBreakParticle() {
-        return BuildingBreakMaterial.ROCK;
-    }
+    this.hardness = 10;
+  }
 
-    @Override
-    public ItemStack[] getDrops(IPlane level, TilePosition position) {
-        return new ItemStack[]{new ItemStack(Items.COPPER_ORE)};
-    }
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.ROCK;
+  }
+
+  @Override
+  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+    return new ItemStack[]{new ItemStack(Items.COPPER_ORE)};
+  }
 }

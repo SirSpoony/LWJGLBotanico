@@ -19,7 +19,7 @@ public class BuildingFurnace extends Building implements IBuildingEntityHost {
         super(id);
         this.name = "furnace";
         this.collisionBounds = new DoubleRectangle(0, 0, 1, 1);
-        this.textureName = "building/furnace.png";
+        this.setTextureBounds(32, 128, 16, 32);
         this.hardness = 4f;
     }
 

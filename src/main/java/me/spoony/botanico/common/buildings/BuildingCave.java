@@ -21,7 +21,6 @@ public class BuildingCave extends Building {
   public BuildingCave(int id) {
     super(id);
     this.name = "cave";
-    this.textureName = "building/cave.png";
     this.hardness = Float.MAX_VALUE;
     this.alwaysBehindCharacter = true;
     this.collisionBounds = new DoubleRectangle(0, 0, 41 / 16f, 35 / 16f);
@@ -29,10 +28,9 @@ public class BuildingCave extends Building {
 
   @Override
   public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
-      boolean highlight) {
-    rg.sprite(position.toGamePosition(), rg.getResourceManager().getTexture(textureName),
-        new IntRectangle((d == 1 ? 64 : 0), 0, 64, 64),
-        highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE, position.y);
+      Color color) {
+    rg.sprite(position.toGamePosition(), getTextureSheet(),
+        new IntRectangle(80 + (d == 1 ? 64 : 0), 0, 48, 48), color, position.y);
   }
 
   @Override

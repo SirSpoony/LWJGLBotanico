@@ -44,4 +44,6 @@ public class Buildings {
   public static Building BUSH = Building.REGISTRY.getBuilding("bush");
   public static Building REEDS = Building.REGISTRY.getBuilding("reeds");
   public static Building SEASHELL = Building.REGISTRY.getBuilding("seashell");
+
+  public static Building WALL = Building.REGISTRY.getBuilding("wall");
 }

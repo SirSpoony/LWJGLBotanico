@@ -10,7 +10,7 @@ public class BuildingSeashell extends Building {
     this.name = "seashell";
     this.shouldCollide = false;
     this.alwaysBehindCharacter = true;
-    this.textureName = "building/seashell.png";
+    this.setTextureBounds(80, 160, 16, 16);
 
     this.hardness = 1;
   }

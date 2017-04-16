@@ -38,6 +38,8 @@ public class IntegratedPlayerManager implements ServerManager {
     SPacketPlayerEID peid = new SPacketPlayerEID();
     peid.eid = player.eid;
     sendPacketToAll(peid);
+
+    player.onJoin();
   }
 
   @Override

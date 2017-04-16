@@ -17,7 +17,7 @@ public class BuildingRocks extends Building {
     this.name = "rocks";
     this.shouldCollide = false;
     this.alwaysBehindCharacter = true;
-    this.textureName = "building/rocks.png";
+    this.setTextureBounds(64, 160, 16, 16);
 
     this.hardness = 1;
   }

@@ -9,26 +9,26 @@ import me.spoony.botanico.server.level.ServerPlane;
  */
 public class BuildingBoulder extends Building {
 
-    public BuildingBoulder(int id) {
-        super(id);
+  public BuildingBoulder(int id) {
+    super(id);
 
-        name = "boulder";
-        this.textureName = "building/boulder.png";
+    name = "boulder";
+    this.setTextureBounds(32, 0, 16, 16);
 
-        this.hardness = 10;
+    this.hardness = 10;
+  }
+
+  @Override
+  public void destroy(IPlane level, TilePosition position) {
+    if (level.isLocal()) {
+      return;
     }
+    ServerPlane serverLevel = (ServerPlane) level;
+    serverLevel.setBuilding(position, Buildings.ROCKS);
+  }
 
-    @Override
-    public void destroy(IPlane level, TilePosition position) {
-        if (level.isLocal()) {
-            return;
-        }
-        ServerPlane serverLevel = (ServerPlane) level;
-        serverLevel.setBuilding(position, Buildings.ROCKS);
-    }
-
-    @Override
-    public BuildingBreakMaterial getBreakParticle() {
-        return BuildingBreakMaterial.ROCK;
-    }
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.ROCK;
+  }
 }

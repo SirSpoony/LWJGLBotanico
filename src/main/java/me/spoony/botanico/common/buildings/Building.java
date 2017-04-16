@@ -24,7 +24,7 @@ public class Building {
   protected String name;
   protected boolean shouldCollide;
   protected DoubleRectangle collisionBounds;
-  protected String textureName;
+  protected IntRectangle textureBounds;
   protected boolean alwaysBehindCharacter;
   protected float hardness;
 
@@ -80,16 +80,18 @@ public class Building {
     REGISTRY.registerBuilding(new BuildingBush(24));
     REGISTRY.registerBuilding(new BuildingReeds(25));
     REGISTRY.registerBuilding(new BuildingSeashell(26));
+
+    REGISTRY.registerBuilding(new BuildingWall(27));
   }
 
   public Building(int id) {
     name = "unnamed";
     shouldCollide = true;
     collisionBounds = new DoubleRectangle(0, 0, 1, 1);
-    textureName = "missing_texture";
     alwaysBehindCharacter = false;
     hardness = .5f;
     this.id = id;
+    this.textureBounds = new IntRectangle(0, 0, 16, 16);
   }
 
   public String getLocalizedName() {
@@ -97,12 +99,13 @@ public class Building {
   }
 
   public void render(RendererGame rg, ClientPlane level, TilePosition position, byte extra,
-      boolean highlight) {
-    Texture texture = BotanicoGame.getResourceManager().getTexture(textureName);
-    rg.sprite(new GamePosition(position), texture,
-        new IntRectangle(0, 0, texture.getWidth(), texture.getHeight()),
-        highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE,
-        position.y + (alwaysBehindCharacter ? 1 : 0));
+      Color color) {
+    rg.sprite(new GamePosition(position), getTextureSheet(),
+        textureBounds, color, position.y + (alwaysBehindCharacter ? 1 : 0));
+  }
+
+  protected Texture getTextureSheet() {
+    return BotanicoGame.getResourceManager().getTexture("buildings.png");
   }
 
   public void create(IPlane level, TilePosition position) {
@@ -162,14 +165,6 @@ public class Building {
     this.collisionBounds = collisionBounds;
   }
 
-  public String getTextureName() {
-    return textureName;
-  }
-
-  public void setTextureName(String textureName) {
-    this.textureName = textureName;
-  }
-
   public boolean isAlwaysBehindCharacter() {
     return alwaysBehindCharacter;
   }
@@ -192,5 +187,12 @@ public class Building {
 
   public BuildingBreakMaterial getBreakParticle() {
     return BuildingBreakMaterial.DEFAULT;
+  }
+
+  public void setTextureBounds(int x, int y, int width, int height) {
+    this.textureBounds.x = x;
+    this.textureBounds.y = y;
+    this.textureBounds.width = width;
+    this.textureBounds.height = height;
   }
 }

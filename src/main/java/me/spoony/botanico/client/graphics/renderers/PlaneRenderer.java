@@ -2,6 +2,7 @@ package me.spoony.botanico.client.graphics.renderers;
 
 import com.google.common.collect.Lists;
 import me.spoony.botanico.client.ClientPlane;
+import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.client.graphics.gui.GameRenderable;
@@ -61,7 +62,7 @@ public class PlaneRenderer implements GameRenderable {
         boolean shouldHighlight =
             highlightedBuilding.equals(currentPosition) && !GameView.getPlayer().hasDialogOpen();
         if (b != null) {
-          b.render(rg, level, currentPosition, d, shouldHighlight);
+          b.render(rg, level, currentPosition, d, shouldHighlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE);
         }
       }
     }

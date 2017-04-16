@@ -19,5 +19,12 @@ public class Recipes {
         new CraftingIngredient(Items.ROCK, 2)));
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.BUCKET),
         new CraftingIngredient(Items.ROCK, 2)));
+
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.WALL),
+        new CraftingIngredient(Items.WOOD, 4)));
+
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROCK_HOE),
+        new CraftingIngredient(Items.WOOD, 2),
+        new CraftingIngredient(Items.ROCK, 1)));
   }
 }

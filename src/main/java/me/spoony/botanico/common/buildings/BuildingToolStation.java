@@ -22,7 +22,7 @@ public class BuildingToolStation extends Building implements IBuildingEntityHost
         super(id);
         this.name = "tool_station";
         this.collisionBounds = new DoubleRectangle(0, 0, 1, 1);
-        this.textureName = "building/tool_station.png";
+        this.setTextureBounds(0, 208, 16, 32);
         this.hardness = 1f;
     }
 

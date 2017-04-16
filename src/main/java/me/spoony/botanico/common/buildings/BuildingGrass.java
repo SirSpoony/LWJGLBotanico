@@ -17,45 +17,45 @@ import java.util.Random;
  * Created by coltenwebb on 11/9/16.
  */
 public class BuildingGrass extends Building {
-    private static final Random DROP_RAND = new Random();
 
-    public BuildingGrass(int id) {
-        super(id);
-        this.name = "grass";
-        this.textureName = "building/grass.png";
-        shouldCollide = false;
-        this.alwaysBehindCharacter = true;
+  private static final Random DROP_RAND = new Random();
 
-        this.hardness = .1f;
-    }
+  public BuildingGrass(int id) {
+    super(id);
+    this.name = "grass";
+    shouldCollide = false;
+    this.hardness = .1f;
+  }
 
-    @Override
-    public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d, boolean highlight) {
-        int val = hash(position.x, position.y) % 4;
-        rg.sprite(position.toGamePosition(new GamePosition()), rg.getResourceManager().getTexture(textureName),
-                new IntRectangle(16 * val, 0, 16, 16),
-                highlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE, position.y+1);
-    }
+  @Override
+  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+      Color color) {
+    int val = hash(position.x, position.y) % 4;
+    rg.sprite(position.toGamePosition(new GamePosition()),
+        getTextureSheet(),
+        new IntRectangle(16 + 16 * val, 48, 16, 16),
+        color, position.y + 1);
+  }
 
-    private long OffsetBasis = 216613626;
-    private long FnvPrime = 16777619;
+  private long OffsetBasis = 216613626;
+  private long FnvPrime = 16777619;
 
-    public int hash(long a, long b) {
-        return Math.abs((int) ((((OffsetBasis ^ a) * FnvPrime) ^ b) * FnvPrime));
-    }
+  public int hash(long a, long b) {
+    return Math.abs((int) ((((OffsetBasis ^ a) * FnvPrime) ^ b) * FnvPrime));
+  }
 
-    @Override
-    public ItemStack[] getDrops(IPlane level, TilePosition position) {
-        int count = DROP_RAND.nextInt(8) - 6;
-        Item item = DROP_RAND.nextBoolean() ? Items.HEMP_SEEDS : Items.WHEAT_SEEDS;
-        return count > 0 ? new ItemStack[]
-                {
-                        new ItemStack(item, count)
-                } : null;
-    }
+  @Override
+  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+    int count = DROP_RAND.nextInt(8) - 6;
+    Item item = DROP_RAND.nextBoolean() ? Items.HEMP_SEEDS : Items.WHEAT_SEEDS;
+    return count > 0 ? new ItemStack[]
+        {
+            new ItemStack(item, count)
+        } : null;
+  }
 
-    @Override
-    public BuildingBreakMaterial getBreakParticle() {
-        return BuildingBreakMaterial.PLANT;
-    }
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.PLANT;
+  }
 }

@@ -9,7 +9,7 @@ public class BuildingReeds extends Building {
     super(id);
 
     name = "reeds";
-    this.textureName = "building/reeds.png";
+    this.setTextureBounds(32, 176, 16, 32);
 
     shouldCollide = false;
 
