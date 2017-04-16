@@ -1,9 +1,13 @@
 package me.spoony.botanico.common.buildings;
 
+import java.util.Random;
 import me.spoony.botanico.client.ClientPlane;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.RendererGame;
+import me.spoony.botanico.common.items.ItemStack;
+import me.spoony.botanico.common.items.Items;
+import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.IntRectangle;
 import me.spoony.botanico.common.util.position.TileDirection;
 import me.spoony.botanico.common.util.position.TilePosition;
@@ -32,15 +36,23 @@ public class BuildingWall extends Building {
 
     if (e) {
       rg.sprite(position.toGamePosition(), getTextureSheet(),
-          new IntRectangle(64+16, 240, 32, 32),
-          color, position.y-.01);
+          new IntRectangle(64 + 16, 240, 32, 32),
+          color, position.y - .01);
     }
 
     if (n) {
       rg.sprite(position.toGamePosition(), getTextureSheet(),
-          new IntRectangle(64+48, 224, 16, 48),
+          new IntRectangle(64 + 48, 224, 16, 48),
           color, position.y);
     }
+  }
+
+  @Override
+  public ItemStack[] getDrops(IPlane level, TilePosition tilePosition) {
+    return new ItemStack[]
+        {
+            new ItemStack(Items.WALL),
+        };
   }
 
   @Override
