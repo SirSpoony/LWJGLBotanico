@@ -46,4 +46,5 @@ public class Buildings {
   public static Building SEASHELL = Building.REGISTRY.getBuilding("seashell");
 
   public static Building WALL = Building.REGISTRY.getBuilding("wall");
+  public static Building SMALL_BUSH = Building.REGISTRY.getBuilding("small_bush");
 }

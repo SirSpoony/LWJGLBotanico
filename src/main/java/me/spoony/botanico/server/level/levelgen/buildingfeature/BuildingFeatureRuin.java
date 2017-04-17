@@ -31,7 +31,7 @@ public class BuildingFeatureRuin implements BuildingFeature {
           continue;
         }
 
-        if (random.nextFloat() < .01f) {
+        if (random.nextFloat() < .05f) {
           if (clearSpace[xi * 32 + yi]) {
             boolean valid = true;
             for (int offx = -2; offx <= 2; offx++) {

@@ -167,7 +167,7 @@ public class SpriteBatch {
       }
     }
 
-    if ((vertindex + 6) * 9 >= vertices.capacity()) {
+    if ((vertindex + 6) * 9 >= vertices.limit()) {
       flush();
     }
 
@@ -242,7 +242,7 @@ public class SpriteBatch {
       }
     }
 
-    if ((vertindex + 6) * 9 >= vertices.capacity()) {
+    if ((vertindex + 6) * 9 >= vertices.limit()) {
       flush();
     }
 
