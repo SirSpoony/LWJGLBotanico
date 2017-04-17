@@ -29,9 +29,8 @@ public class BuildingFlower extends Building {
   public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
       Color color) {
     rg.sprite(new GamePosition(position), getTextureSheet(),
-        new IntRectangle(subid * 16, 128, 16, 32),
-        color,
-        position.y + (alwaysBehindCharacter ? 1 : 0));
+        new IntRectangle(48 + subid * 16, 192, 16, 16),
+        color,position.y + (alwaysBehindCharacter ? 1 : 0));
   }
 
   @Override

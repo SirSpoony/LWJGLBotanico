@@ -192,6 +192,8 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
         } else {
           buildingDamageIndicator = null;
         }
+      } else {
+        buildingDamageIndicator = null;
       }
     } else {
       buildingDamageIndicator = null;

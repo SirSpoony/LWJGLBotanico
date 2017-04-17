@@ -82,6 +82,9 @@ public class Building {
 
     REGISTRY.registerBuilding(new BuildingWall(27));
     REGISTRY.registerBuilding(new BuildingSmallBush(28));
+
+    REGISTRY.registerBuilding(new BuildingFlower(29, "flower_cyan", 2));
+    REGISTRY.registerBuilding(new BuildingFlower(30, "flower_purple", 3));
   }
 
   public Building(int id) {

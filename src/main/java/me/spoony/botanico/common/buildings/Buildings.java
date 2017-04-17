@@ -11,6 +11,8 @@ public class Buildings {
 
   public static Building FLOWER_ORANGE = Building.REGISTRY.getBuilding("flower_orange");
   public static Building FLOWER_RED = Building.REGISTRY.getBuilding("flower_red");
+  public static Building FLOWER_CYAN = Building.REGISTRY.getBuilding("flower_cyan");
+  public static Building FLOWER_PURPLE = Building.REGISTRY.getBuilding("flower_purple");
 
   public static Building GRASS = Building.REGISTRY.getBuilding("grass");
   public static Building DIRT_MOUND = Building.REGISTRY.getBuilding("dirt_mound");

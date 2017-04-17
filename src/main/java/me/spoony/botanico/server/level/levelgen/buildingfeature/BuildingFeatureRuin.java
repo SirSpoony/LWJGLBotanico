@@ -34,8 +34,8 @@ public class BuildingFeatureRuin implements BuildingFeature {
         if (random.nextFloat() < .05f) {
           if (clearSpace[xi * 32 + yi]) {
             boolean valid = true;
-            for (int offx = -2; offx <= 2; offx++) {
-              for (int offy = -2; offy <= 2; offy++) {
+            for (int offx = -1; offx <= 1; offx++) {
+              for (int offy = -1; offy <= 1; offy++) {
                 if (chunk.getBuilding(xi + offx, yi + offy) != null) {
                   valid = false;
                 }

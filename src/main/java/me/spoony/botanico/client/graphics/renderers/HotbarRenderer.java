@@ -60,7 +60,7 @@ public class HotbarRenderer implements GUIRenderable {
     rg.sprite(bounds.getPosition(), texture,
         new IntRectangle(0, 0, textureregion.width, textureregion.height));
 
-    float damage = .5f;
+    float damage = 1f;
 
     rg.sprite(bounds.getPosition().add(18f, 21f), texture,
         new IntRectangle(0, 24, 113, 14));
