@@ -67,12 +67,12 @@ public class DialogRendererInventoryPlayer extends DialogRendererAdapter<DialogI
   public void render(RendererGUI rg) {
     this.centerDialogBounds(rg.guiViewport);
 
-    rg.sprite(getDialogPosition(),
+    rg.sprite(dialogBounds.x, dialogBounds.y,
         rg.getResourceManager().getTexture("dialog/dialog_inventory.png"), dialogTextureSource);
 
     this.renderItemSlots(rg);
 
-    rg.text(offsetByDialogBounds(new GuiPosition(150 / 2, dialogTextureSource.height - 14)),
+    rg.text(offsetXByDialogBounds(150 / 2), offsetYByDialogBounds(dialogTextureSource.height - 14),
         "Inventory",
         new TextColors(new Color(173 / 255f, 100 / 255f, 0 / 255f, 1)), CallAlign.BOTTOM_CENTER);
   }

@@ -27,7 +27,7 @@ public class KickedView extends MenuView implements BinaryInputListener
         GUILabel guiKickMessage;
         guiKickMessage = new GUILabel(message);
         guiKickMessage.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiKickMessage.setOffset(new GuiPosition(0, 10));
+        guiKickMessage.setOffset(0, 10);
 
         GUIButton guiBackButton;
         guiBackButton = new GUIButton("Back") {
@@ -40,7 +40,7 @@ public class KickedView extends MenuView implements BinaryInputListener
         };
         guiBackButton.setWidth(100);
         guiBackButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiBackButton.setOffset(new GuiPosition(0, -10));
+        guiBackButton.setOffset(0, -10);
 
         addControl(guiKickMessage);
         addControl(guiBackButton);

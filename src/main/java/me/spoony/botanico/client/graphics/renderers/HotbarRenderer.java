@@ -37,7 +37,7 @@ public class HotbarRenderer implements GUIRenderable {
     if (bin != Input.BUTTON_LEFT && bin != Input.BUTTON_RIGHT) {
       return false;
     }
-    if (bounds.contains(Input.CURSOR_POS.toGuiPosition())) {
+    if (bounds.contains(Input.CURSOR_POS)) {
       for (RendererItemSlot slot : rendererItemSlots) {
         slot.checkInteraction(bin);
       }
@@ -52,20 +52,20 @@ public class HotbarRenderer implements GUIRenderable {
     bounds.y = 3;
 
     for (int i = 0; i < rendererItemSlots.length; i++) {
-      rendererItemSlots[i].updatePosition(bounds.getPosition());
+      rendererItemSlots[i].updatePositionOffset(bounds.x, bounds.y);
     }
 
     Texture texture = rg.getResourceManager().getTexture("hotbar.png");
 
-    rg.sprite(bounds.getPosition(), texture,
+    rg.sprite(bounds.x, bounds.y, texture,
         new IntRectangle(0, 0, textureregion.width, textureregion.height));
 
     float damage = 1f;
 
-    rg.sprite(bounds.getPosition().add(18f, 21f), texture,
+    rg.sprite(bounds.x+18,bounds.y+21, texture,
         new IntRectangle(0, 24, 113, 14));
 
-    rg.sprite(bounds.getPosition().add(18f + 11, 25f), texture,
+    rg.sprite(bounds.x+29,bounds.y+25, texture,
         new IntRectangle(0, 42, (int) Math.floor(100 * damage), 6));
 
     for (RendererItemSlot slot : rendererItemSlots) {
@@ -77,7 +77,7 @@ public class HotbarRenderer implements GUIRenderable {
       if (slot == null) {
         return;
       }
-      rg.sprite(bounds.getPosition().add(slot.getSlotIndex() * 17, 0f), texture,
+      rg.sprite(bounds.x+slot.getSlotIndex() * 17, bounds.y, texture,
           new IntRectangle(124, 0, 20, 20));
     }
   }

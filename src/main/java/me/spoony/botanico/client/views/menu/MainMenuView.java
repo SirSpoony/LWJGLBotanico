@@ -28,7 +28,7 @@ public class MainMenuView extends MenuView
         guiLogo.setWidth(85*2);
         guiLogo.setHeight(26*2);
         guiLogo.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiLogo.setOffset(new GuiPosition(0,30));
+        guiLogo.setOffset(0,30);
 
         GUILabel versionLabel = new GUILabel("Version "+ Botanico.VERSION);
         versionLabel.setAlignment(GUIControlAlignmentType.TOP_LEFT);
@@ -44,7 +44,7 @@ public class MainMenuView extends MenuView
         };
         guiStartButton.setWidth(100);
         guiStartButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiStartButton.setOffset(new GuiPosition(0,-20));
+        guiStartButton.setOffset(0,-20);
 
         GUIButton guiMultiplayerButton;
         guiMultiplayerButton = new GUIButton("Multiplayer") {
@@ -57,7 +57,7 @@ public class MainMenuView extends MenuView
         };
         guiMultiplayerButton.setWidth(100);
         guiMultiplayerButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiMultiplayerButton.setOffset(new GuiPosition(0,-40));
+        guiMultiplayerButton.setOffset(0,-40);
 
         addControl(guiLogo);
         addControl(versionLabel);

@@ -10,6 +10,7 @@ import me.spoony.botanico.client.input.Input;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.items.ItemStack;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 11/8/2016.
@@ -43,19 +44,18 @@ public class CursorRenderer implements GUIRenderable
     @Override
     public void render(RendererGUI rendererGUI)
     {
-        GuiPosition renderpos = Input.CURSOR_POS.toGuiPosition(new GuiPosition());
-        renderpos.x-=8;
-        renderpos.y-=8;
+        float renderX = (float) Input.CURSOR_POS.getX(PositionType.GUI);
+        float renderY = (float) Input.CURSOR_POS.getY(PositionType.GUI);
+        renderX-=8;
+        renderY-=8;
 
         if (getStack() != null) {
             RendererItemStack rendererItemStack = new RendererItemStack(getStack());
             rendererItemStack.clickEffect = Input.BUTTON_LEFT.isDown();
-            rendererItemStack.setPosition(renderpos);
+            rendererItemStack.setPosition(renderX, renderY);
             rendererItemStack.render(rendererGUI);
         } else {
-            tooltip.getPosition().set(renderpos);
-            tooltip.getPosition().x += 11;
-            tooltip.getPosition().y += 18;
+            tooltip.setPosition(renderX + 11, renderY + 18);
             tooltip.render(rendererGUI);
             tooltip.clear();
         }

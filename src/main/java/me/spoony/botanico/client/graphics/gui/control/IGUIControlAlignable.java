@@ -6,5 +6,5 @@ package me.spoony.botanico.client.graphics.gui.control;
 public interface IGUIControlAlignable extends IGUIControl
 {
     void setAlignment(GUIControlAlignmentType alignment);
-    void setOffset(GuiPosition offset);
+    void setOffset(float x, float y);
 }

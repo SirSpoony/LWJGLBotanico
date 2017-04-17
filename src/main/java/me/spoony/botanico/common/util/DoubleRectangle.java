@@ -114,16 +114,15 @@ public class DoubleRectangle {
     /**
      * Checks if the rectangle contains the vector. Lower bounds are inclusive, upper bounds are exclusive.
      *
-     * @param vector2D The vector to be tested
      * @return
      */
-    public boolean contains(DoubleVector2D vector2D) {
+    public boolean contains(double x, double y) {
         Preconditions.checkState(width >= 0);
         Preconditions.checkState(height >= 0);
-        return !(vector2D.x < this.x ||
-                vector2D.y < this.y ||
-                vector2D.x > this.x + this.width ||
-                vector2D.y > this.y + this.height);
+        return !(x < this.x ||
+                y < this.y ||
+                x > this.x + this.width ||
+                y > this.y + this.height);
     }
 
     public boolean overlaps(DoubleRectangle r) {

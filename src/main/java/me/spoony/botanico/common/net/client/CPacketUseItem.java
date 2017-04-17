@@ -4,6 +4,8 @@ import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IServerHandler;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.net.BotanicoServer;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 
@@ -19,6 +21,6 @@ public class CPacketUseItem extends AutoPacketAdapter implements IServerHandler
     public void onReceive(BotanicoServer server, RemoteEntityPlayer player) {
         ItemSlot cursor = player.inventory.getSlot(EntityPlayer.SLOT_CURSOR);
         if (cursor.getStack() == null) return;
-        cursor.getStack().getItem().onUse(player.getPlane(), player, cursor, new TilePosition(x, y));
+        cursor.getStack().getItem().onUse(player.getPlane(), player, cursor, new OmniPosition(PositionType.GAME, x, y));
     }
 }

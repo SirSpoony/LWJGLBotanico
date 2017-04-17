@@ -32,7 +32,7 @@ public class MultiplayerConnectView extends MenuView
         };
         guiConnectButton.setWidth(100);
         guiConnectButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiConnectButton.setOffset(new GuiPosition(0, -10));
+        guiConnectButton.setOffset(0, -10);
 
         GUIButton guiCancelButton;
         guiCancelButton = new GUIButton("Cancel") {
@@ -45,7 +45,7 @@ public class MultiplayerConnectView extends MenuView
         };
         guiCancelButton.setWidth(100);
         guiCancelButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiCancelButton.setOffset(new GuiPosition(0, -30));
+        guiCancelButton.setOffset(0, -30);
 
         guiIPTextField = new GUITextBox("IP") {
             @Override
@@ -63,7 +63,7 @@ public class MultiplayerConnectView extends MenuView
         };
         guiIPTextField.setWidth(150);
         guiIPTextField.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiIPTextField.setOffset(new GuiPosition(0,10));
+        guiIPTextField.setOffset(0,10);
 
         guiNameTextField = new GUITextBox("Name") {
             @Override
@@ -75,7 +75,7 @@ public class MultiplayerConnectView extends MenuView
         };
         guiNameTextField.setWidth(150);
         guiNameTextField.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiNameTextField.setOffset(new GuiPosition(0,30));
+        guiNameTextField.setOffset(0,30);
 
         addControl(guiIPTextField);
         addControl(guiNameTextField);

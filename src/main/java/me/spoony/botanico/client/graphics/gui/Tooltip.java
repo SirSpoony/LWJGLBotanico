@@ -14,22 +14,20 @@ import me.spoony.botanico.common.util.IntRectangle;
  */
 public class Tooltip
 {
-    protected GuiPosition position;
+    float x;
+    float y;
+
     protected String text;
 
     public Tooltip()
     {
-        position = new GuiPosition();
+
     }
 
-    public GuiPosition getPosition()
+    public void setPosition(float x, float y)
     {
-        return position;
-    }
-
-    public void setPosition(GuiPosition position)
-    {
-        this.position.set(position);
+        this.x = x;
+        this.y = y;
     }
 
     public String getText()
@@ -46,7 +44,7 @@ public class Tooltip
     {
         if (getText() == null) return;
 
-        GuiRectangle backbounds = new GuiRectangle(position.x, position.y - rendererGUI.getTextBounds(text).height, rendererGUI.getTextBounds(text).width, 10);
+        GuiRectangle backbounds = new GuiRectangle(x, y - rendererGUI.getTextBounds(text).height, rendererGUI.getTextBounds(text).width, 10);
         backbounds.x -= 2;
         backbounds.y -= 3;
         backbounds.width += 3;
@@ -84,7 +82,7 @@ public class Tooltip
         GuiRectangle topleftbounds = new GuiRectangle(backbounds.x, backbounds.y + backbounds.height - 4, 4, 4);
         rendererGUI.sprite(topleftbounds, tttex, new IntRectangle(0, 0, 4, 4), Color.WHITE);
 
-        rendererGUI.text(position, text, TextColors.WHITE, CallAlign.TOP_LEFT);
+        rendererGUI.text(x, y, text, TextColors.WHITE, CallAlign.TOP_LEFT);
     }
 
     public void clear() {

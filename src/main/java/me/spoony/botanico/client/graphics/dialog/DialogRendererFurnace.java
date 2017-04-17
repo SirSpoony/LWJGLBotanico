@@ -42,24 +42,24 @@ public class DialogRendererFurnace extends DialogRendererAdapter<DialogFurnace> 
 
     @Override
     public void render(RendererGUI rendererGUI) {
-        centerDialogBounds(rendererGUI.guiViewport);
-
-        if (!isOpen()) return;
-
-        rendererGUI.sprite(getDialogPosition(),
-                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
-
-        // Render smelting progress
-        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(163, 67)),
-                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 128, (int)(42f*this.dialog.progress), 8));
-
-        // Render fuel progress
-        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(156, 42)),
-                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 150, (int)(58f*this.dialog.burnProgress), 8));
-
-        this.renderItemSlots(rendererGUI);
-
-        rendererGUI.text(offsetByDialogBounds(new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)), "Furnace",
-                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
+//        centerDialogBounds(rendererGUI.guiViewport);
+//
+//        if (!isOpen()) return;
+//
+//        rendererGUI.sprite(getDialogPosition(),
+//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
+//
+//        // Render smelting progress
+//        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(163, 67)),
+//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 128, (int)(42f*this.dialog.progress), 8));
+//
+//        // Render fuel progress
+//        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(156, 42)),
+//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 150, (int)(58f*this.dialog.burnProgress), 8));
+//
+//        this.renderItemSlots(rendererGUI);
+//
+//        rendererGUI.text(offsetByDialogBounds(new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)), "Furnace",
+//                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
     }
 }

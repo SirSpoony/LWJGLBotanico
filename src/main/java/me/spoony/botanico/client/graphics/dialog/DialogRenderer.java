@@ -3,6 +3,7 @@ package me.spoony.botanico.client.graphics.dialog;
 import me.spoony.botanico.client.graphics.gui.GUIRenderable;
 import me.spoony.botanico.client.input.BinaryInput;
 import me.spoony.botanico.common.dialog.Dialog;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/8/2016.
@@ -21,5 +22,5 @@ public interface DialogRenderer<T extends Dialog> extends GUIRenderable
     T getDialog();
     boolean isOpen();
 
-    GuiPosition dialogPosition();
+    OmniPosition dialogPosition();
 }

@@ -2,6 +2,7 @@ package me.spoony.botanico.client.graphics.gui.control;
 
 import me.spoony.botanico.client.graphics.RendererGUI;
 import me.spoony.botanico.common.util.position.GuiRectangle;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 11/26/2016.
@@ -9,7 +10,8 @@ import me.spoony.botanico.common.util.position.GuiRectangle;
 public class GUIControlAlignableAdapter implements IGUIControlAlignable
 {
     GUIControlAlignmentType alignment;
-    GuiPosition offset;
+    float offsetX;
+    float offsetY;
 
     protected float width;
     protected float height;
@@ -18,7 +20,6 @@ public class GUIControlAlignableAdapter implements IGUIControlAlignable
 
     public GUIControlAlignableAdapter() {
         alignment = GUIControlAlignmentType.BOTTOM_LEFT;
-        offset = new GuiPosition();
 
         width = 0;
         height = 0;
@@ -33,9 +34,10 @@ public class GUIControlAlignableAdapter implements IGUIControlAlignable
     }
 
     @Override
-    public void setOffset(GuiPosition offset)
+    public void setOffset(float x, float y)
     {
-        this.offset.set(offset);
+        this.offsetX = x;
+        this.offsetY = y;
     }
 
     @Override
@@ -56,21 +58,21 @@ public class GUIControlAlignableAdapter implements IGUIControlAlignable
         if (alignment.x == 0) {
             // do nothing
         } else if (alignment.x == 1) {
-            ret.setCenter(new GuiPosition(viewport.getCenter().x, ret.getCenter().y));
+            ret.setCenter((float)viewport.getCenter().getX(PositionType.GUI), (float)ret.getCenter().getY(PositionType.GUI));
         } else if (alignment.x == 2) {
-            ret.setPosition(new GuiPosition(viewport.width-ret.width, ret.y));
+            ret.setPosition(viewport.width-ret.width, ret.y);
         }
 
         if (alignment.y == 0) {
             // do nothing
         } else if (alignment.y == 1) {
-            ret.setCenter(new GuiPosition(ret.getCenter(new GuiPosition()).x, viewport.getCenter(new GuiPosition()).y));
+            ret.setCenter((float)ret.getCenter().getX(PositionType.GUI), (float)viewport.getCenter().getY(PositionType.GUI));
         } else if (alignment.y == 2) {
-            ret.setPosition(new GuiPosition(ret.x, viewport.height-ret.height));
+            ret.setPosition(ret.x, viewport.height-ret.height);
         }
 
-        ret.x+=offset.x;
-        ret.y+=offset.y;
+        ret.x+=offsetX;
+        ret.y+=offsetY;
 
         this.bounds.set(ret);
     }

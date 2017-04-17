@@ -4,6 +4,7 @@ import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.net.client.CPacketInventoryButtonClick;
 import me.spoony.botanico.common.net.client.CPacketInventorySlotClick;
 import me.spoony.botanico.common.net.client.CPacketUseItem;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/20/2016.
@@ -31,10 +32,10 @@ public class ClientPacketHandler {
     client.sendPacket(pic);
   }
 
-  public void sendUseItem(TilePosition position) {
+  public void sendUseItem(OmniPosition position) {
     CPacketUseItem put = new CPacketUseItem();
-    put.x = position.x;
-    put.y = position.y;
+    put.x = position.getTileX();
+    put.y = position.getTileY();
     client.sendPacket(put);
   }
 }

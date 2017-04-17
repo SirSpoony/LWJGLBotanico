@@ -44,11 +44,11 @@ public class GUITextBox extends GUIControlAlignableAdapter implements ITextInput
 
         if (!Strings.isNullOrEmpty(text)) {
             rendererGUI.text(
-                    new GuiPosition(bounds.x+2, bounds.y+5),
+                    bounds.x+2, bounds.y+5,
                     text, TextColors.WHITE, CallAlign.BOTTOM_LEFT);
         } else if (!Strings.isNullOrEmpty(label)) {
             rendererGUI.text(
-                    new GuiPosition(bounds.x+2, bounds.y+5),
+                    bounds.x+2, bounds.y+5,
                     label, new TextColors(new Color(.7f,.7f,.7f,1f), new Color(0,0,0,.5f)), CallAlign.BOTTOM_LEFT);
 /*            rendererGUI.textbottom(
                     new Vector2(bounds.x+2, bounds.y+5),
@@ -64,7 +64,7 @@ public class GUITextBox extends GUIControlAlignableAdapter implements ITextInput
     }
 
     public boolean containsCursor() {
-        if (getBounds().contains(Input.CURSOR_POS.toGuiPosition())) return true;
+        if (getBounds().contains(Input.CURSOR_POS)) return true;
         return false;
     }
 

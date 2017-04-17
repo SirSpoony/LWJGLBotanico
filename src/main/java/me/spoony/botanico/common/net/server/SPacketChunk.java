@@ -66,6 +66,6 @@ public class SPacketChunk implements Packet, IClientHandler {
   @Override
   public void onReceive(BotanicoClient client) {
     client.getLocalLevel()
-        .receiveChunk(new Chunk(new ChunkPosition(x, y), tiles, buildings, buildingdata));
+        .receiveChunk(new Chunk(x, y, tiles, buildings, buildingdata));
   }
 }

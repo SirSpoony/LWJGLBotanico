@@ -39,31 +39,31 @@ public class DialogRendererBoiler extends DialogRendererAdapter<DialogBoiler> {
 
     @Override
     public void render(RendererGUI rendererGUI) {
-        centerDialogBounds(rendererGUI.guiViewport);
-
-        if (!isOpen()) return;
-
-        rendererGUI.sprite(getDialogPosition(),
-                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
-
-        // render fluid
-        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(134, 16)),
-                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(75,128,16,(int)(64f*this.dialog.waterProgress)));
-
-        // render fuel progress
-        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(156, 42)),
-                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 150, (int)(58f*this.dialog.burnProgress), 8));
-
-        // render production stats
-        rendererGUI.text(offsetByDialogBounds(new GuiPosition(184, 70)), "Production:",
-                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
-
-        rendererGUI.text(offsetByDialogBounds(new GuiPosition(184, 70-10)), (float) Math.round(this.dialog.energyProduction*100)/100f+" J/s",
-                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
-
-        this.renderItemSlots(rendererGUI);
-
-        rendererGUI.text(offsetByDialogBounds(new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)), "Boiler",
-                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
+//        centerDialogBounds(rendererGUI.guiViewport);
+//
+//        if (!isOpen()) return;
+//
+//        rendererGUI.sprite(getDialogPosition(),
+//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
+//
+//        // render fluid
+//        rendererGUI.sprite(offsetXByDialogBounds(134), offsetYByDialogBounds( 16),
+//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(75,128,16,(int)(64f*this.dialog.waterProgress)));
+//
+//        // render fuel progress
+//        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(156, 42)),
+//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 150, (int)(58f*this.dialog.burnProgress), 8));
+//
+//        // render production stats
+//        rendererGUI.text(offsetByDialogBounds(new GuiPosition(184, 70)), "Production:",
+//                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
+//
+//        rendererGUI.text(offsetByDialogBounds(new GuiPosition(184, 70-10)), (float) Math.round(this.dialog.energyProduction*100)/100f+" J/s",
+//                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
+//
+//        this.renderItemSlots(rendererGUI);
+//
+//        rendererGUI.text(offsetByDialogBounds(new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)), "Boiler",
+//                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
     }
 }

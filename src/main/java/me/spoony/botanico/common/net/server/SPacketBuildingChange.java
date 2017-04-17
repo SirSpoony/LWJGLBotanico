@@ -5,6 +5,8 @@ import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IClientHandler;
 import me.spoony.botanico.common.net.NotTransferable;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 11/23/2016.
@@ -39,6 +41,6 @@ public class SPacketBuildingChange extends AutoPacketAdapter implements IClientH
 
   @Override
   public void onReceive(BotanicoClient client) {
-    client.getLocalLevel().receiveBuildingUpdate(new TilePosition(x, y), building);
+    client.getLocalLevel().receiveBuildingUpdate(new OmniPosition(PositionType.GAME, x, y), building);
   }
 }

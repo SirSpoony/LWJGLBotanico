@@ -70,7 +70,7 @@ public class MenuView extends ViewAdapter implements BinaryInputListener, TextIn
       Random rand = new Random(1);
       for (int x = 0; x < Math.ceil(rendererGUI.guiViewport.width / 16f); x++) {
         for (int y = 0; y < Math.ceil(rendererGUI.guiViewport.height / 16f); y++) {
-          rendererGUI.sprite(new GuiPosition(x * 16, y * 16),
+          rendererGUI.sprite(x * 16, y * 16,
               rendererGUI.getResourceManager().getTexture("tiles.png"),
               new IntRectangle(32 + 16 * (rand.nextInt() & 1), 16 + 16 * (rand.nextInt() & 1), 16,
                   16));

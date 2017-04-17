@@ -7,6 +7,8 @@ import me.spoony.botanico.common.entities.EntityItemStack;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.Item;
 import me.spoony.botanico.common.items.ItemStack;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 11/20/2016.
@@ -34,7 +36,7 @@ public class SPacketNewEntity extends AutoPacketAdapter implements IClientHandle
 
             //log("Added EntityPlayer EID: "+eid);
         } else if (type == EntityItemStack.ID) {
-            EntityItemStack eis = new EntityItemStack(new GamePosition(x, y), client.getLocalLevel(), new ItemStack(Item.REGISTRY.get(misc)), false);
+            EntityItemStack eis = new EntityItemStack(new OmniPosition(PositionType.GAME, x, y), client.getLocalLevel(), new ItemStack(Item.REGISTRY.get(misc)), false);
             eis.eid = eid;
             client.getLocalLevel().addEntity(eis);
 

@@ -23,32 +23,20 @@ public class RendererGUI {
 
   private float scale = 3;
 
-  public double windowXToGui(double x) {
+  public float windowXToGui(float x) {
     return x / scale;
   }
 
-  public double windowYToGui(double y) {
+  public float windowYToGui(float y) {
     return y / scale;
   }
 
-  public double guiXToWindow(double x) {
+  public float guiXToWindow(float x) {
     return x * scale;
   }
 
-  public double guiYToWindow(double y) {
+  public float guiYToWindow(float y) {
     return y * scale;
-  }
-
-  public GuiPosition windowPosToGuiPos(WindowPosition windowpos, GuiPosition guiPosition) {
-    guiPosition.x = windowpos.x / scale;
-    guiPosition.y = windowpos.y / scale;
-    return guiPosition;
-  }
-
-  public WindowPosition guiPosToWindowPos(GuiPosition guipos, WindowPosition windowPosition) {
-    windowPosition.x = guipos.x * scale;
-    windowPosition.y = guipos.y * scale;
-    return windowPosition;
   }
 
   public RendererGUI() {
@@ -113,68 +101,61 @@ public class RendererGUI {
     sprite(bounds, texture, source, Color.WHITE);
   }
 
-  public void sprite(GuiPosition pos, Texture texture, IntRectangle source) {
-    sprite(pos, texture, source, Color.WHITE);
+  public void sprite(float x, float y, Texture texture, IntRectangle source) {
+    sprite(x, y, texture, source, Color.WHITE);
   }
 
-  public void sprite(GuiPosition pos, Texture texture, IntRectangle source, Color color) {
-    WindowPosition windowPos = new WindowPosition(pos);
-
+  public void sprite(float x, float y, Texture texture, IntRectangle source, Color color) {
     batch.sprite(
-        windowPos.x, windowPos.y, source.getWidth() * scale, source.getHeight() * scale,
+            (float)guiXToWindow(x), (float)guiYToWindow(y), source.getWidth() * scale, source.getHeight() * scale,
         color,
         source.getX(), source.getY(), source.getWidth(), source.getHeight(),
         texture);
   }
 
   public void sprite(GuiRectangle bounds, Texture texture, IntRectangle source, Color color) {
-    WindowPosition windowPos = new WindowPosition(bounds.getPosition());
-    //System.out.println("render in renderergui x "+windowPos.x+" y "+windowPos.y);
-    //System.out.println("renderergui size w "+guiViewport.width+" h "+guiViewport.height);
     batch.sprite(
-        windowPos.x, windowPos.y, bounds.width * scale, bounds.height * scale,
+            guiXToWindow(bounds.x), guiYToWindow(bounds.y), bounds.width * scale, bounds.height * scale,
         color,
         source.getX(), source.getY(), source.getWidth(), source.getHeight(),
         texture);
   }
 
-  public void text(GuiPosition pos, String text, TextColors textColor, CallAlign callAlign) {
-    Preconditions.checkNotNull(pos);
+  public void text(float x, float y, String text, TextColors textColor, CallAlign callAlign) {
     Preconditions.checkNotNull(textColor);
     callAlign = Optional.of(callAlign).or(CallAlign.BOTTOM_LEFT);
 
     switch (callAlign) {
       case BOTTOM_CENTER:
-        text(new GuiPosition(pos.x - (int) Math.floor(getTextBounds(text).width / 2),
-            pos.y + getTextBounds(text).height), text, textColor, CallAlign.TOP_LEFT);
+        text(x - (int) Math.floor(getTextBounds(text).width / 2),
+            y + getTextBounds(text).height, text, textColor, CallAlign.TOP_LEFT);
         break;
       case BOTTOM_LEFT:
-        text(new GuiPosition(pos.x, pos.y + getTextBounds(text).height), text, textColor,
+        text(x, y + getTextBounds(text).height, text, textColor,
             CallAlign.TOP_LEFT);
         break;
       case BOTTOM_RIGHT:
-        text(new GuiPosition(pos.x - getTextBounds(text).width, pos.y + getTextBounds(text).height),
+        text(x - getTextBounds(text).width, y + getTextBounds(text).height,
             text, textColor, CallAlign.TOP_LEFT);
         break;
       case TOP_RIGHT:
-        text(new GuiPosition(pos.x - getTextBounds(text).width, pos.y), text, textColor,
+        text(x - getTextBounds(text).width, y, text, textColor,
             CallAlign.TOP_LEFT);
         break;
       case TOP_LEFT:
-        renderText(pos, text, textColor);
+        renderText(x, y, text, textColor);
         break;
     }
 
   }
 
-  private void renderText(GuiPosition pos, String text, TextColors colors) {
+  private void renderText(float x, float y, String text, TextColors colors) {
     if (Strings.isNullOrEmpty(text)) {
       return;
     }
     Font font = getResourceManager().getFont("coder's_crux_regular_9");
-    WindowPosition windowPos = new WindowPosition(pos);
-    int renderx = (int) windowPos.x;
-    int rendery = (int) windowPos.y;
+    int renderx = (int) guiXToWindow(x);
+    int rendery = (int) guiYToWindow(y);
     font.renderString(batch, text, renderx + scale, rendery - scale, scale, colors.background);
     font.renderString(batch, text, renderx, rendery, scale, colors.foreground);
   }

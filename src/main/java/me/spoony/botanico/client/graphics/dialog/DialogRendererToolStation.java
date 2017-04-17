@@ -54,14 +54,14 @@ public class DialogRendererToolStation extends DialogRendererAdapter {
       return;
     }
 
-    rendererGUI.sprite(getDialogPosition(),
+    rendererGUI.sprite(dialogBounds.x, dialogBounds.y,
         rendererGUI.getResourceManager().getTexture("dialog/dialog_tool_station.png"),
         dialogTextureSource);
 
     this.renderItemSlots(rendererGUI);
 
-    rendererGUI.text(offsetByDialogBounds(
-        new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)),
+    rendererGUI.text(offsetXByDialogBounds(
+        dialogTextureSource.width / 2), offsetYByDialogBounds(dialogTextureSource.height - 12),
         "Tool Station",
         new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
   }

@@ -10,6 +10,7 @@ import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.items.Inventory;
 import me.spoony.botanico.common.items.ItemSlot;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 import java.util.Set;
 
@@ -36,14 +37,22 @@ public abstract class DialogRendererAdapter<T extends Dialog> implements DialogR
         .setPosition((float) Math.floor(dialogBounds.x), (float) Math.floor(dialogBounds.y));
   }
 
-  public GuiPosition getDialogPosition() {
+  public OmniPosition getDialogPosition() {
     return dialogBounds.getPosition();
   }
 
-  public GuiPosition offsetByDialogBounds(GuiPosition pos) {
+  public OmniPosition offsetByDialogBounds(OmniPosition pos) {
     pos.x += dialogBounds.x;
     pos.y += dialogBounds.y;
     return pos;
+  }
+
+  public float offsetXByDialogBounds(float x) {
+    return x + (float)dialogBounds.x;
+  }
+
+  public float offsetYByDialogBounds(float y) {
+    return y + (float)dialogBounds.y;
   }
 
   public GuiRectangle offsetByDialogBounds(GuiRectangle bounds) {
@@ -94,7 +103,7 @@ public abstract class DialogRendererAdapter<T extends Dialog> implements DialogR
       if (slot == null) {
         continue;
       }
-      slot.updatePosition(this);
+      slot.updatePositionOffset(this);
       slot.render(rendererGUI);
     }
   }
@@ -118,7 +127,7 @@ public abstract class DialogRendererAdapter<T extends Dialog> implements DialogR
   }
 
   @Override
-  public GuiPosition dialogPosition() {
+  public OmniPosition dialogPosition() {
     return dialogBounds.getPosition();
   }
 }

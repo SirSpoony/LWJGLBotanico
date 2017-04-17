@@ -10,6 +10,7 @@ import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.util.IntRectangle;
+import me.spoony.botanico.common.util.position.PositionType;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -24,8 +25,11 @@ public class RendererItemSlot implements GUIRenderable {
     return itemSlot;
   }
 
-  protected GuiPosition position;
-  private GuiPosition renderposition;
+  protected float x;
+  protected float y;
+
+  private float renderX;
+  private float renderY;
 
   protected RendererItemStack guiitem;
 
@@ -35,14 +39,13 @@ public class RendererItemSlot implements GUIRenderable {
 
   public RendererItemSlot(ItemSlot itemSlot, int x, int y) {
     checkNotNull(itemSlot, "RendererItemSlot cannot be initialized with null itemslot!");
-    this.position = new GuiPosition(x, y);
-    this.renderposition = new GuiPosition();
     this.itemSlot = itemSlot;
     this.guiitem = new RendererItemStack(itemSlot.getStack());
   }
 
-  public void setPosition(GuiPosition pos) {
-    position.set(pos);
+  public void setPosition(float x, float y) {
+    this.x = x;
+    this.y = y;
   }
 
   public void update(float delta) {
@@ -50,8 +53,8 @@ public class RendererItemSlot implements GUIRenderable {
   }
 
   public void checkInteraction(BinaryInput binaryInput) {
-    GuiRectangle slotbounds = new GuiRectangle(renderposition.x, renderposition.y, 16, 16);
-    if (!slotbounds.contains(Input.CURSOR_POS.toGuiPosition())) {
+    GuiRectangle slotbounds = new GuiRectangle(renderX, renderY, 16, 16);
+    if (!slotbounds.contains(Input.CURSOR_POS)) {
       return;
     }
 
@@ -66,8 +69,8 @@ public class RendererItemSlot implements GUIRenderable {
   public void render(RendererGUI rg) {
     //if (GameView.get() == null) return;
 
-    GuiRectangle slotbounds = new GuiRectangle(renderposition.x, renderposition.y, 16, 16);
-    if (slotbounds.contains(Input.CURSOR_POS.toGuiPosition())) {
+    GuiRectangle slotbounds = new GuiRectangle(renderX, renderY, 16, 16);
+    if (slotbounds.contains(Input.CURSOR_POS)) {
       rg.sprite(slotbounds, rg.getResourceManager().getTexture("slot_highlight.png"),
           new IntRectangle(0, 0, 16, 16), new Color(1, 1, 1, .5f));
 
@@ -79,17 +82,17 @@ public class RendererItemSlot implements GUIRenderable {
     }
 
     guiitem.updateFromSlot(itemSlot);
-    guiitem.setPosition(renderposition);
+    guiitem.setPosition(renderX, renderY);
     guiitem.render(rg);
   }
 
-  public void updatePosition(GuiPosition offset) {
-    renderposition.set(position);
-    renderposition.add(offset);
+  public void updatePositionOffset(float x, float y) {
+    renderX = this.x + x;
+    renderY = this.y + y;
   }
 
-  public void updatePosition(DialogRenderer dialogRenderer) {
-    renderposition.set(position);
-    renderposition.add(dialogRenderer.dialogPosition());
+  public void updatePositionOffset(DialogRenderer dialogRenderer) {
+    renderX = this.x + (float)dialogRenderer.dialogPosition().getX(PositionType.GUI);
+    renderY = this.y + (float)dialogRenderer.dialogPosition().getY(PositionType.GUI);
   }
 }

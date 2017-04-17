@@ -7,21 +7,23 @@ import me.spoony.botanico.client.input.BinaryInput;
 import me.spoony.botanico.client.input.Input;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.util.IntRectangle;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 12/2/2016.
  */
 public class DialogButton {
     public String tooltip;
-    public GuiPosition position;
-    public GuiPosition renderposition;
+    public OmniPosition position;
+    private float renderX;
+    private float renderY;
     public int width;
     public int height;
     public String texture;
 
-    public DialogButton(GuiPosition position, String texture) {
+    public DialogButton(OmniPosition position, String texture) {
         this.position = position;
-        this.renderposition = new GuiPosition();
 
         this.width = 16;
         this.height = 16;
@@ -40,25 +42,25 @@ public class DialogButton {
 
     public void render(RendererGUI rg) {
         if (isHighlighted()) {
-            rg.sprite(renderposition, rg.getResourceManager().getTexture(texture),
+            rg.sprite(renderX, renderY, rg.getResourceManager().getTexture(texture),
                     getTextureSource());
             if (!Strings.isNullOrEmpty(tooltip)) {
                 GameView.getCursor().getTooltip().setText(tooltip);
             }
         } else {
-            rg.sprite(renderposition, rg.getResourceManager().getTexture(texture),
+            rg.sprite(renderX, renderY, rg.getResourceManager().getTexture(texture),
                     getTextureSource());
         }
     }
 
-    public void updatePosition(GuiPosition offset) {
-        renderposition.set(position);
-        renderposition.add(offset);
+    public void updateOffsetPosition(float offsetX, float offsetY) {
+        renderX = (float)position.x + offsetX;
+        renderY = (float)position.y + offsetY;
     }
 
-    public void updatePosition(DialogRenderer dialogRenderer) {
-        renderposition.set(position);
-        renderposition.add(dialogRenderer.dialogPosition());
+    public void updateOffsetPosition(DialogRenderer dialogRenderer) {
+        renderX = (float)position.x + (float)dialogRenderer.dialogPosition().getX(PositionType.GUI);
+        renderY = (float)position.y + (float)dialogRenderer.dialogPosition().getY(PositionType.GUI);
     }
 
     public void checkClick(BinaryInput binaryInput) {
@@ -68,8 +70,8 @@ public class DialogButton {
     }
 
     public boolean isHighlighted() {
-        GuiRectangle mousebounds = new GuiRectangle(renderposition.x, renderposition.y, 18, 18);
-        if (!mousebounds.contains(Input.CURSOR_POS.toGuiPosition())) return false;
+        GuiRectangle mousebounds = new GuiRectangle(renderX, renderY, 18, 18);
+        if (!mousebounds.contains(Input.CURSOR_POS)) return false;
         return true;
     }
 

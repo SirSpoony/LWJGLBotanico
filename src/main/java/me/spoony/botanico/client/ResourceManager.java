@@ -70,17 +70,5 @@ public class ResourceManager {
 		getTexture("dialog/dialog_inventory.png");
 		getTexture("dialog/dialog_tool_station.png");
 		getTexture("dialog/tint.png");
-
-		getTexture("building/boulder.png");
-		getTexture("building/dirt_mound.png");
-		getTexture("building/flower.png");
-		getTexture("building/grass.png");
-		getTexture("building/grinder.png");
-		getTexture("building/rocks.png");
-		getTexture("building/sticks_pile.png");
-		getTexture("building/tool_station.png");
-		getTexture("building/tree.png");
-		getTexture("building/tree_cold.png");
-		getTexture("building/workbench.png");
 	}
 }

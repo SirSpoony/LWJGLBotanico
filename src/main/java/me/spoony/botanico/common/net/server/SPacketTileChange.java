@@ -5,6 +5,8 @@ import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IClientHandler;
 import me.spoony.botanico.common.net.NotTransferable;
 import me.spoony.botanico.common.tiles.Tile;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 11/27/2016.
@@ -39,6 +41,6 @@ public class SPacketTileChange extends AutoPacketAdapter implements IClientHandl
 
     @Override
     public void onReceive(BotanicoClient client) {
-        client.getLocalLevel().receiveTileUpdate(new TilePosition(x, y), tile);
+        client.getLocalLevel().receiveTileUpdate(new OmniPosition(PositionType.GAME, x, y), tile);
     }
 }

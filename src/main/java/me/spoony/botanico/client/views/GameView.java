@@ -134,23 +134,23 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
 
     if (Botanico.DEBUG) {
       rendererGUI
-          .text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height), "FPS: " +
+          .text(0, rendererGUI.guiViewport.height, "FPS: " +
               Math.round(BotanicoGame.FPS), TextColors.YELLOW, CallAlign.TOP_LEFT);
 
       double x = client.getLocalPlayer().position.x;
       double y = client.getLocalPlayer().position.y;
 
-      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 10),
+      rendererGUI.text(0, rendererGUI.guiViewport.height - 10,
           "Player X: " +
               x, TextColors.WHITE, CallAlign.TOP_LEFT);
-      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 20),
+      rendererGUI.text(0, rendererGUI.guiViewport.height - 20,
           "Player Y: " +
               y, TextColors.WHITE, CallAlign.TOP_LEFT);
 
-      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 35),
+      rendererGUI.text(0, rendererGUI.guiViewport.height - 35,
           "DBG 1: " +
               debugValue, TextColors.WHITE, CallAlign.TOP_LEFT);
-      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 45),
+      rendererGUI.text(0, rendererGUI.guiViewport.height - 45,
           "DBG 2: " +
               debugValue2, TextColors.WHITE, CallAlign.TOP_LEFT);
     }

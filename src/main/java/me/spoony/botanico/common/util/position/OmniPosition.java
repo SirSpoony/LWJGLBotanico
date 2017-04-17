@@ -8,6 +8,8 @@ import me.spoony.botanico.client.BotanicoGame;
 
 /**
  * Created by Colten on 4/16/2017.
+ *
+ * This should only be used when the position has the possibility of being used for both the GUI and World, i.e. cursor position.
  */
 public class OmniPosition {
 
@@ -37,9 +39,9 @@ public class OmniPosition {
           case GUI:
             return x;
           case WINDOW:
-            return BotanicoGame.getGame().getRendererGUI().guiXToWindow(x);
+            return BotanicoGame.getGame().getRendererGUI().guiXToWindow((float)x);
           case GAME:
-            double wp = BotanicoGame.getGame().getRendererGUI().guiXToWindow(x);
+            double wp = BotanicoGame.getGame().getRendererGUI().guiXToWindow((float)x);
             return BotanicoGame.getGame().getRendererGame().windowXToGame(wp);
           case CHUNK:
             break; // todo
@@ -48,7 +50,7 @@ public class OmniPosition {
       case WINDOW:
         switch (this.type) {
           case GUI:
-            return BotanicoGame.getGame().getRendererGUI().windowXToGui(x);
+            return BotanicoGame.getGame().getRendererGUI().windowXToGui((float)x);
           case WINDOW:
             return x;
           case GAME:
@@ -61,7 +63,7 @@ public class OmniPosition {
         switch (this.type) {
           case GUI:
             double wp = BotanicoGame.getGame().getRendererGame().gameXToWindow(x);
-            return BotanicoGame.getGame().getRendererGUI().windowXToGui(wp);
+            return BotanicoGame.getGame().getRendererGUI().windowXToGui((float)wp);
           case WINDOW:
             return BotanicoGame.getGame().getRendererGame().gameXToWindow(x);
           case GAME:
@@ -93,9 +95,9 @@ public class OmniPosition {
           case GUI:
             return y;
           case WINDOW:
-            return BotanicoGame.getGame().getRendererGUI().guiYToWindow(y);
+            return BotanicoGame.getGame().getRendererGUI().guiYToWindow((float)y);
           case GAME:
-            double wp = BotanicoGame.getGame().getRendererGUI().guiYToWindow(y);
+            double wp = BotanicoGame.getGame().getRendererGUI().guiYToWindow((float)y);
             return BotanicoGame.getGame().getRendererGame().windowYToGame(wp);
           case CHUNK:
             break; // todo
@@ -104,7 +106,7 @@ public class OmniPosition {
       case WINDOW:
         switch (this.type) {
           case GUI:
-            return BotanicoGame.getGame().getRendererGUI().windowYToGui(y);
+            return BotanicoGame.getGame().getRendererGUI().windowYToGui((float)y);
           case WINDOW:
             return y;
           case GAME:
@@ -117,7 +119,7 @@ public class OmniPosition {
         switch (this.type) {
           case GUI:
             double wp = BotanicoGame.getGame().getRendererGame().gameYToWindow(y);
-            return BotanicoGame.getGame().getRendererGUI().windowYToGui(wp);
+            return BotanicoGame.getGame().getRendererGUI().windowYToGui((float)wp);
           case WINDOW:
             return BotanicoGame.getGame().getRendererGame().gameYToWindow(y);
           case GAME:

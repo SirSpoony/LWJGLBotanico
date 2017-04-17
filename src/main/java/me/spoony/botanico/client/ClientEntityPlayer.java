@@ -24,6 +24,7 @@ import me.spoony.botanico.common.util.DoubleVector2D;
 import me.spoony.botanico.common.util.IntRectangle;
 import me.spoony.botanico.common.util.Timer;
 import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 11/20/2016.
@@ -59,7 +60,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
 
     this.inventory = new Inventory(EntityPlayer.INVENTORY_SIZE, Dialog.PLAYER_INV_ID);
 
-    this.lastPacketPosition = new OmniPosition();
+    this.lastPacketPosition = new OmniPosition(PositionType.GAME, 0, 0);
 
     this.initialized = false;
   }
@@ -161,7 +162,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (Input.BUTTON_RIGHT.isDown() && !client.gameView.hasDialogOpen()) {
-      TilePosition tilePosition = getHighlightedBuildingPosition();
+      OmniPosition tilePosition = getHighlightedBuildingPosition();
       if (tilePosition != null) {
         Building b = plane.getBuilding(tilePosition);
 
@@ -181,8 +182,8 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
 
             if (buildingDamageIndicator.health <= 0) {
               CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
-              cbi.x = tilePosition.x;
-              cbi.y = tilePosition.y;
+              cbi.x = tilePosition.getTileX();
+              cbi.y = tilePosition.getTileY();
               cbi.type = CPacketBuildingInteraction.DESTROY;
               client.sendPacket(cbi);
               buildingDamageIndicator = null;
@@ -205,23 +206,23 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
         pem.y = this.position.y;
         client.sendPacket(pem);
 
-        lastPacketPosition = new GamePosition(position);
+        lastPacketPosition = new OmniPosition(position);
       }
     }
   }
 
-  public TilePosition getHighlightedBuildingPosition() {
-    GamePosition cursor = Input.CURSOR_POS.toGamePosition();
-    if (!canReach(Input.CURSOR_POS.toGamePosition())) {
+  public OmniPosition getHighlightedBuildingPosition() {
+    OmniPosition cursor = Input.CURSOR_POS;
+    if (!canReach(Input.CURSOR_POS)) {
       return null;
     }
-    TilePosition directPos = cursor.toTilePosition();
+    OmniPosition directPos = cursor;
     if (getPlane().getBuilding(directPos) != null) {
       return directPos;
     } else {
       for (int xo = -3; xo <= 3; xo++) {
         for (int yo = -3; yo <= 3; yo++) {
-          Building b = getPlane().getBuilding(new TilePosition(directPos).add(xo, yo));
+          Building b = getPlane().getBuilding(new OmniPosition(PositionType.GAME, directPos.getTileX() + xo, directPos.getTileY() + yo));
           if (b == null) {
             continue;
           }
@@ -230,8 +231,8 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
               directPos.y + yo + b.getCollisionBounds().getY(),
               b.getCollisionBounds().getWidth(),
               b.getCollisionBounds().getHeight());
-          if (testRect.contains(Input.CURSOR_POS.toGamePosition().toVector())) {
-            return directPos.add(xo, yo);
+          if (testRect.contains(Input.CURSOR_POS.getX(PositionType.GAME), Input.CURSOR_POS.getY(PositionType.GAME))) {
+            return new OmniPosition(PositionType.GAME, directPos.getTileX() + xo, directPos.getTileY() + yo);
           }
         }
       }
@@ -259,7 +260,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
   }
 
   public ItemSlot getCurrentBuildingDamageTool() {
-    TilePosition tilePosition = new TilePosition(Input.CURSOR_POS.toGamePosition());
+    OmniPosition tilePosition = Input.CURSOR_POS;
     Building b = getPlane().getBuilding(tilePosition);
     if (b == null) {
       return null;
@@ -310,20 +311,20 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (binaryInput == Input.BUTTON_LEFT) {
-      TilePosition tilePosition = new TilePosition(Input.CURSOR_POS.toGamePosition());
+      OmniPosition tilePosition = Input.CURSOR_POS;
       Building b = GameView.getClientLevel().getBuilding(tilePosition);
 
-      if (b != null && this.canReach(tilePosition.toGamePosition(new GamePosition()))) {
+      if (b != null && this.canReach(tilePosition)) {
         CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
-        cbi.x = tilePosition.x;
-        cbi.y = tilePosition.y;
+        cbi.x = tilePosition.getTileX();
+        cbi.y = tilePosition.getTileY();
         cbi.type = CPacketBuildingInteraction.CLICK;
         client.sendPacket(cbi);
         return false;
       }
 
       ItemStack cursorStack = GameView.getCursor().getStack();
-      if (this.canReach(tilePosition.toGamePosition(new GamePosition()))) {
+      if (this.canReach(tilePosition)) {
         if (cursorStack != null && cursorStack.getItem() instanceof ItemBuilding) {
           Building hypotheticalBuilding = ((ItemBuilding) cursorStack.getItem()).getBuilding();
 
@@ -333,8 +334,8 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
           }
 
           CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
-          cbi.x = tilePosition.x;
-          cbi.y = tilePosition.y;
+          cbi.x = tilePosition.getTileX();
+          cbi.y = tilePosition.getTileY();
           cbi.type = CPacketBuildingInteraction.CREATE;
           client.sendPacket(cbi);
 
@@ -380,7 +381,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
       loadAnimation();
     }
 
-    rg.sprite(new GamePosition(position).add(0, -2 / 16f), spritesheet,
+    rg.sprite(new OmniPosition(position).add(PositionType.GAME, 0, -2 / 16f), spritesheet,
         new IntRectangle(64, 0, 16, 32), position.y);
 
     if (animation == 1) {
@@ -421,7 +422,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     return inventory;
   }
 
-  public boolean canReach(GamePosition position) {
-    return (this.position.distance(position) < 5);
+  public boolean canReach(OmniPosition position) {
+    return (this.position.distance(PositionType.GAME, position) < 5);
   }
 }

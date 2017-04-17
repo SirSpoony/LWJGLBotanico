@@ -32,7 +32,7 @@ public class CommandLine
         for (int i = 0; i < messages.size(); i++) {
             CommandLineMessage current = messages.get(i);
             //if (!current.shouldDisplay()) break;
-            rg.text(new GuiPosition(rg.guiViewport.width -10, rg.guiViewport.height - 10 - 10*i),
+            rg.text(rg.guiViewport.width -10, rg.guiViewport.height - 10 - 10*i,
                     "" + current.getMessage(),
                     new TextColors(new Color(1,1,1,1f*current.getOpacity()), new Color(0,0,0,.5f*current.getOpacity())), CallAlign.TOP_RIGHT);
         }

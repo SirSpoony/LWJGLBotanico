@@ -16,6 +16,8 @@ import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.tiles.TileRenderRule;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 import java.util.List;
 
@@ -44,11 +46,11 @@ public class PlaneRenderer implements GameRenderable {
 
     renderTiles(rg);
 
-    TilePosition highlightedBuilding = level.getLocalPlayer().getHighlightedBuildingPosition();
+    OmniPosition highlightedBuilding = level.getLocalPlayer().getHighlightedBuildingPosition();
 
     for (int x = firstTileX; x < lastTileX; x++) {
       for (int y = firstTileY; y < lastTileY; y++) {
-        TilePosition currentPosition = new TilePosition(x, y);
+        OmniPosition currentPosition = new OmniPosition(PositionType.GAME, x, y);
 
         Building b = level.getBuilding(currentPosition);
         byte d = level.getBuildingData(currentPosition);
@@ -86,10 +88,12 @@ public class PlaneRenderer implements GameRenderable {
     Texture tileTexture = rg.getResourceManager().getTexture("tiles.png");
 
     Tile[][] tiles = new Tile[tileViewWidth][tileViewHeight];
-    TilePosition pos = new TilePosition();
+    OmniPosition pos = new OmniPosition(PositionType.GAME, 0, 0);
     for (int x = firstTileX; x < lastTileX; x++) {
       for (int y = firstTileY; y < lastTileY; y++) {
-        tiles[x - firstTileX][y - firstTileY] = level.getTile(pos.set(x, y));
+        pos.setX(PositionType.GAME, x);
+        pos.setY(PositionType.GAME, y);
+        tiles[x - firstTileX][y - firstTileY] = level.getTile(pos);
       }
     }
 
@@ -119,12 +123,12 @@ public class PlaneRenderer implements GameRenderable {
         IntRectangle background = tile.backgroundRegion(adjtiles, relevantRule, randtexture);
 
         if (background != null) {
-          rg.sprite(new GamePosition(x, y), tileTexture,
+          rg.sprite(new OmniPosition(PositionType.GAME, x, y), tileTexture,
               background, RendererGame.BACK_LAYER);
         }
 
         if (foreground != null) {
-          rg.sprite(new GamePosition(x, y), tileTexture,
+          rg.sprite(new OmniPosition(PositionType.GAME, x, y), tileTexture,
               foreground, RendererGame.BACK_LAYER);
         }
       }

@@ -6,6 +6,8 @@ import me.spoony.botanico.common.items.ItemBuilding;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IServerHandler;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.net.BotanicoServer;
 
@@ -24,7 +26,7 @@ public class CPacketBuildingInteraction extends AutoPacketAdapter implements ISe
 
   @Override
   public void onReceive(BotanicoServer server, RemoteEntityPlayer player) {
-    TilePosition position = new TilePosition(x, y);
+    OmniPosition position = new OmniPosition(PositionType.GAME, x, y);
     if (type == CREATE) {
       ItemSlot cursorSlot = player.getCursor();
       if (!(cursorSlot.getStack().getItem() instanceof ItemBuilding)) {

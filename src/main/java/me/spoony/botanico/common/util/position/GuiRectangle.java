@@ -59,7 +59,13 @@ public class GuiRectangle {
     return this;
   }
 
-  public OmniPosition getCenter(OmniPosition guiPosition) {
+  public GuiRectangle setCenter(float x, float y) {
+    this.x = x - this.width / 2f;
+    this.y = x - this.height / 2f;
+    return this;
+  }
+
+  public OmniPosition getCenter() {
     return new OmniPosition(PositionType.GUI, x + (width / 2f), y + (height / 2f));
   }
 

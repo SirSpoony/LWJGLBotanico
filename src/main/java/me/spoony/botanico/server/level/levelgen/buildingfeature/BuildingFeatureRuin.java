@@ -23,7 +23,7 @@ public class BuildingFeatureRuin implements BuildingFeature {
   @Override
   public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
     boolean[] clearSpace = ChunkGeneratorUnderworld
-        .genClearSpace(chunk.position.x, chunk.position.y, seed);
+        .genClearSpace(chunk.x, chunk.y, seed);
 
     for (int xi = 3; xi < 28; xi++) {
       for (int yi = 3; yi < 28; yi++) {

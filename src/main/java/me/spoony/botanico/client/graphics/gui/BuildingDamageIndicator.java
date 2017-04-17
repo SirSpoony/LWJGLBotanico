@@ -2,22 +2,24 @@ package me.spoony.botanico.client.graphics.gui;
 
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.common.util.IntRectangle;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by coltenwebb on 11/9/16.
  */
 public class BuildingDamageIndicator {
 
-  public GamePosition getRenderPosition() {
-    return new GamePosition(tilePosition.x + 1f / 8f, tilePosition.y + 1f / 8f);
+  public OmniPosition getRenderPosition() {
+    return new OmniPosition(PositionType.GAME, tilePosition.x + 1f / 8f, tilePosition.y + 1f / 8f);
   }
 
-  public TilePosition tilePosition;
+  public OmniPosition tilePosition;
 
   public float health;
   public float maxHealth;
 
-  public BuildingDamageIndicator(TilePosition tilePosition, float maxhealth) {
+  public BuildingDamageIndicator(OmniPosition tilePosition, float maxhealth) {
     this.tilePosition = tilePosition;
     this.maxHealth = maxhealth;
     this.health = maxhealth;

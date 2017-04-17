@@ -39,7 +39,7 @@ public class GUIButton extends GUIControlAlignableAdapter implements IClickable
         textbounds.setCenter(bounds.getCenter());
         textbounds.y += 2;
         rendererGUI.text(
-                textbounds.getPosition(),
+                textbounds.x, textbounds.y,
                 text, TextColors.WHITE, CallAlign.BOTTOM_LEFT);
     }
 
@@ -58,7 +58,7 @@ public class GUIButton extends GUIControlAlignableAdapter implements IClickable
     }
 
     public boolean doesContainCursor() {
-        if (getBounds().contains(Input.CURSOR_POS.toGuiPosition())) return true;
+        if (getBounds().contains(Input.CURSOR_POS)) return true;
         return false;
     }
 

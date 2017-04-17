@@ -38,7 +38,7 @@ public class GUILabel extends GUIControlAlignableAdapter
         preRender(rendererGUI);
 
         rendererGUI.text(
-                getBounds().getPosition(),
+                getBounds().x, getBounds().y,
                 text, TextColors.WHITE, CallAlign.BOTTOM_LEFT);
     }
 }

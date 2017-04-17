@@ -14,24 +14,22 @@ import me.spoony.botanico.common.util.position.GuiRectangle;
  */
 public class RendererItemStack {
     private static Color ghost_color = new Color(1, 1, 1, .5f);
-    protected GuiPosition position;
     protected ItemStack stack;
     public boolean isGhost;
     public boolean clickEffect;
 
+    public float x;
+    public float y;
+
     public RendererItemStack(ItemStack itemstack) {
         this.stack = itemstack;
         this.isGhost = false;
-        this.position = new GuiPosition();
         this.clickEffect = false;
     }
 
-    public GuiPosition getPosition() {
-        return position;
-    }
-
-    public void setPosition(GuiPosition position) {
-        this.position = new GuiPosition(position);
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
     public void updateFromSlot(ItemSlot slot) {
@@ -50,16 +48,16 @@ public class RendererItemStack {
         if (stack == null) return;
         Texture texture = rg.getResourceManager().getTexture("items.png");
         if (isGhost) {
-            rg.sprite(position, texture,
+            rg.sprite(x, y, texture,
                     stack.getItem().textureBounds, ghost_color);
         } else {
             if (clickEffect) {
-                rg.sprite(new GuiRectangle(position.x+1, position.y+1, 14, 14), texture, stack.getItem().textureBounds);
+                rg.sprite(new GuiRectangle(x+1, y+1, 14, 14), texture, stack.getItem().textureBounds);
             } else {
-                rg.sprite(position, texture, stack.getItem().textureBounds);
+                rg.sprite(x, y, texture, stack.getItem().textureBounds);
             }
             if (stack.showCount()) {
-                rg.text(position, "" + stack.getCount(), TextColors.WHITE, CallAlign.BOTTOM_LEFT);
+                rg.text(x, y, "" + stack.getCount(), TextColors.WHITE, CallAlign.BOTTOM_LEFT);
             }
         }
     }
