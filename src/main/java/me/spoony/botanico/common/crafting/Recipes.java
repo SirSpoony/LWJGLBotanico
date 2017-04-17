@@ -9,7 +9,6 @@ import me.spoony.botanico.common.items.Items;
 public class Recipes {
 
   public static RecipeRegistry GENERAL_RECIPES;
-  public static RecipeRegistry TOOL_STATION_RECIPES;
 
   public static void init() {
     GENERAL_RECIPES = new RecipeRegistry();
@@ -18,13 +17,28 @@ public class Recipes {
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ENERGY_PIPE),
         new CraftingIngredient(Items.ROCK, 2)));
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.BUCKET),
-        new CraftingIngredient(Items.ROCK, 2)));
+        new CraftingIngredient(Items.WOOD, 3)));
 
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.WALL),
         new CraftingIngredient(Items.WOOD, 4)));
 
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROCK_HOE),
         new CraftingIngredient(Items.WOOD, 2),
-        new CraftingIngredient(Items.ROCK, 1)));
+        new CraftingIngredient(Items.ROCK_HOE_HEAD, 1)));
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROCK_AXE),
+        new CraftingIngredient(Items.WOOD, 2),
+        new CraftingIngredient(Items.ROCK_AXE_HEAD, 1)));
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROCK_SWORD),
+        new CraftingIngredient(Items.WOOD, 2),
+        new CraftingIngredient(Items.ROCK_SWORD_BLADE, 1)));
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROCK_PICKAXE),
+        new CraftingIngredient(Items.WOOD, 2),
+        new CraftingIngredient(Items.ROCK_PICKAXE_HEAD, 1)));
+
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROPE),
+        new CraftingIngredient(Items.HEMP_FIBER, 5)));
+
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.WHEAT_SEEDS),
+        new CraftingIngredient(Items.WHEAT, 4)));
   }
 }
