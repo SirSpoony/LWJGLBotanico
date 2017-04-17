@@ -15,7 +15,7 @@ public class BuildingBush extends Building {
     super(id);
     this.name = "bush";
     this.setTextureBounds(48, 0, 32, 32);
-    this.hardness = Float.MAX_VALUE;
+    this.hardness = 5;
     this.alwaysBehindCharacter = false;
     this.collisionBounds = new DoubleRectangle(0,0,2,1.5);
   }

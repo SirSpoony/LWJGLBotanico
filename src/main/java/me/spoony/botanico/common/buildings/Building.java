@@ -21,22 +21,21 @@ public class Building {
 
   public static final BuildingRegistry REGISTRY = new BuildingRegistry();
 
+  protected int id;
   protected String name;
+
   protected boolean shouldCollide;
   protected DoubleRectangle collisionBounds;
+
   protected IntRectangle textureBounds;
   protected boolean alwaysBehindCharacter;
+
   protected float hardness;
 
   public int getID() {
     return id;
   }
 
-  public void setID(int id) {
-    this.id = id;
-  }
-
-  protected int id;
 
   public static void initRegistry() {
     REGISTRY.registerBuilding(new BuildingWorkbench(0));
@@ -141,14 +140,6 @@ public class Building {
     return getHardness();
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public boolean shouldCollide() {
     return shouldCollide;
   }
@@ -161,24 +152,16 @@ public class Building {
     return collisionBounds;
   }
 
-  public void setCollisionBounds(DoubleRectangle collisionBounds) {
-    this.collisionBounds = collisionBounds;
-  }
-
-  public boolean isAlwaysBehindCharacter() {
+  public boolean isFlat() {
     return alwaysBehindCharacter;
   }
 
-  public void setAlwaysBehindCharacter(boolean alwaysBehindCharacter) {
-    this.alwaysBehindCharacter = alwaysBehindCharacter;
+  public String getName() {
+    return name;
   }
 
   public float getHardness() {
     return hardness;
-  }
-
-  public void setHardness(float hardness) {
-    this.hardness = hardness;
   }
 
   public ItemStack[] getDrops() {

@@ -3,6 +3,7 @@ package me.spoony.botanico.client;
 import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.Animation;
 import me.spoony.botanico.common.items.ItemSlot;
+import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.dialog.Dialog;
@@ -93,8 +94,8 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
   }
 
   @Override
-  public void update(float timeDiff, IPlane level) {
-    super.update(timeDiff, level);
+  public void update(float timeDiff, IPlane plane) {
+    super.update(timeDiff, plane);
 
     if (downAnimation == null) {
       loadAnimation();
@@ -114,7 +115,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
 
     if (coorddir.y != 0) {
       position.y += coorddir.y * movementSpeed * timeDiff;
-      CollisionCheck check = new EntityCollider(level, this).checkCollisionsChunk();
+      CollisionCheck check = new EntityCollider(plane, this).checkCollisionsChunk();
       if (check.collided) {
         if (coorddir.y > 0) {
           position.y -= check.intersection.getHeight();
@@ -126,7 +127,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
 
     if (coorddir.x != 0) {
       position.x += coorddir.x * movementSpeed * timeDiff;
-      CollisionCheck check = new EntityCollider(level, this).checkCollisionsChunk();
+      CollisionCheck check = new EntityCollider(plane, this).checkCollisionsChunk();
       if (check.collided) {
         if (coorddir.x > 0) {
           position.x -= check.intersection.getWidth();
@@ -153,7 +154,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
       downAnimation.update(timeDiff);
 
       if (footstepTimer.step(timeDiff)) {
-        Tile tile = level.getTile(new TilePosition(position));
+        Tile tile = plane.getTile(new TilePosition(position));
         if (tile != null) {
           //tile.getFootStepMaterial().getRandomSound(Botanico.INSTANCE.getResourceManager()).play(.5f); todo footstep
         }
@@ -161,34 +162,36 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (Input.BUTTON_RIGHT.isDown() && !client.gameView.hasDialogOpen()) {
-      TilePosition tilePosition = new TilePosition(Input.CURSOR_POS.toGamePosition());
-      Building b = level.getBuilding(tilePosition);
+      TilePosition tilePosition = getHighlightedBuildingPosition();
+      if (tilePosition != null) {
+        Building b = plane.getBuilding(tilePosition);
 
-      if (b != null && this.canReach(tilePosition.toGamePosition(new GamePosition()))) {
-        if (buildingDamageIndicator == null) {
-          buildingDamageIndicator = new BuildingDamageIndicator(tilePosition,
-              b.getHardness(level, tilePosition));
-        } else {
-          if (!(buildingDamageIndicator.tilePosition.equals(tilePosition))) {
+        if (b != null) {
+          if (buildingDamageIndicator == null) {
             buildingDamageIndicator = new BuildingDamageIndicator(tilePosition,
-                b.getHardness(level, tilePosition));
+                b.getHardness(plane, tilePosition));
+          } else {
+            if (!(buildingDamageIndicator.tilePosition.equals(tilePosition))) {
+              buildingDamageIndicator = new BuildingDamageIndicator(tilePosition,
+                  b.getHardness(plane, tilePosition));
+            }
+
+            buildingDamageIndicator.maxHealth = b.getHardness(plane, tilePosition);
+
+            buildingDamageIndicator.health -= timeDiff * (1f / getBuildingDamageModifier(b));
+
+            if (buildingDamageIndicator.health <= 0) {
+              CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
+              cbi.x = tilePosition.x;
+              cbi.y = tilePosition.y;
+              cbi.type = CPacketBuildingInteraction.DESTROY;
+              client.sendPacket(cbi);
+              buildingDamageIndicator = null;
+            }
           }
-
-          buildingDamageIndicator.maxHealth = b.getHardness(level, tilePosition);
-
-          buildingDamageIndicator.health -= timeDiff * (1f / getBuildingDamageModifier(b));
-
-          if (buildingDamageIndicator.health <= 0) {
-            CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
-            cbi.x = tilePosition.x;
-            cbi.y = tilePosition.y;
-            cbi.type = CPacketBuildingInteraction.DESTROY;
-            client.sendPacket(cbi);
-            buildingDamageIndicator = null;
-          }
+        } else {
+          buildingDamageIndicator = null;
         }
-      } else {
-        buildingDamageIndicator = null;
       }
     } else {
       buildingDamageIndicator = null;
@@ -204,6 +207,35 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
         lastPacketPosition = new GamePosition(position);
       }
     }
+  }
+
+  public TilePosition getHighlightedBuildingPosition() {
+    GamePosition cursor = Input.CURSOR_POS.toGamePosition();
+    if (!canReach(Input.CURSOR_POS.toGamePosition())) {
+      return null;
+    }
+    TilePosition directPos = cursor.toTilePosition();
+    if (getPlane().getBuilding(directPos) != null) {
+      return directPos;
+    } else {
+      for (int xo = -3; xo <= 3; xo++) {
+        for (int yo = -3; yo <= 3; yo++) {
+          Building b = getPlane().getBuilding(new TilePosition(directPos).add(xo, yo));
+          if (b == null) {
+            continue;
+          }
+          DoubleRectangle testRect = new DoubleRectangle(
+              directPos.x + xo + b.getCollisionBounds().getX(),
+              directPos.y + yo + b.getCollisionBounds().getY(),
+              b.getCollisionBounds().getWidth(),
+              b.getCollisionBounds().getHeight());
+          if (testRect.contains(Input.CURSOR_POS.toGamePosition().toVector())) {
+            return directPos.add(xo, yo);
+          }
+        }
+      }
+    }
+    return null;
   }
 
   public boolean isMining() {

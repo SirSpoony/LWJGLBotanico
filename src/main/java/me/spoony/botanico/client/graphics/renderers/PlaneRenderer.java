@@ -47,10 +47,7 @@ public class PlaneRenderer implements GameRenderable {
 
     renderTiles(rg);
 
-    TilePosition highlightedBuilding = Input.CURSOR_POS.toGamePosition().toTilePosition();
-    if (!level.getLocalPlayer().canReach(highlightedBuilding.toGamePosition())) {
-      highlightedBuilding.set(Long.MAX_VALUE, Long.MAX_VALUE);
-    }
+    TilePosition highlightedBuilding = level.getLocalPlayer().getHighlightedBuildingPosition();
 
     for (int x = firstTileX; x < lastTileX; x++) {
       for (int y = firstTileY; y < lastTileY; y++) {
@@ -60,7 +57,7 @@ public class PlaneRenderer implements GameRenderable {
         byte d = level.getBuildingData(currentPosition);
 
         boolean shouldHighlight =
-            highlightedBuilding.equals(currentPosition) && !GameView.getPlayer().hasDialogOpen();
+            currentPosition.equals(highlightedBuilding) && !GameView.getPlayer().hasDialogOpen();
         if (b != null) {
           b.render(rg, level, currentPosition, d, shouldHighlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE);
         }
