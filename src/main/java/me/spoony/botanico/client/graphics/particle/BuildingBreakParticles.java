@@ -2,14 +2,14 @@ package me.spoony.botanico.client.graphics.particle;
 
 import com.google.common.collect.Sets;
 import me.spoony.botanico.client.graphics.RendererGame;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.buildings.BuildingBreakMaterial;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
 
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 12/4/2016.
@@ -24,7 +24,7 @@ public class BuildingBreakParticles {
     bbps = Sets.newHashSet();
   }
 
-  public void start(TilePosition position, BuildingBreakMaterial mat) {
+  public void start(OmniPosition position, BuildingBreakMaterial mat) {
     homex = position.x;
     homey = position.y;
     Random posRand = new Random();
@@ -90,7 +90,8 @@ public class BuildingBreakParticles {
     }
 
     public void render(RendererGame rg) {
-      rg.sprite(new GamePosition(x, y), rg.getResourceManager().getTexture("break_particles.png"),
+      rg.sprite(new OmniPosition(PositionType.GAME, x, y),
+          rg.getResourceManager().getTexture("break_particles.png"),
           textureregion, y);
     }
 

@@ -1,12 +1,9 @@
 package me.spoony.botanico.common.buildings;
 
-import me.spoony.botanico.client.ClientPlane;
-import me.spoony.botanico.client.engine.Color;
-import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -25,7 +22,7 @@ public class BuildingCaveRope extends Building {
   }
 
   @Override
-  public boolean onClick(IPlane plane, EntityPlayer player, TilePosition position) {
+  public boolean onClick(IPlane plane, EntityPlayer player, OmniPosition position) {
     if (plane.isLocal()) {
       return true;
     }
@@ -33,8 +30,8 @@ public class BuildingCaveRope extends Building {
       return true;
     }
 
-    ((RemoteEntityPlayer) player).teleport(position.toGamePosition().add(0, 2.5f),
-        ((ServerPlane)plane).getLevel().getOverworld());
+    ((RemoteEntityPlayer) player).teleport(position.add(PositionType.GAME, 0, 2.5f),
+        ((ServerPlane) plane).getLevel().getOverworld());
 
     return true;
   }

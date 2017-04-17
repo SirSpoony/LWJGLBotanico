@@ -6,7 +6,6 @@ import me.spoony.botanico.client.graphics.gui.control.GUIButton;
 import me.spoony.botanico.client.graphics.gui.control.GUILabel;
 import me.spoony.botanico.client.graphics.gui.control.GUITexture;
 import me.spoony.botanico.client.graphics.gui.control.GUIControlAlignmentType;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.util.IntRectangle;
 

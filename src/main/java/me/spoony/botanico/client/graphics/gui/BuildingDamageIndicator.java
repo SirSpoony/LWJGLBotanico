@@ -1,10 +1,7 @@
 package me.spoony.botanico.client.graphics.gui;
 
 import me.spoony.botanico.client.graphics.RendererGame;
-import me.spoony.botanico.client.input.Input;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
 
 /**
  * Created by coltenwebb on 11/9/16.

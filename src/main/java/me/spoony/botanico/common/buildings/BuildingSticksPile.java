@@ -7,9 +7,9 @@ import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.client.ClientPlane;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
 
 import java.util.Random;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/10/2016.
@@ -24,10 +24,10 @@ public class BuildingSticksPile extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    int val = hash(position.x, position.y) % 4;
-    rg.sprite(position.toGamePosition(), getTextureSheet(),
+    int val = hash(position.getTileX(), position.getTileY()) % 4;
+    rg.sprite(position, getTextureSheet(),
         new IntRectangle(48 + 16 * val, 176, 16, 16), color,
         position.y + 1);
   }
@@ -40,7 +40,7 @@ public class BuildingSticksPile extends Building {
   }
 
   @Override
-  public ItemStack[] getDrops(IPlane level, TilePosition tilePosition) {
+  public ItemStack[] getDrops(IPlane level, OmniPosition tilePosition) {
     return new ItemStack[]
         {
             new ItemStack(Items.WOOD, new Random().nextInt(3) + 1),

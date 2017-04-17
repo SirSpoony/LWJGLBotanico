@@ -5,7 +5,6 @@ import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.CallAlign;
 import me.spoony.botanico.client.graphics.RendererGUI;
 import me.spoony.botanico.client.graphics.TextColors;
-import me.spoony.botanico.common.util.position.GuiPosition;
 
 import java.util.List;
 

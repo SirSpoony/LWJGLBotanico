@@ -1,17 +1,14 @@
 package me.spoony.botanico.client.graphics;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import javax.xml.soap.Text;
 import me.spoony.botanico.client.BotanicoGame;
 import me.spoony.botanico.client.ResourceManager;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.engine.SpriteBatch;
 import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.particle.BuildingBreakParticles;
-import me.spoony.botanico.common.util.position.GamePosition;
-import me.spoony.botanico.common.util.position.TilePosition;
-import me.spoony.botanico.common.util.position.WindowPosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.common.buildings.BuildingBreakMaterial;
 import me.spoony.botanico.common.util.BMath;
 import me.spoony.botanico.common.util.DoubleRectangle;
@@ -41,16 +38,20 @@ public class RendererGame {
   public float nightCycle = 1; // 0 is midnight, 1 is daytime
   public boolean tint;
 
-  public GamePosition windowPosToGamePos(WindowPosition windowpos, GamePosition gamepos) {
-    gamepos.x = gameViewport.x + windowpos.x / (16f * scale);
-    gamepos.y = gameViewport.y + windowpos.y / (16f * scale);
-    return gamepos;
+  public double windowXToGame(double x) {
+    return gameViewport.x + x / (16f * scale);
   }
 
-  public WindowPosition gamePosToWindowPos(GamePosition gamepos, WindowPosition windowpos) {
-    windowpos.x = (float) (-gameViewport.x * (16f * scale) + gamepos.x * (16f * scale));
-    windowpos.y = (float) (-gameViewport.y * (16f * scale) + gamepos.y * (16f * scale));
-    return windowpos;
+  public double windowYToGame(double y) {
+    return gameViewport.y + y / (16f * scale);
+  }
+
+  public double gameXToWindow(double x) {
+    return (-gameViewport.x * (16f * scale) + x * (16f * scale));
+  }
+
+  public double gameYToWindow(double y) {
+    return (-gameViewport.y * (16f * scale) + y * (16f * scale));
   }
 
   public RendererGame() {
@@ -158,34 +159,32 @@ public class RendererGame {
    * @param source source of the texture to be rendered (relative to top left)
    * @param layer order to be rendered, lower is closer
    */
-  public void sprite(GamePosition pos, Texture texture, IntRectangle source, double layer) {
+  public void sprite(OmniPosition pos, Texture texture, IntRectangle source, double layer) {
     sprite(pos, texture, source, Color.WHITE, layer);
   }
 
-  public void sprite(GamePosition pos, Texture texture, IntRectangle source, Color color,
+  public void sprite(OmniPosition pos, Texture texture, IntRectangle source, Color color,
       double layer) {
-    WindowPosition windowPos = new WindowPosition(pos);
-
     orderedRenderables.add(new R(layer,
-        windowPos.x, windowPos.y, source.getWidth() * this.scale, source.getHeight() * this.scale,
+        (float) pos.getX(PositionType.WINDOW), (float) pos.getY(PositionType.WINDOW),
+        source.getWidth() * this.scale, source.getHeight() * this.scale,
         color,
         source.getX(), source.getY(), source.getWidth(), source.getHeight(),
         texture));
   }
 
-  public void sprite(GamePosition pos, float scale, Texture texture, IntRectangle source,
+  public void sprite(OmniPosition pos, float scale, Texture texture, IntRectangle source,
       Color color, double layer) {
-    WindowPosition windowPos = new WindowPosition(pos);
-
     orderedRenderables.add(new R(layer,
-        windowPos.x, windowPos.y, source.getWidth() * this.scale * scale,
+        (float) pos.getX(PositionType.WINDOW), (float) pos.getY(PositionType.WINDOW),
+        source.getWidth() * this.scale * scale,
         source.getHeight() * this.scale * scale,
         color,
         source.getX(), source.getY(), source.getWidth(), source.getHeight(),
         texture));
   }
 
-  public void particleBuildingBreak(TilePosition position, BuildingBreakMaterial particles) {
+  public void particleBuildingBreak(OmniPosition position, BuildingBreakMaterial particles) {
     effect.start(position, particles);
   }
 

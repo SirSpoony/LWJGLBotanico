@@ -6,7 +6,7 @@ import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.DoubleRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.level.ServerPlane;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class BuildingWorkbench extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+  public ItemStack[] getDrops(IPlane level, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
       return null;
     }
@@ -45,7 +45,7 @@ public class BuildingWorkbench extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public BuildingEntity createNewEntity(IPlane plane, TilePosition position) {
+  public BuildingEntity createNewEntity(IPlane plane, OmniPosition position) {
     return new BuildingEntityWorkbench(position, plane);
   }
 }

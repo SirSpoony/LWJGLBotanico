@@ -4,7 +4,6 @@ import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.Animation;
 import me.spoony.botanico.common.items.ItemSlot;
 import me.spoony.botanico.common.util.DoubleRectangle;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.entities.*;
@@ -24,7 +23,7 @@ import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.util.DoubleVector2D;
 import me.spoony.botanico.common.util.IntRectangle;
 import me.spoony.botanico.common.util.Timer;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/20/2016.
@@ -43,7 +42,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
   Timer footstepTimer;
   BotanicoClient client;
 
-  private GamePosition lastPacketPosition;
+  private OmniPosition lastPacketPosition;
 
   public Inventory inventory;
 
@@ -60,7 +59,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
 
     this.inventory = new Inventory(EntityPlayer.INVENTORY_SIZE, Dialog.PLAYER_INV_ID);
 
-    this.lastPacketPosition = new GamePosition();
+    this.lastPacketPosition = new OmniPosition();
 
     this.initialized = false;
   }
@@ -101,7 +100,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
       loadAnimation();
     }
 
-    GamePosition prevPos = new GamePosition(getPosition());
+    OmniPosition prevPos = new OmniPosition(getPosition());
     DoubleVector2D coorddir = getInputAxis();
     if (coorddir.x < 0) {
       animation = 0;
@@ -154,7 +153,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
       downAnimation.update(timeDiff);
 
       if (footstepTimer.step(timeDiff)) {
-        Tile tile = plane.getTile(new TilePosition(position));
+        Tile tile = plane.getTile(new OmniPosition(position));
         if (tile != null) {
           //tile.getFootStepMaterial().getRandomSound(Botanico.INSTANCE.getResourceManager()).play(.5f); todo footstep
         }

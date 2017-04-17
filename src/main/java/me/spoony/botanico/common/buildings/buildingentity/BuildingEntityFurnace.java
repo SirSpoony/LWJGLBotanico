@@ -4,7 +4,7 @@ import me.spoony.botanico.common.dialog.DialogFurnace;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 12/30/2016.
@@ -12,7 +12,7 @@ import me.spoony.botanico.common.util.position.TilePosition;
 public class BuildingEntityFurnace extends BuildingEntity implements Updatable {
     public DialogFurnace dialog;
 
-    public BuildingEntityFurnace(TilePosition position, IPlane plane)
+    public BuildingEntityFurnace(OmniPosition position, IPlane plane)
     {
         super(position, plane);
 

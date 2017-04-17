@@ -1,12 +1,9 @@
 package me.spoony.botanico.common.buildings.buildingentity;
 
-import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.dialog.DialogKnappingStation;
-import me.spoony.botanico.common.dialog.DialogViewerManager;
 import me.spoony.botanico.common.items.Inventory;
-import me.spoony.botanico.common.items.ItemSlotMode;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/27/2016.
@@ -19,7 +16,7 @@ public class BuildingEntityKnappingStation extends BuildingEntity
         return dialog.inventory;
     }
 
-    public BuildingEntityKnappingStation(TilePosition position, IPlane plane)
+    public BuildingEntityKnappingStation(OmniPosition position, IPlane plane)
     {
         super(position, plane);
 

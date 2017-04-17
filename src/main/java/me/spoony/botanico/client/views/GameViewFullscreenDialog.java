@@ -3,7 +3,6 @@ package me.spoony.botanico.client.views;
 import me.spoony.botanico.client.graphics.CallAlign;
 import me.spoony.botanico.client.graphics.RendererGUI;
 import me.spoony.botanico.client.graphics.TextColors;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.common.util.position.GuiRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
 

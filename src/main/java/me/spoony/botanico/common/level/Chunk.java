@@ -2,23 +2,25 @@ package me.spoony.botanico.common.level;
 
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.tiles.Tile;
-import me.spoony.botanico.common.util.position.ChunkPosition;
 
 public class Chunk {
 
   public static final int CHUNK_SIZE = 32;
 
+  public final long x;
+  public final long y;
+
   public final Tile[] tiles;
   public final Building[] buildings;
   public final byte[] buildingData;
 
-  public final ChunkPosition position;
+  public Chunk(long x, long y, Tile[] ts, Building[] bs, byte[] bd) {
+    this.x = x;
+    this.y = y;
 
-  public Chunk(ChunkPosition position, Tile[] ts, Building[] bs, byte[] bd) {
     this.tiles = ts;
     this.buildings = bs;
     this.buildingData = bd;
-    this.position = position;
   }
 
   public Tile getTile(int x, int y) {

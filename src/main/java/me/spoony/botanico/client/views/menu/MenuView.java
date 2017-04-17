@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.RendererGUI;
 import me.spoony.botanico.client.graphics.gui.control.*;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.common.util.position.GuiRectangle;
 import me.spoony.botanico.client.input.BinaryInput;
 import me.spoony.botanico.client.input.BinaryInputListener;

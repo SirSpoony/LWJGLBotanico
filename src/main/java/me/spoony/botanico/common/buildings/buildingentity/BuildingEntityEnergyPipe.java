@@ -2,7 +2,8 @@ package me.spoony.botanico.common.buildings.buildingentity;
 
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.BMath;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.level.ServerPlane;
 
 /**
@@ -12,7 +13,7 @@ public class BuildingEntityEnergyPipe extends BuildingEntity implements Updatabl
     public byte contentsType;
     public float energy;
 
-    public BuildingEntityEnergyPipe(TilePosition position, IPlane plane) {
+    public BuildingEntityEnergyPipe(OmniPosition position, IPlane plane) {
         super(position, plane);
 
         contentsType = (byte) -1;
@@ -27,7 +28,8 @@ public class BuildingEntityEnergyPipe extends BuildingEntity implements Updatabl
                 if (ox == -1 && oy == -1) continue;
                 if (ox == 1 && oy == -1) continue;
                 if (ox == -1 && oy == 1) continue;
-                BuildingEntity obe = ((ServerPlane)plane).getBuildingEntity(new TilePosition(position).add(ox, oy));
+                BuildingEntity obe = ((ServerPlane)plane).getBuildingEntity(new OmniPosition(
+                    PositionType.GAME, position.getX(PositionType.GAME) + ox, position.getY(PositionType.GAME) + oy));
                 if (obe == null) continue;
                 if (obe instanceof IEnergyContainer) {
                     IEnergyContainer energyContainer = (IEnergyContainer) obe;

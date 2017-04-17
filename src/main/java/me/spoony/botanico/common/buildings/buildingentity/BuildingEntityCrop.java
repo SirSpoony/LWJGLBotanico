@@ -2,7 +2,7 @@ package me.spoony.botanico.common.buildings.buildingentity;
 
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.BMath;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.level.ServerPlane;
 
 import java.util.Random;
@@ -17,7 +17,7 @@ public class BuildingEntityCrop extends BuildingEntity implements Updatable
     public float growth;
     public byte maxstate;
 
-    public BuildingEntityCrop(TilePosition position, IPlane plane, byte maxstate) {
+    public BuildingEntityCrop(OmniPosition position, IPlane plane, byte maxstate) {
         super(position, plane);
 
         this.maxstate = maxstate;

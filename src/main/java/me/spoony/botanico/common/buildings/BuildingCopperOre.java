@@ -3,8 +3,7 @@ package me.spoony.botanico.common.buildings;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
-import me.spoony.botanico.server.level.ServerPlane;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 1/2/2017.
@@ -26,7 +25,7 @@ public class BuildingCopperOre extends Building {
   }
 
   @Override
-  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+  public ItemStack[] getDrops(IPlane level, OmniPosition position) {
     return new ItemStack[]{new ItemStack(Items.COPPER_ORE)};
   }
 }

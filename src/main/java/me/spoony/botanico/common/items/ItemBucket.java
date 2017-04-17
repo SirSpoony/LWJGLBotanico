@@ -5,8 +5,7 @@ import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.tiles.Tiles;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
-import me.spoony.botanico.server.RemoteEntityPlayer;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.level.ServerPlane;
 
 /**
@@ -18,7 +17,7 @@ public class ItemBucket extends Item {
     }
 
     @Override
-    public void onUse(IPlane level, EntityPlayer player, ItemSlot cursor, TilePosition position) {
+    public void onUse(IPlane level, EntityPlayer player, ItemSlot cursor, OmniPosition position) {
         if (!(level instanceof ServerPlane)) return;
         ServerPlane sl = (ServerPlane) level;
 

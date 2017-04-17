@@ -2,17 +2,17 @@ package me.spoony.botanico.common.buildings.buildingentity;
 
 import com.google.common.base.Preconditions;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/8/2016.
  */
 public class BuildingEntity
 {
-    public TilePosition position;
+    public OmniPosition position;
     public IPlane plane;
 
-    public BuildingEntity(TilePosition position, IPlane plane) {
+    public BuildingEntity(OmniPosition position, IPlane plane) {
         Preconditions.checkNotNull(position);
         Preconditions.checkNotNull(plane);
 

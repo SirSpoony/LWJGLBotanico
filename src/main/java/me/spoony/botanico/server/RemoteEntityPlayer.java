@@ -1,11 +1,8 @@
 package me.spoony.botanico.server;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Range;
 import com.google.common.collect.Sets;
 import me.spoony.botanico.common.net.Packet;
-import me.spoony.botanico.common.util.position.ChunkPosition;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.*;
@@ -14,8 +11,9 @@ import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.net.server.SPacketMessage;
 import me.spoony.botanico.common.net.server.SPacketChangeDialog;
 import me.spoony.botanico.common.net.server.SPacketDialogData;
-import me.spoony.botanico.common.net.server.SPacketSlot;
 import me.spoony.botanico.common.util.Timer;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.level.ServerPlane;
 
 import java.util.Set;
@@ -66,9 +64,9 @@ public class RemoteEntityPlayer extends EntityPlayer {
 
     for (int ox = -1; ox <= 1; ox++) {
       for (int oy = -1; oy <= 1; oy++) {
-        ChunkPosition position = new ChunkPosition(
-            new GamePosition(this.position).add(ox * 32, oy * 32));
-        shouldBeCommonChunks.add(plane.getChunk(position));
+        long x = position.getChunkX() + ox;
+        long y = position.getChunkY() + oy;
+        shouldBeCommonChunks.add(plane.getChunk(x, y));
       }
     }
 
@@ -118,7 +116,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
       ItemStack retstack = giveItemStack(stack, false);
       if (retstack != null) {
         ((ServerPlane) plane)
-            .dropItemStack(new GamePosition(position.x + .5d, position.y), retstack);
+            .dropItemStack(new OmniPosition(PositionType.GAME, position.x + .5d, position.y),
+                retstack);
       }
       return null;
     } else {
@@ -184,7 +183,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
     return (ServerPlane) super.getPlane();
   }
 
-  public void teleport(GamePosition position, ServerPlane plane) {
+  public void teleport(OmniPosition position, ServerPlane plane) {
     if (plane != this.getPlane()) {
       getPlane().removeEntity(this);
       this.plane = plane;
@@ -192,8 +191,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
 
       this.forceUpdateCommonChunks();
     }
-    this.setPosition(position);
-    System.out.println(position);
+    this.position.set(position);
+
     getPlane().server.getClientManager().getPacketHandler().sendTeleport(this);
   }
 

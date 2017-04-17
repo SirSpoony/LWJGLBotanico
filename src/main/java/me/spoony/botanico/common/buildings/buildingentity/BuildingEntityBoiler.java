@@ -1,11 +1,9 @@
 package me.spoony.botanico.common.buildings.buildingentity;
 
-import com.google.common.math.DoubleMath;
 import me.spoony.botanico.common.dialog.DialogBoiler;
-import me.spoony.botanico.common.dialog.DialogFurnace;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 1/1/2017.
@@ -15,7 +13,7 @@ public class BuildingEntityBoiler extends BuildingEntity implements Updatable {
 
     public float constantgentime;
 
-    public BuildingEntityBoiler(TilePosition position, IPlane plane) {
+    public BuildingEntityBoiler(OmniPosition position, IPlane plane) {
         super(position, plane);
 
         DialogBoiler d = new DialogBoiler();

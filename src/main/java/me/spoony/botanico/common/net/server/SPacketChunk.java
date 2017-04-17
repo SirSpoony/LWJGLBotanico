@@ -8,7 +8,6 @@ import me.spoony.botanico.common.net.Packet;
 import me.spoony.botanico.common.net.PacketDecoder;
 import me.spoony.botanico.common.net.PacketEncoder;
 import me.spoony.botanico.common.tiles.Tile;
-import me.spoony.botanico.common.util.position.ChunkPosition;
 
 /**
  * Created by Colten on 11/22/2016.

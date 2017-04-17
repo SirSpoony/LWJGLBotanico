@@ -1,7 +1,6 @@
 package me.spoony.botanico.client.graphics.gui.control;
 
 import me.spoony.botanico.client.graphics.RendererGUI;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.common.util.position.GuiRectangle;
 
 /**

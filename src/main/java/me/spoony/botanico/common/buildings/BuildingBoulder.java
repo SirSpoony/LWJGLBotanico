@@ -1,7 +1,7 @@
 package me.spoony.botanico.common.buildings;
 
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.level.ServerPlane;
 
 /**
@@ -19,7 +19,7 @@ public class BuildingBoulder extends Building {
   }
 
   @Override
-  public void destroy(IPlane level, TilePosition position) {
+  public void destroy(IPlane level, OmniPosition position) {
     if (level.isLocal()) {
       return;
     }

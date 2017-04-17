@@ -5,8 +5,6 @@ import me.spoony.botanico.client.*;
 import me.spoony.botanico.client.graphics.dialog.DialogRenderer;
 import me.spoony.botanico.client.graphics.dialog.DialogRenderers;
 import me.spoony.botanico.client.views.menu.MainMenuView;
-import me.spoony.botanico.common.util.position.GamePosition;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.client.graphics.renderers.CursorRenderer;
 import me.spoony.botanico.client.graphics.renderers.HotbarRenderer;
 import me.spoony.botanico.common.dialog.Dialog;
@@ -14,6 +12,8 @@ import me.spoony.botanico.client.graphics.*;
 import me.spoony.botanico.client.graphics.gui.*;
 import me.spoony.botanico.client.input.*;
 import me.spoony.botanico.common.util.DoubleRectangle;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 public class GameView extends ViewAdapter implements IView, BinaryInputListener {
 
@@ -88,7 +88,7 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
     rendererGame = new RendererGame();
     rendererGUI = new RendererGUI();
 
-    GamePosition playerPosition = client.getLocalPlayer().position;
+    OmniPosition playerPosition = client.getLocalPlayer().position;
     rendererGame
         .centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(), -1);
   }
@@ -99,7 +99,7 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
 
     client.getLocalLevel().update(delta);
 
-    GamePosition playerPosition = client.getLocalPlayer().position;
+    OmniPosition playerPosition = client.getLocalPlayer().position;
     rendererGame.centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(),
         delta * 16);
 
@@ -133,21 +133,26 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
     rendererGUI.begin();
 
     if (Botanico.DEBUG) {
-      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height), "FPS: " +
-          Math.round(BotanicoGame.FPS), TextColors.YELLOW, CallAlign.TOP_LEFT);
+      rendererGUI
+          .text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height), "FPS: " +
+              Math.round(BotanicoGame.FPS), TextColors.YELLOW, CallAlign.TOP_LEFT);
 
       double x = client.getLocalPlayer().position.x;
       double y = client.getLocalPlayer().position.y;
 
-      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 10), "Player X: " +
-          x, TextColors.WHITE, CallAlign.TOP_LEFT);
-      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 20), "Player Y: " +
-          y, TextColors.WHITE, CallAlign.TOP_LEFT);
+      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 10),
+          "Player X: " +
+              x, TextColors.WHITE, CallAlign.TOP_LEFT);
+      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 20),
+          "Player Y: " +
+              y, TextColors.WHITE, CallAlign.TOP_LEFT);
 
-      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 35), "DBG 1: " +
-          debugValue, TextColors.WHITE, CallAlign.TOP_LEFT);
-      rendererGUI.text(new GuiPosition(0, rendererGUI.guiViewport.height - 45), "DBG 2: " +
-          debugValue2, TextColors.WHITE, CallAlign.TOP_LEFT);
+      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 35),
+          "DBG 1: " +
+              debugValue, TextColors.WHITE, CallAlign.TOP_LEFT);
+      rendererGUI.text(new OmniPosition(PositionType.GUI, 0, rendererGUI.guiViewport.height - 45),
+          "DBG 2: " +
+              debugValue2, TextColors.WHITE, CallAlign.TOP_LEFT);
     }
 
     commandLine.render(rendererGUI);

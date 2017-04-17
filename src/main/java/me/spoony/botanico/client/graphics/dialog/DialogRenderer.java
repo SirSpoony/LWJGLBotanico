@@ -1,7 +1,6 @@
 package me.spoony.botanico.client.graphics.dialog;
 
 import me.spoony.botanico.client.graphics.gui.GUIRenderable;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.client.input.BinaryInput;
 import me.spoony.botanico.common.dialog.Dialog;
 

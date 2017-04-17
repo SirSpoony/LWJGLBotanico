@@ -2,14 +2,13 @@ package me.spoony.botanico.common.buildings;
 
 import me.spoony.botanico.client.ClientPlane;
 import me.spoony.botanico.client.engine.Color;
-import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntity;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntityJar;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -27,7 +26,7 @@ public class BuildingJar extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public boolean onClick(IPlane level, EntityPlayer player, TilePosition position) {
+  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
       return false;
     }
@@ -46,18 +45,18 @@ public class BuildingJar extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    rg.sprite(position.toGamePosition(), getTextureSheet(),
+    rg.sprite(position, getTextureSheet(),
         new IntRectangle(0, 160, 16, 16),
         color, position.y);
-    rg.sprite(position.toGamePosition(), getTextureSheet(),
+    rg.sprite(position, getTextureSheet(),
         new IntRectangle(16, 160, 16, 16),
         color, position.y);
   }
 
   @Override
-  public BuildingEntity createNewEntity(IPlane plane, TilePosition position) {
+  public BuildingEntity createNewEntity(IPlane plane, OmniPosition position) {
     return new BuildingEntityJar(position, plane);
   }
 }

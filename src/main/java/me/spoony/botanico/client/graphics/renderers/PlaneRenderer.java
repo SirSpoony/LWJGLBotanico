@@ -7,8 +7,6 @@ import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.client.graphics.gui.GameRenderable;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.GamePosition;
-import me.spoony.botanico.client.input.Input;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.entities.Entity;
@@ -18,7 +16,6 @@ import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.tiles.TileRenderRule;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
 
 import java.util.List;
 

@@ -4,7 +4,6 @@ import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.level.Chunk;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.util.BMath;
-import me.spoony.botanico.common.util.position.ChunkPosition;
 import me.spoony.botanico.server.level.levelgen.biome.*;
 
 import java.util.Random;
@@ -19,13 +18,14 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
     noise = new Noise(256, (int) seed);
   }
 
-  public Chunk generateChunk(ChunkPosition position) {
-    Random rand = new Random(smear(position.x, position.y) + seed);
+  @Override
+  public Chunk generateChunk(long x, long y) {
+    Random rand = new Random(smear(x, y) + seed);
     Tile[] tiles = new Tile[32 * 32];
     Building[] buildings = new Building[32 * 32];
     byte[] buildingData = new byte[32 * 32];
 
-    Chunk chunk = new Chunk(position, tiles, buildings, buildingData);
+    Chunk chunk = new Chunk(x, y, tiles, buildings, buildingData);
 
     generateBiome(rand, chunk, 0, new BiomeLake());
     generateBiome(rand, chunk, 1, new BiomePrairie());
@@ -47,8 +47,8 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
     boolean[] biomemap = new boolean[32*32];
     for (int xi = 0; xi < 32; xi++) {
       for (int yi = 0; yi < 32; yi++) {
-        long xireal = xi + chunk.position.x * Chunk.CHUNK_SIZE;
-        long yireal = yi + chunk.position.y * Chunk.CHUNK_SIZE;
+        long xireal = xi + chunk.x * Chunk.CHUNK_SIZE;
+        long yireal = yi + chunk.y * Chunk.CHUNK_SIZE;
 
         if (getBiome(xireal, yireal) == id) {
           biomemap[xi*32+yi] = true;

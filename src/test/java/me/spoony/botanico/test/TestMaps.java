@@ -1,15 +1,11 @@
 package me.spoony.botanico.test;
 
-import com.google.common.collect.Maps;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import me.spoony.botanico.common.util.position.ChunkPosition;
-
-import java.util.Map;
 
 /**
  * Created by Colten on 12/31/2016.

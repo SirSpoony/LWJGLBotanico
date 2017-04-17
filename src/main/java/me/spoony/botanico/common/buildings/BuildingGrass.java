@@ -3,15 +3,14 @@ package me.spoony.botanico.common.buildings;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.common.items.Item;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
 import me.spoony.botanico.client.ClientPlane;
 
 import java.util.Random;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by coltenwebb on 11/9/16.
@@ -28,10 +27,10 @@ public class BuildingGrass extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    int val = hash(position.x, position.y) % 4;
-    rg.sprite(position.toGamePosition(new GamePosition()),
+    int val = hash(position.getTileX(), position.getTileY()) % 4;
+    rg.sprite(position,
         getTextureSheet(),
         new IntRectangle(16 + 16 * val, 48, 16, 16),
         color, position.y + 1);
@@ -45,7 +44,7 @@ public class BuildingGrass extends Building {
   }
 
   @Override
-  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+  public ItemStack[] getDrops(IPlane level, OmniPosition position) {
     int count = DROP_RAND.nextInt(8) - 6;
     Item item = DROP_RAND.nextBoolean() ? Items.HEMP_SEEDS : Items.WHEAT_SEEDS;
     return count > 0 ? new ItemStack[]

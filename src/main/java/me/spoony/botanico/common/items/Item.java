@@ -5,7 +5,7 @@ import me.spoony.botanico.common.buildings.Buildings;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/10/2016.
@@ -97,7 +97,7 @@ public class Item {
     this.maxStackSize = maxStackSize;
   }
 
-  public void onUse(IPlane level, EntityPlayer player, ItemSlot cursor, TilePosition position) {
+  public void onUse(IPlane level, EntityPlayer player, ItemSlot cursor, OmniPosition position) {
 
   }
 

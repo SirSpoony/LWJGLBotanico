@@ -2,10 +2,10 @@ package me.spoony.botanico.common.buildings;
 
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.RendererGame;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.level.ServerPlane;
 import me.spoony.botanico.client.ClientPlane;
 
@@ -21,14 +21,15 @@ public class BuildingTree extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    rg.sprite(new GamePosition(position.x - 1, position.y), getTextureSheet(),
+    position.setX(PositionType.GAME, position.getX(PositionType.GAME) - 1);
+    rg.sprite(position, getTextureSheet(),
         new IntRectangle(16, 208, 46, 64), color, position.y);
   }
 
   @Override
-  public void destroy(IPlane level, TilePosition position) {
+  public void destroy(IPlane level, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
       return;
     }

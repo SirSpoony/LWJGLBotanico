@@ -3,7 +3,6 @@ package me.spoony.botanico.common.buildings;
 import me.spoony.botanico.client.BotanicoGame;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.engine.Texture;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.common.items.ItemStack;
@@ -12,7 +11,7 @@ import me.spoony.botanico.common.tiles.Tiles;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
 import me.spoony.botanico.client.ClientPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/8/2016.
@@ -101,9 +100,9 @@ public class Building {
     return "[" + name + "]";
   }
 
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte extra,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte extra,
       Color color) {
-    rg.sprite(new GamePosition(position), getTextureSheet(),
+    rg.sprite(position, getTextureSheet(),
         textureBounds, color, position.y + (alwaysBehindCharacter ? 1 : 0));
   }
 
@@ -111,11 +110,11 @@ public class Building {
     return BotanicoGame.getResourceManager().getTexture("buildings.png");
   }
 
-  public void create(IPlane level, TilePosition position) {
+  public void create(IPlane level, OmniPosition position) {
     // TODO
   }
 
-  public boolean canCreate(IPlane level, TilePosition position) {
+  public boolean canCreate(IPlane level, OmniPosition position) {
     if (level.getBuilding(position) != null) {
       return false;
     }
@@ -128,19 +127,19 @@ public class Building {
     return true;
   }
 
-  public void destroy(IPlane level, TilePosition position) {
+  public void destroy(IPlane level, OmniPosition position) {
 
   }
 
-  public boolean onClick(IPlane level, EntityPlayer player, TilePosition position) {
+  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
     return false;
   }
 
-  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+  public ItemStack[] getDrops(IPlane level, OmniPosition position) {
     return getDrops();
   }
 
-  public float getHardness(IPlane level, TilePosition position) {
+  public float getHardness(IPlane level, OmniPosition position) {
     return getHardness();
   }
 

@@ -10,7 +10,6 @@ import me.spoony.botanico.common.level.Chunk;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.tiles.Tiles;
 import me.spoony.botanico.common.util.BMath;
-import me.spoony.botanico.common.util.position.ChunkPosition;
 
 import java.util.Random;
 
@@ -26,11 +25,8 @@ public class ChunkGeneratorUnderworld implements IChunkGenerator {
   }
 
   @Override
-  public Chunk generateChunk(ChunkPosition position) {
-    Random rand = new Random(BMath.smear(position.x, position.y) + seed);
-
-    long chunkx = position.x;
-    long chunky = position.y;
+  public Chunk generateChunk(long chunkx, long chunky) {
+    Random rand = new Random(BMath.smear(chunkx, chunky) + seed);
 
     boolean[] clearSpace = genClearSpace(chunkx, chunky, getSeed());
 
@@ -56,7 +52,7 @@ public class ChunkGeneratorUnderworld implements IChunkGenerator {
         }
       }
     }
-    return new Chunk(position, tiles, buildings, buildingData);
+    return new Chunk(chunkx, chunky, tiles, buildings, buildingData);
   }
 
   @Override

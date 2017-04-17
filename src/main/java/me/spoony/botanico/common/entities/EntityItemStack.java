@@ -4,12 +4,13 @@ import me.spoony.botanico.ClientOnly;
 import me.spoony.botanico.client.ClientPlane;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.RendererGame;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.BMath;
 import me.spoony.botanico.common.util.DoubleRectangle;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -30,9 +31,9 @@ public class EntityItemStack extends Entity {
 
   public Entity collector;
   public float collectionProgress = 0;
-  public GamePosition positionBeforeCollection;
+  public OmniPosition positionBeforeCollection;
 
-  public EntityItemStack(GamePosition position, IPlane plane, ItemStack stack,
+  public EntityItemStack(OmniPosition position, IPlane plane, ItemStack stack,
       boolean randomPosInBlock) {
     super(plane);
 
@@ -86,13 +87,13 @@ public class EntityItemStack extends Entity {
         if (prog > 1) {
           prog = 1;
         }
-        GamePosition target = new GamePosition(
+        OmniPosition target = new OmniPosition(PositionType.GAME,
             collector.position.x + collector.collider.getCenter().x,
             collector.position.y + collector.collider.getCenter().y + .5d);
         position.x = BMath.lerp(position.x, target.x, prog);
         position.y = BMath.lerp(position.y, target.y, prog);
 
-        if (target.distance(position) < .4) {
+        if (target.distance(PositionType.GAME, position) < .4) {
           ((ClientPlane) level).removeEntity(this);
         }
       }
@@ -103,7 +104,8 @@ public class EntityItemStack extends Entity {
   @Override
   public void render(RendererGame rg) {
     float offset = (float) Math.sin(renderpos);
-    GamePosition renderPosition = new GamePosition(position).add(0d, (offset + 1) / 16d);
+    OmniPosition renderPosition = new OmniPosition(PositionType.GAME,
+        position.getX(PositionType.GAME), position.getY(PositionType.GAME) + (offset + 1) / 16d);
     rg.sprite(renderPosition, renderscale, rg.getResourceManager().getTexture("items.png"),
         stack.getItem().textureBounds, Color.WHITE, renderPosition.y);
   }
@@ -120,7 +122,7 @@ public class EntityItemStack extends Entity {
     }
     collectionProgress = 0;
     collector = GameView.getClientLevel().getEntity(state);
-    positionBeforeCollection = new GamePosition(position);
+    positionBeforeCollection = new OmniPosition(PositionType.GAME, position.getX(PositionType.GAME), position.getY(PositionType.GAME));
   }
 
   public boolean isBeingCollected() {

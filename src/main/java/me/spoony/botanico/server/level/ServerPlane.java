@@ -1,11 +1,7 @@
 package me.spoony.botanico.server.level;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import me.spoony.botanico.common.util.position.ChunkPosition;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.buildings.IBuildingEntityHost;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntity;
@@ -18,7 +14,8 @@ import me.spoony.botanico.common.level.Chunk;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.net.server.SPacketNewEntity;
 import me.spoony.botanico.common.net.server.SPacketRemoveEntity;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.level.levelgen.ChunkGeneratorOverworld;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.server.level.levelgen.IChunkGenerator;
@@ -31,7 +28,7 @@ public class ServerPlane implements IPlane {
   private final Map<Integer, Entity> entities;
   private final Set<BuildingEntity> buildingEntities;
   protected IChunkGenerator chunkGenerator;
-  private final Map<ChunkPosition, Chunk> chunks;
+  private final Set<Chunk> chunks;
 
   public int seed;
 
@@ -41,7 +38,7 @@ public class ServerPlane implements IPlane {
   public ServerPlane(BotanicoServer server, ServerLevel level, long seed) {
     entities = Maps.newConcurrentMap();
     buildingEntities = Sets.newConcurrentHashSet();
-    chunks = Maps.newConcurrentMap();
+    chunks = Sets.newConcurrentHashSet();
     chunkGenerator = new ChunkGeneratorOverworld(seed);
 
     this.server = server;
@@ -55,9 +52,13 @@ public class ServerPlane implements IPlane {
   }
 
   @Override
-  public Chunk getChunk(ChunkPosition position) {
-    Chunk ret = chunks.get(position);
-    return ret != null ? ret : generateChunk(position);
+  public Chunk getChunk(long x, long y) {
+    for (Chunk c : chunks) {
+      if (c.x == x && c.y == y) {
+        return c;
+      }
+    }
+    return generateChunk(x, y);
   }
 
   @Override
@@ -65,27 +66,27 @@ public class ServerPlane implements IPlane {
     return IPlane.OVERWORLD;
   }
 
-  public Chunk generateChunk(ChunkPosition position) {
-    Chunk newChunk = chunkGenerator.generateChunk(position);
-    chunks.put(position, newChunk);
+  public Chunk generateChunk(long x, long y) {
+    Chunk newChunk = chunkGenerator.generateChunk(x, y);
+    chunks.add(newChunk);
     return newChunk;
   }
 
-  public void setTile(TilePosition position, Tile tile) {
-    Chunk chunk = getChunk(position.toChunkPosition());
+  public void setTile(OmniPosition position, Tile tile) {
+    Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
     chunk.setTile(position.getXInChunk(), position.getYInChunk(), tile);
 
     server.getClientManager().getPacketHandler().sendTileChange(position, this, tile);
   }
 
   @Override
-  public Tile getTile(TilePosition position) {
-    return getChunk(position.toChunkPosition())
+  public Tile getTile(OmniPosition position) {
+    return getChunk(position.getChunkX(), position.getChunkY())
         .getTile(position.getXInChunk(), position.getYInChunk());
   }
 
-  public void setBuilding(TilePosition position, Building b) {
-    Chunk chunk = getChunk(position.toChunkPosition());
+  public void setBuilding(OmniPosition position, Building b) {
+    Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
 
     Building prevbuild = chunk.getBuilding(position.getXInChunk(), position.getYInChunk());
     chunk.setBuilding(position.getXInChunk(), position.getYInChunk(), b);
@@ -119,8 +120,8 @@ public class ServerPlane implements IPlane {
   }
 
   @Override
-  public Building getBuilding(TilePosition position) {
-    return getChunk(position.toChunkPosition())
+  public Building getBuilding(OmniPosition position) {
+    return getChunk(position.getChunkX(), position.getChunkY())
         .getBuilding(position.getXInChunk(), position.getYInChunk());
   }
 
@@ -166,7 +167,7 @@ public class ServerPlane implements IPlane {
     buildingEntities.add(e);
   }
 
-  public BuildingEntity getBuildingEntity(TilePosition position) {
+  public BuildingEntity getBuildingEntity(OmniPosition position) {
     for (BuildingEntity e : buildingEntities) {
       if (e.position.equals(position)) {
         return e;
@@ -175,16 +176,12 @@ public class ServerPlane implements IPlane {
     return null;
   }
 
-  public void removeBuildingEntity(TilePosition position) {
+  public void removeBuildingEntity(OmniPosition position) {
     buildingEntities.remove(getBuildingEntity(position));
   }
 
-  public void removeBuilding(TilePosition position) {
-    this.setBuilding(position, null);
-  }
-
   public void update(float timeDiff) {
-    for (Chunk chunk : chunks.values()) {
+    for (Chunk chunk : chunks) {
       chunk.update(timeDiff);
     }
 
@@ -202,13 +199,13 @@ public class ServerPlane implements IPlane {
 
   }
 
-  public void dropItemStack(GamePosition position, ItemStack stack) {
+  public void dropItemStack(OmniPosition position, ItemStack stack) {
     Random randpos = new Random();
     while (!stack.isEmpty()) {
       ItemStack tempstack = ItemStack.clone(stack);
       tempstack.setCount(1);
       EntityItemStack eis = new EntityItemStack(
-          new GamePosition(position.x + ((-.5f + randpos.nextFloat()) / 2),
+          new OmniPosition(PositionType.GAME, position.x + ((-.5f + randpos.nextFloat()) / 2),
               position.y + ((-.5f + randpos.nextFloat()) / 2)),
           this,
           tempstack, false);
@@ -217,25 +214,26 @@ public class ServerPlane implements IPlane {
     }
   }
 
-  public void breakBuildingAndDrop(TilePosition position, EntityPlayer player) {
+  public void breakBuildingAndDrop(OmniPosition position, EntityPlayer player) {
     ItemStack[] ist = getBuilding(position).getDrops(this, position);
     if (ist != null) {
       for (ItemStack s : ist) {
-        dropItemStack(position.toGamePosition(new GamePosition()).add(.3f, .3f), s);
+        dropItemStack(new OmniPosition(PositionType.GAME, position.getX(PositionType.GAME) + .3f,
+            position.getX(PositionType.GAME) + .3f), s);
       }
     }
     setBuilding(position, null);
   }
 
-  public void setBuildingData(TilePosition position, byte data) {
-    Chunk chunk = getChunk(position.toChunkPosition());
+  public void setBuildingData(OmniPosition position, byte data) {
+    Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
     chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
 
     server.getClientManager().getPacketHandler().sendBuildingDataChange(position, this, data);
   }
 
-  public byte getBuildingData(TilePosition position) {
-    return getChunk(position.toChunkPosition())
+  public byte getBuildingData(OmniPosition position) {
+    return getChunk(position.getChunkX(), position.getChunkY())
         .getBuildingData(position.getXInChunk(), position.getYInChunk());
   }
 

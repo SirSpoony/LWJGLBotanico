@@ -3,9 +3,8 @@ package me.spoony.botanico.common.buildings;
 import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.client.ClientPlane;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/10/2016.
@@ -26,9 +25,9 @@ public class BuildingFlower extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    rg.sprite(new GamePosition(position), getTextureSheet(),
+    rg.sprite(position, getTextureSheet(),
         new IntRectangle(48 + subid * 16, 192, 16, 16),
         color,position.y + (alwaysBehindCharacter ? 1 : 0));
   }

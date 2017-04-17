@@ -5,10 +5,11 @@ import static org.lwjgl.glfw.GLFW.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import me.spoony.botanico.client.BotanicoGame;
-import me.spoony.botanico.common.util.position.WindowPosition;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by coltenwebb on 11/9/16.
@@ -49,7 +50,7 @@ public class Input
 
     public static BinaryInput BUTTON_RIGHT = new BinaryInput(BinaryInputType.BUTTON, GLFW_MOUSE_BUTTON_RIGHT);
 
-    public static WindowPosition CURSOR_POS = new WindowPosition();
+    public static OmniPosition CURSOR_POS = new OmniPosition(PositionType.WINDOW, 0, 0);
 
     public static void init() {
         INPUT_PROCESSOR = new InputProcessor(BotanicoGame.WINDOW.getHandle()) {
@@ -102,7 +103,7 @@ public class Input
             @Override
             public void cursorMoved(float x, float y)
             {
-                CURSOR_POS.set(x, y);
+                CURSOR_POS.set(PositionType.WINDOW, x, y);
             }
         };
 

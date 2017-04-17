@@ -9,7 +9,7 @@ import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -27,14 +27,14 @@ public class BuildingCave extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    rg.sprite(position.toGamePosition(), getTextureSheet(),
+    rg.sprite(position, getTextureSheet(),
         new IntRectangle(80 + (d == 1 ? 64 : 0), 0, 48, 48), color, position.y);
   }
 
   @Override
-  public boolean onClick(IPlane plane, EntityPlayer player, TilePosition position) {
+  public boolean onClick(IPlane plane, EntityPlayer player, OmniPosition position) {
     if (plane.isLocal()) {
       return true;
     }
@@ -56,7 +56,7 @@ public class BuildingCave extends Building {
 
     if (serverPlane.getBuildingData(position) == (byte) 1) {
       ((RemoteEntityPlayer) player)
-          .teleport(position.toGamePosition(), serverPlane.getLevel().getUnderworld());
+          .teleport(position, serverPlane.getLevel().getUnderworld());
       return true;
     } else {
       ((RemoteEntityPlayer) player).sendMessage("You need rope first!");

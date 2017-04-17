@@ -4,10 +4,11 @@ import me.spoony.botanico.ClientOnly;
 import me.spoony.botanico.ServerOnly;
 import me.spoony.botanico.client.ClientPlane;
 import me.spoony.botanico.client.graphics.RendererGame;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.nbt.NBTCompoundTag;
 import me.spoony.botanico.common.util.DoubleRectangle;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.level.ServerPlane;
 
 import java.util.Random;
@@ -17,7 +18,7 @@ import java.util.Random;
  */
 public class Entity {
 
-  public GamePosition position;
+  public OmniPosition position;
   public IPlane plane;
 
   public DoubleRectangle collider;
@@ -30,7 +31,7 @@ public class Entity {
   }
 
   public Entity(IPlane plane) {
-    this.position = new GamePosition(0, 0);
+    this.position = new OmniPosition(PositionType.GAME, 0, 0);
     this.plane = plane;
     this.collider = new DoubleRectangle(0, 0, 1, 1);
     this.eid = new Random().nextInt();
@@ -45,29 +46,8 @@ public class Entity {
 
   }
 
-  public void setPosition(GamePosition position) {
-    this.position.set(position);
-  }
-
-  public void setPosition(double x, double y) {
-    position.set(x, y);
-  }
-
-  public GamePosition getPosition() {
+  public OmniPosition getPosition() {
     return position;
-  }
-
-  public NBTCompoundTag writeData(NBTCompoundTag tag) {
-    tag.setCompound(position.writeData(new NBTCompoundTag("pos")));
-    tag.setInt("eid", eid);
-    tag.setInt("typeID", typeID);
-    return tag;
-  }
-
-  public void readData(NBTCompoundTag tag) {
-    position.readData((NBTCompoundTag) tag.get("pos").getValue());
-    eid = (Integer) tag.get("eid").getValue();
-    typeID = (Integer) tag.get("typeID").getValue();
   }
 
   @ClientOnly

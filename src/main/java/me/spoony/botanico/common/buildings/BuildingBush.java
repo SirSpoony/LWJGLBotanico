@@ -1,11 +1,6 @@
 package me.spoony.botanico.common.buildings;
 
-import me.spoony.botanico.client.ClientPlane;
-import me.spoony.botanico.client.engine.Color;
-import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.common.util.DoubleRectangle;
-import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
 
 /**
  * Created by Colten on 4/15/2017.

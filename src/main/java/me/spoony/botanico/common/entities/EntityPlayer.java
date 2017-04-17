@@ -3,9 +3,10 @@ package me.spoony.botanico.common.entities;
 import me.spoony.botanico.client.engine.Texture;
 import me.spoony.botanico.client.graphics.RendererGame;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 
 /**
  * Created by Colten on 11/8/2016.
@@ -30,7 +31,7 @@ public class EntityPlayer extends Entity {
   public EntityPlayer(IPlane plane) {
     super(plane);
     this.typeID = EntityPlayer.ID;
-    this.position = new GamePosition(0, 0);
+    this.position = new OmniPosition(PositionType.GAME, 0, 0);
     this.collider = new DoubleRectangle(.1f, 0, .8f, .4f);
   }
 

@@ -7,7 +7,7 @@ import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.DoubleRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -27,7 +27,7 @@ public class BuildingToolStation extends Building implements IBuildingEntityHost
     }
 
     @Override
-    public ItemStack[] getDrops(IPlane level, TilePosition position) {
+    public ItemStack[] getDrops(IPlane level, OmniPosition position) {
         if (!(level instanceof ServerPlane)) return null;
         ServerPlane serverLevel = (ServerPlane) level;
         BuildingEntityToolStation bew = (BuildingEntityToolStation) serverLevel.getBuildingEntity(position);
@@ -42,7 +42,7 @@ public class BuildingToolStation extends Building implements IBuildingEntityHost
     }
 
     @Override
-    public boolean onClick(IPlane level, EntityPlayer player, TilePosition position) {
+    public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
         if (!(level instanceof ServerPlane)) return false;
         ServerPlane serverLevel = (ServerPlane) level;
 
@@ -61,7 +61,7 @@ public class BuildingToolStation extends Building implements IBuildingEntityHost
     }
 
     @Override
-    public BuildingEntity createNewEntity(IPlane plane, TilePosition position) {
+    public BuildingEntity createNewEntity(IPlane plane, OmniPosition position) {
         return new BuildingEntityToolStation(position, plane);
     }
 }

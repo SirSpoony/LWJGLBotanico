@@ -10,7 +10,7 @@ import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.tiles.Tiles;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 import me.spoony.botanico.server.level.ServerPlane;
 
 import java.util.Random;
@@ -28,12 +28,12 @@ public class BuildingWheat extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public boolean canCreate(IPlane level, TilePosition position) {
+  public boolean canCreate(IPlane level, OmniPosition position) {
     return super.canCreate(level, position) && level.getTile(position) == Tiles.FERTILIZED_GROUND;
   }
 
   @Override
-  public void create(IPlane level, TilePosition position) {
+  public void create(IPlane level, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
       return;
     }
@@ -43,15 +43,15 @@ public class BuildingWheat extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, TilePosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    rg.sprite(position.toGamePosition(), getTextureSheet(),
+    rg.sprite(position, getTextureSheet(),
         new IntRectangle(160 + d * 16, 128, 16, 32), color,
         position.y);
   }
 
   @Override
-  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+  public ItemStack[] getDrops(IPlane level, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
       return new ItemStack[]{new ItemStack(Items.WHEAT_SEEDS, 1)};
     }
@@ -71,7 +71,7 @@ public class BuildingWheat extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public BuildingEntity createNewEntity(IPlane plane, TilePosition position) {
+  public BuildingEntity createNewEntity(IPlane plane, OmniPosition position) {
     return new BuildingEntityCrop(position, plane, (byte) 5);
   }
 }

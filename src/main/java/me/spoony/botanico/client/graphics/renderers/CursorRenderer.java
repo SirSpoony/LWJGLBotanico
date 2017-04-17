@@ -6,8 +6,6 @@ import me.spoony.botanico.client.graphics.RendererGUI;
 import me.spoony.botanico.client.graphics.gui.GUIRenderable;
 import me.spoony.botanico.client.graphics.gui.RendererItemStack;
 import me.spoony.botanico.client.graphics.gui.Tooltip;
-import me.spoony.botanico.client.views.GameView;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.client.input.Input;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.ItemSlot;

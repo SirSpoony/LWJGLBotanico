@@ -4,7 +4,7 @@ import me.spoony.botanico.common.items.ItemStack;
 import me.spoony.botanico.common.items.Items;
 import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.tiles.Tiles;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 12/28/2016.
@@ -22,12 +22,12 @@ public class BuildingMysticFlower extends Building {
   }
 
   @Override
-  public boolean canCreate(IPlane level, TilePosition position) {
+  public boolean canCreate(IPlane level, OmniPosition position) {
     return super.canCreate(level, position) && level.getTile(position) == Tiles.GROUND;
   }
 
   @Override
-  public ItemStack[] getDrops(IPlane level, TilePosition position) {
+  public ItemStack[] getDrops(IPlane level, OmniPosition position) {
     return new ItemStack[]{new ItemStack(Items.MYSTIC_FLOWER, 1)};
   }
 

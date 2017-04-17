@@ -3,9 +3,8 @@ package me.spoony.botanico.common.buildings.buildingentity;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.dialog.DialogToolStation;
 import me.spoony.botanico.common.items.Inventory;
-import me.spoony.botanico.common.items.ItemSlotMode;
 import me.spoony.botanico.common.level.IPlane;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
 
 /**
  * Created by Colten on 11/12/2016.
@@ -18,7 +17,7 @@ public class BuildingEntityToolStation extends BuildingEntity
         return dialog.inventory;
     }
 
-    public BuildingEntityToolStation(TilePosition position, IPlane plane)
+    public BuildingEntityToolStation(OmniPosition position, IPlane plane)
     {
         super(position, plane);
 

@@ -1,10 +1,5 @@
 package me.spoony.botanico.common.tiles;
 
-import com.google.common.base.Objects;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import me.spoony.botanico.client.graphics.RendererGame;
-import me.spoony.botanico.common.util.position.GamePosition;
 import me.spoony.botanico.common.util.IntRectangle;
 
 /**

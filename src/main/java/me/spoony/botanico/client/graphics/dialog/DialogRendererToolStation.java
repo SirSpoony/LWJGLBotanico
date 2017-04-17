@@ -5,14 +5,11 @@ import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.graphics.CallAlign;
 import me.spoony.botanico.client.graphics.TextColors;
 import me.spoony.botanico.client.graphics.gui.RendererItemSlot;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.common.util.position.GuiRectangle;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.client.graphics.RendererGUI;
 import me.spoony.botanico.client.input.BinaryInput;
-import me.spoony.botanico.client.input.Input;
-import me.spoony.botanico.common.dialog.DialogToolStation;
 import me.spoony.botanico.common.util.IntRectangle;
 
 /**

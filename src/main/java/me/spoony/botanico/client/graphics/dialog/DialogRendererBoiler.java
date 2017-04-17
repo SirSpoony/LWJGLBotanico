@@ -9,7 +9,6 @@ import me.spoony.botanico.client.graphics.gui.RendererItemSlot;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.dialog.DialogBoiler;
 import me.spoony.botanico.common.util.IntRectangle;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.common.util.position.GuiRectangle;
 
 /**

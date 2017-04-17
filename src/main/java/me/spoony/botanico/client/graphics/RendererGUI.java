@@ -9,10 +9,7 @@ import me.spoony.botanico.client.engine.Color;
 import me.spoony.botanico.client.engine.Font;
 import me.spoony.botanico.client.engine.SpriteBatch;
 import me.spoony.botanico.client.engine.Texture;
-import me.spoony.botanico.common.util.position.GuiPosition;
 import me.spoony.botanico.common.util.position.GuiRectangle;
-import me.spoony.botanico.common.util.position.WindowPosition;
-import me.spoony.botanico.client.input.Input;
 import me.spoony.botanico.common.util.BMath;
 import me.spoony.botanico.common.util.IntRectangle;
 
@@ -26,6 +23,22 @@ public class RendererGUI {
 
   private float scale = 3;
 
+  public double windowXToGui(double x) {
+    return x / scale;
+  }
+
+  public double windowYToGui(double y) {
+    return y / scale;
+  }
+
+  public double guiXToWindow(double x) {
+    return x * scale;
+  }
+
+  public double guiYToWindow(double y) {
+    return y * scale;
+  }
+
   public GuiPosition windowPosToGuiPos(WindowPosition windowpos, GuiPosition guiPosition) {
     guiPosition.x = windowpos.x / scale;
     guiPosition.y = windowpos.y / scale;
@@ -36,10 +49,6 @@ public class RendererGUI {
     windowPosition.x = guipos.x * scale;
     windowPosition.y = guipos.y * scale;
     return windowPosition;
-  }
-
-  public GuiPosition getCursorPosition(GuiPosition guipos) {
-    return windowPosToGuiPos(Input.CURSOR_POS, guipos);
   }
 
   public RendererGUI() {

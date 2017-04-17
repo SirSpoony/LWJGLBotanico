@@ -11,7 +11,8 @@ import me.spoony.botanico.common.net.server.SPacketEntityState;
 import me.spoony.botanico.common.net.server.SPacketTeleport;
 import me.spoony.botanico.common.net.server.SPacketTileChange;
 import me.spoony.botanico.common.tiles.Tile;
-import me.spoony.botanico.common.util.position.TilePosition;
+import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -26,26 +27,26 @@ public class ServerPacketHandler {
     this.server = server;
   }
 
-  public void sendBuildingChange(TilePosition position, ServerPlane plane, Building building) {
+  public void sendBuildingChange(OmniPosition position, ServerPlane plane, Building building) {
     SPacketBuildingChange pbc = new SPacketBuildingChange();
-    pbc.x = position.x;
-    pbc.y = position.y;
+    pbc.x = (long) position.getX(PositionType.GAME);
+    pbc.y = (long) position.getY(PositionType.GAME);
     pbc.building = building;
     server.getClientManager().sendPacketToAll(pbc, p -> p.getPlane() == plane);
   }
 
-  public void sendTileChange(TilePosition position, ServerPlane plane, Tile tile) {
+  public void sendTileChange(OmniPosition position, ServerPlane plane, Tile tile) {
     SPacketTileChange pbc = new SPacketTileChange();
-    pbc.x = position.x;
-    pbc.y = position.y;
+    pbc.x = (long) position.getX(PositionType.GAME);
+    pbc.y = (long) position.getY(PositionType.GAME);
     pbc.tile = tile;
     server.getClientManager().sendPacketToAll(pbc, p -> p.getPlane() == plane);
   }
 
-  public void sendBuildingDataChange(TilePosition position, ServerPlane plane, byte data) {
+  public void sendBuildingDataChange(OmniPosition position, ServerPlane plane, byte data) {
     SPacketBuildingData pbd = new SPacketBuildingData();
-    pbd.x = position.x;
-    pbd.y = position.y;
+    pbd.x = (long) position.getX(PositionType.GAME);
+    pbd.y = (long) position.getY(PositionType.GAME);
     pbd.data = data;
     server.getClientManager().sendPacketToAll(pbd, p -> p.getPlane() == plane);
   }
@@ -58,8 +59,8 @@ public class ServerPacketHandler {
     packet.buildings = chunk.buildings.clone();
     packet.tiles = chunk.tiles.clone();
     packet.buildingdata = chunk.buildingData.clone();
-    packet.x = chunk.position.x;
-    packet.y = chunk.position.y;
+    packet.x = chunk.x;
+    packet.y = chunk.y;
 
     server.getClientManager().sendPacket(packet, player);
   }

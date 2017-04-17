@@ -5,7 +5,6 @@ import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.net.AutoPacketAdapter;
 import me.spoony.botanico.common.net.IClientHandler;
 import me.spoony.botanico.common.net.NotTransferable;
-import me.spoony.botanico.common.util.position.TilePosition;
 
 /**
  * Created by Colten on 11/23/2016.
