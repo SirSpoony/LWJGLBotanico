@@ -41,6 +41,8 @@ public class RendererItemSlot implements GUIRenderable {
     checkNotNull(itemSlot, "RendererItemSlot cannot be initialized with null itemslot!");
     this.itemSlot = itemSlot;
     this.guiitem = new RendererItemStack(itemSlot.getStack());
+    this.x = x;
+    this.y = y;
   }
 
   public void setPosition(float x, float y) {
@@ -92,7 +94,7 @@ public class RendererItemSlot implements GUIRenderable {
   }
 
   public void updatePositionOffset(DialogRenderer dialogRenderer) {
-    renderX = this.x + (float)dialogRenderer.dialogPosition().getX(PositionType.GUI);
-    renderY = this.y + (float)dialogRenderer.dialogPosition().getY(PositionType.GUI);
+    renderX = this.x + (float) dialogRenderer.dialogPosition().getX(PositionType.GUI);
+    renderY = this.y + (float) dialogRenderer.dialogPosition().getY(PositionType.GUI);
   }
 }

@@ -16,8 +16,11 @@ public interface IPlane
     int UNDERWORLD = 1;
 
     Tile getTile(OmniPosition position);
+    Tile getTile(long x, long y);
     Building getBuilding(OmniPosition position);
+    Building getBuilding(long x, long y);
     byte getBuildingData(OmniPosition position);
+    byte getBuildingData(long x, long y);
     Collection<Entity> getEntities();
     Entity getEntity(int eid);
     boolean isLocal();

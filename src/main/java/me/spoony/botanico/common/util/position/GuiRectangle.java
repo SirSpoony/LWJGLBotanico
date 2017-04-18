@@ -61,7 +61,7 @@ public class GuiRectangle {
 
   public GuiRectangle setCenter(float x, float y) {
     this.x = x - this.width / 2f;
-    this.y = x - this.height / 2f;
+    this.y = y - this.height / 2f;
     return this;
   }
 
@@ -78,10 +78,10 @@ public class GuiRectangle {
   public boolean contains(OmniPosition pos) {
     Preconditions.checkState(width >= 0);
     Preconditions.checkState(height >= 0);
-    return !(pos.x <= this.x ||
-        pos.y <= this.y ||
-        pos.x > this.x + this.width ||
-        pos.y > this.y + this.height);
+    return !(pos.getX(PositionType.GUI) <= this.x ||
+        pos.getY(PositionType.GUI) <= this.y ||
+        pos.getX(PositionType.GUI) > this.x + this.width ||
+        pos.getY(PositionType.GUI) > this.y + this.height);
   }
 
   @Override

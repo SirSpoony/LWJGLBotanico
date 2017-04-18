@@ -11,7 +11,8 @@ import me.spoony.botanico.common.util.position.PositionType;
 public class BuildingDamageIndicator {
 
   public OmniPosition getRenderPosition() {
-    return new OmniPosition(PositionType.GAME, tilePosition.x + 1f / 8f, tilePosition.y + 1f / 8f);
+    return new OmniPosition(PositionType.GAME, tilePosition.getTileX() + 1f / 8f,
+        tilePosition.getTileY() + 1f / 8f);
   }
 
   public OmniPosition tilePosition;
@@ -29,6 +30,6 @@ public class BuildingDamageIndicator {
     IntRectangle source = new IntRectangle(0,
         (int) (27 - Math.floor((health / maxHealth) * 10) * 3), 12, 3);
     rg.sprite(getRenderPosition(), rg.getResourceManager().getTexture("damage_indicator.png"),
-        source, tilePosition.y-10);
+        source, tilePosition.getGameY() - 10);
   }
 }

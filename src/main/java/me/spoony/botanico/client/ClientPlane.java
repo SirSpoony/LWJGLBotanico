@@ -5,6 +5,9 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.math.DoubleMath;
+import com.google.common.math.LongMath;
+import java.math.RoundingMode;
 import me.spoony.botanico.client.graphics.renderers.PlaneRenderer;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.buildings.Building;
@@ -77,6 +80,16 @@ public class ClientPlane implements IPlane {
   }
 
   @Override
+  public Tile getTile(long x, long y) {
+    Chunk chunk = getChunk(DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR), DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR));
+    if (chunk == null) {
+      return null;
+    }
+
+    return chunk.getTile(LongMath.mod(x, 32), LongMath.mod(y, 32));
+  }
+
+  @Override
   public Building getBuilding(OmniPosition position) {
     Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
     if (chunk == null) {
@@ -87,6 +100,16 @@ public class ClientPlane implements IPlane {
   }
 
   @Override
+  public Building getBuilding(long x, long y) {
+    Chunk chunk = getChunk(DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR), DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR));
+    if (chunk == null) {
+      return null;
+    }
+
+    return chunk.getBuilding(LongMath.mod(x, 32), LongMath.mod(y, 32));
+  }
+
+  @Override
   public byte getBuildingData(OmniPosition position) {
     Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
     if (chunk == null) {
@@ -94,6 +117,16 @@ public class ClientPlane implements IPlane {
     }
 
     return chunk.getBuildingData(position.getXInChunk(), position.getYInChunk());
+  }
+
+  @Override
+  public byte getBuildingData(long x, long y) {
+    Chunk chunk = getChunk(DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR), DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR));
+    if (chunk == null) {
+      return -1;
+    }
+
+    return chunk.getBuildingData(LongMath.mod(x, 32), LongMath.mod(y, 32));
   }
 
   @Override

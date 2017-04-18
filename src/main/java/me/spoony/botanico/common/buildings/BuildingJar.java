@@ -49,10 +49,10 @@ public class BuildingJar extends Building implements IBuildingEntityHost {
       Color color) {
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(0, 160, 16, 16),
-        color, position.y);
+        color, position.getGameY());
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(16, 160, 16, 16),
-        color, position.y);
+        color, position.getGameY());
   }
 
   @Override

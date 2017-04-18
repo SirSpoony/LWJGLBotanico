@@ -56,32 +56,32 @@ public class BuildingEnergyPipe extends Building implements IBuildingEntityHost 
 
     if (l && r && !u && !dwn) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(0, 48, 16, 16), color, position.y);
+          new IntRectangle(0, 48, 16, 16), color, position.getGameY());
       return;
     }
     if (!l && !r && u && dwn) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(16, 48, 16, 16), color, position.y);
+          new IntRectangle(16, 48, 16, 16), color, position.getGameY());
       return;
     }
 
     if (u) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(48, 32, 16, 16), color, position.y);
+          new IntRectangle(48, 32, 16, 16), color, position.getGameY());
     }
     rg.sprite(position, getTextureSheet(),
-        new IntRectangle(0, 16, 16, 16), color, position.y);
+        new IntRectangle(0, 16, 16, 16), color, position.getGameY());
     if (dwn) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(16, 32, 16, 16), color, position.y);
+          new IntRectangle(16, 32, 16, 16), color, position.getGameY());
     }
     if (l) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(0, 32, 16, 16), color, position.y);
+          new IntRectangle(0, 32, 16, 16), color, position.getGameY());
     }
     if (r) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(32, 32, 16, 16), color, position.y);
+          new IntRectangle(32, 32, 16, 16), color, position.getGameY());
     }
   }
 
@@ -104,22 +104,22 @@ public class BuildingEnergyPipe extends Building implements IBuildingEntityHost 
     if (u) {
       rg.sprite(position, getTextureSheet(),
           new IntRectangle(48, 0, 16, 16), color,
-          position.y);
+          position.getGameY());
     }
     if (dwn) {
       rg.sprite(position, getTextureSheet(),
           new IntRectangle(16, 0, 16, 16), color,
-          position.y);
+          position.getGameY());
     }
     if (l) {
       rg.sprite(position, getTextureSheet(),
           new IntRectangle(0, 0, 16, 16), color,
-          position.y);
+          position.getGameY());
     }
     if (r) {
       rg.sprite(position, getTextureSheet(),
           new IntRectangle(32, 0, 16, 16), color,
-          position.y);
+          position.getGameY());
     }
   }
 

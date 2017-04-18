@@ -30,18 +30,18 @@ public class BuildingWall extends Building {
 
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(64, 240, 16, 32),
-        color, position.y);
+        color, position.getGameY());
 
     if (e) {
       rg.sprite(position, getTextureSheet(),
           new IntRectangle(64 + 16, 240, 32, 32),
-          color, position.y - .01);
+          color, position.getGameY() - .01);
     }
 
     if (n) {
       rg.sprite(position, getTextureSheet(),
           new IntRectangle(64 + 48, 224, 16, 48),
-          color, position.y);
+          color, position.getGameY());
     }
   }
 

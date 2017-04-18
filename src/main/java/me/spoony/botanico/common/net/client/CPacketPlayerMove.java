@@ -21,13 +21,13 @@ public class CPacketPlayerMove extends AutoPacketAdapter implements IServerHandl
         Preconditions.checkNotNull(player, "Client does not have a player entity yet.");
 
         Entity ent = player;
-        ent.position.x = x;
-        ent.position.y = y;
+        ent.position.setGameX(x);
+        ent.position.setGameY(y);
 
         SPacketEntityMove pem = new SPacketEntityMove();
         pem.eid = ent.eid;
-        pem.x = ent.position.x;
-        pem.y = ent.position.y;
+        pem.x = ent.position.getGameX();
+        pem.y = ent.position.getGameY();
         server.getClientManager().sendPacketToAll(pem, p -> p != player);
     }
 }

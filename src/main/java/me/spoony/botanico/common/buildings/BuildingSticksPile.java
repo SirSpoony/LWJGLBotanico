@@ -29,7 +29,7 @@ public class BuildingSticksPile extends Building {
     int val = hash(position.getTileX(), position.getTileY()) % 4;
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(48 + 16 * val, 176, 16, 16), color,
-        position.y + 1);
+        position.getGameY() + 1);
   }
 
   private long OffsetBasis = 216613626;

@@ -37,34 +37,41 @@ public class PlaneRenderer implements GameRenderable {
     // FANCY RENDERING VOODOO, IT WILL BREAK
     // OK NVM THIS IS SOME RLLY SHITTY CODE HOLY SHIT
 
-    DoubleRectangle gameview = rg.gameViewport;
+    DoubleRectangle gameViewport = rg.gameViewport;
 
-    int firstTileX = (int) Math.floor(gameview.x) - 4;
-    int firstTileY = (int) Math.floor(gameview.y) - 4;
-    int lastTileX = (int) Math.ceil(gameview.x + gameview.width) + 4;
-    int lastTileY = (int) Math.ceil(gameview.y + gameview.height) + 4;
+    int firstTileX = (int) Math.floor(gameViewport.x) - 4;
+    int firstTileY = (int) Math.floor(gameViewport.y) - 4;
+    int lastTileX = (int) Math.ceil(gameViewport.x + gameViewport.width) + 4;
+    int lastTileY = (int) Math.ceil(gameViewport.y + gameViewport.height) + 4;
 
     renderTiles(rg);
 
     OmniPosition highlightedBuilding = level.getLocalPlayer().getHighlightedBuildingPosition();
 
+    OmniPosition currentPos = new OmniPosition(PositionType.GAME, 0, 0);
     for (int x = firstTileX; x < lastTileX; x++) {
       for (int y = firstTileY; y < lastTileY; y++) {
-        OmniPosition currentPosition = new OmniPosition(PositionType.GAME, x, y);
+        Building b = level.getBuilding(x, y);
+        byte d = level.getBuildingData(x, y);
 
-        Building b = level.getBuilding(currentPosition);
-        byte d = level.getBuildingData(currentPosition);
+        boolean shouldHighlight = false;
+        if (highlightedBuilding != null) {
+          shouldHighlight = x == highlightedBuilding.getTileX() &&
+              y == highlightedBuilding.getTileY() &&
+              !GameView.getPlayer().hasDialogOpen();
+        }
 
-        boolean shouldHighlight =
-            currentPosition.equals(highlightedBuilding) && !GameView.getPlayer().hasDialogOpen();
         if (b != null) {
-          b.render(rg, level, currentPosition, d, shouldHighlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE);
+          currentPos.setGameX(x);
+          currentPos.setGameY(y);
+          b.render(rg, level, currentPos, d,
+              shouldHighlight ? new Color(.8f, .8f, .8f, 1) : Color.WHITE);
         }
       }
     }
 
-    List<Entity> temptlist = Lists.newArrayList(level.getEntities()); // due to thread safety bugs
-    for (Entity e : temptlist) {
+//    List<Entity> temptlist = Lists.newArrayList(level.getEntities()); // due to thread safety bugs
+    for (Entity e : level.getEntities()) {
       e.render(rg);
     }
   }
@@ -88,12 +95,9 @@ public class PlaneRenderer implements GameRenderable {
     Texture tileTexture = rg.getResourceManager().getTexture("tiles.png");
 
     Tile[][] tiles = new Tile[tileViewWidth][tileViewHeight];
-    OmniPosition pos = new OmniPosition(PositionType.GAME, 0, 0);
     for (int x = firstTileX; x < lastTileX; x++) {
       for (int y = firstTileY; y < lastTileY; y++) {
-        pos.setX(PositionType.GAME, x);
-        pos.setY(PositionType.GAME, y);
-        tiles[x - firstTileX][y - firstTileY] = level.getTile(pos);
+        tiles[x - firstTileX][y - firstTileY] = level.getTile(x, y);
       }
     }
 
@@ -107,14 +111,14 @@ public class PlaneRenderer implements GameRenderable {
           continue;
         }
 
-        adjtiles.setTile(Direction.DOWN,       tiles[x - firstTileX]    [y - firstTileY - 1]);
+        adjtiles.setTile(Direction.DOWN, tiles[x - firstTileX][y - firstTileY - 1]);
         adjtiles.setTile(Direction.DOWN_RIGHT, tiles[x - firstTileX + 1][y - firstTileY - 1]);
-        adjtiles.setTile(Direction.RIGHT,      tiles[x - firstTileX + 1][y - firstTileY]);
-        adjtiles.setTile(Direction.UP_RIGHT,   tiles[x - firstTileX + 1][y - firstTileY + 1]);
-        adjtiles.setTile(Direction.UP,         tiles[x - firstTileX]    [y - firstTileY + 1]);
-        adjtiles.setTile(Direction.UP_LEFT,    tiles[x - firstTileX - 1][y - firstTileY + 1]);
-        adjtiles.setTile(Direction.LEFT,       tiles[x - firstTileX - 1][y - firstTileY]);
-        adjtiles.setTile(Direction.DOWN_LEFT,  tiles[x - firstTileX - 1][y - firstTileY - 1]);
+        adjtiles.setTile(Direction.RIGHT, tiles[x - firstTileX + 1][y - firstTileY]);
+        adjtiles.setTile(Direction.UP_RIGHT, tiles[x - firstTileX + 1][y - firstTileY + 1]);
+        adjtiles.setTile(Direction.UP, tiles[x - firstTileX][y - firstTileY + 1]);
+        adjtiles.setTile(Direction.UP_LEFT, tiles[x - firstTileX - 1][y - firstTileY + 1]);
+        adjtiles.setTile(Direction.LEFT, tiles[x - firstTileX - 1][y - firstTileY]);
+        adjtiles.setTile(Direction.DOWN_LEFT, tiles[x - firstTileX - 1][y - firstTileY - 1]);
 
         final int randtexture = Tile.perm[Math.abs(5 * x + y) & 255];
         final TileRenderRule relevantRule = tile.renderRules.findRenderRule(adjtiles);
@@ -123,13 +127,13 @@ public class PlaneRenderer implements GameRenderable {
         IntRectangle background = tile.backgroundRegion(adjtiles, relevantRule, randtexture);
 
         if (background != null) {
-          rg.sprite(new OmniPosition(PositionType.GAME, x, y), tileTexture,
-              background, RendererGame.BACK_LAYER);
+          rg.sprite(x, y, 1, tileTexture,
+              background, Color.WHITE, RendererGame.BACK_LAYER);
         }
 
         if (foreground != null) {
-          rg.sprite(new OmniPosition(PositionType.GAME, x, y), tileTexture,
-              foreground, RendererGame.BACK_LAYER);
+          rg.sprite(x, y, 1, tileTexture,
+              foreground, Color.WHITE, RendererGame.BACK_LAYER);
         }
       }
     }

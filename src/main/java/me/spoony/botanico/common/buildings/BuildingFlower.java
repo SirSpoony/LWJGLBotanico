@@ -18,7 +18,6 @@ public class BuildingFlower extends Building {
     this.name = name;
     shouldCollide = false;
 
-    this.alwaysBehindCharacter = false;
     this.hardness = .1f;
 
     this.subid = subid;
@@ -29,7 +28,7 @@ public class BuildingFlower extends Building {
       Color color) {
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(48 + subid * 16, 192, 16, 16),
-        color,position.y + (alwaysBehindCharacter ? 1 : 0));
+        color, position.getGameY());
   }
 
   @Override

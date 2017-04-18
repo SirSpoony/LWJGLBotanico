@@ -116,7 +116,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
       ItemStack retstack = giveItemStack(stack, false);
       if (retstack != null) {
         ((ServerPlane) plane)
-            .dropItemStack(new OmniPosition(PositionType.GAME, position.x + .5d, position.y),
+            .dropItemStack(new OmniPosition(PositionType.GAME, position.getGameX() + .5d, position.getGameY()),
                 retstack);
       }
       return null;

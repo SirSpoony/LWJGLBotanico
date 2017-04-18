@@ -25,8 +25,8 @@ public class BuildingBreakParticles {
   }
 
   public void start(OmniPosition position, BuildingBreakMaterial mat) {
-    homex = position.x;
-    homey = position.y;
+    homex = position.getGameX();
+    homey = position.getGameY();
     Random posRand = new Random();
     synchronized (bbps) {
       for (int i = 0; i < 6; i++) {

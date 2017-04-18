@@ -7,77 +7,74 @@ import me.spoony.botanico.common.util.position.PositionType;
 /**
  * Created by Colten on 11/26/2016.
  */
-public class GUIControlAlignableAdapter implements IGUIControlAlignable
-{
-    GUIControlAlignmentType alignment;
-    float offsetX;
-    float offsetY;
+public class GUIControlAlignableAdapter implements IGUIControlAlignable {
 
-    protected float width;
-    protected float height;
+  GUIControlAlignmentType alignment;
+  float offsetX;
+  float offsetY;
+  protected float width;
+  protected float height;
 
-    private GuiRectangle bounds;
+  private GuiRectangle bounds;
 
-    public GUIControlAlignableAdapter() {
-        alignment = GUIControlAlignmentType.BOTTOM_LEFT;
+  public GUIControlAlignableAdapter() {
+    alignment = GUIControlAlignmentType.BOTTOM_LEFT;
 
-        width = 0;
-        height = 0;
+    width = 0;
+    height = 0;
 
-        bounds = new GuiRectangle();
+    bounds = new GuiRectangle();
+  }
+
+  @Override
+  public void setAlignment(GUIControlAlignmentType alignment) {
+    this.alignment = alignment;
+  }
+
+  @Override
+  public void setOffset(float x, float y) {
+    this.offsetX = x;
+    this.offsetY = y;
+  }
+
+  @Override
+  public GuiRectangle getBounds() {
+    return bounds;
+  }
+
+  @Override
+  public void render(RendererGUI rendererGUI) {
+    preRender(rendererGUI);
+  }
+
+  public void updateBounds(GuiRectangle viewport) {
+    GuiRectangle ret = new GuiRectangle(0, 0, width, height);
+
+    if (alignment.x == 0) {
+      // do nothing
+    } else if (alignment.x == 1) {
+      ret.setCenter((float) viewport.getCenter().getX(PositionType.GUI),
+          (float) ret.getCenter().getY(PositionType.GUI));
+    } else if (alignment.x == 2) {
+      ret.setPosition(viewport.width - ret.width, ret.y);
     }
 
-    @Override
-    public void setAlignment(GUIControlAlignmentType alignment)
-    {
-        this.alignment = alignment;
+    if (alignment.y == 0) {
+      // do nothing
+    } else if (alignment.y == 1) {
+      ret.setCenter((float) ret.getCenter().getX(PositionType.GUI),
+          (float) viewport.getCenter().getY(PositionType.GUI));
+    } else if (alignment.y == 2) {
+      ret.setPosition(ret.x, viewport.height - ret.height);
     }
 
-    @Override
-    public void setOffset(float x, float y)
-    {
-        this.offsetX = x;
-        this.offsetY = y;
-    }
+    ret.x += offsetX;
+    ret.y += offsetY;
 
-    @Override
-    public GuiRectangle getBounds()
-    {
-        return bounds;
-    }
+    this.bounds.set(ret);
+  }
 
-    @Override
-    public void render(RendererGUI rendererGUI)
-    {
-        preRender(rendererGUI);
-    }
-
-    public void updateBounds(GuiRectangle viewport) {
-        GuiRectangle ret = new GuiRectangle(0,0,width,height);
-
-        if (alignment.x == 0) {
-            // do nothing
-        } else if (alignment.x == 1) {
-            ret.setCenter((float)viewport.getCenter().getX(PositionType.GUI), (float)ret.getCenter().getY(PositionType.GUI));
-        } else if (alignment.x == 2) {
-            ret.setPosition(viewport.width-ret.width, ret.y);
-        }
-
-        if (alignment.y == 0) {
-            // do nothing
-        } else if (alignment.y == 1) {
-            ret.setCenter((float)ret.getCenter().getX(PositionType.GUI), (float)viewport.getCenter().getY(PositionType.GUI));
-        } else if (alignment.y == 2) {
-            ret.setPosition(ret.x, viewport.height-ret.height);
-        }
-
-        ret.x+=offsetX;
-        ret.y+=offsetY;
-
-        this.bounds.set(ret);
-    }
-
-    protected void preRender(RendererGUI rendererGUI) {
-        updateBounds(rendererGUI.guiViewport);
-    }
+  protected void preRender(RendererGUI rendererGUI) {
+    updateBounds(rendererGUI.guiViewport);
+  }
 }

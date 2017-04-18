@@ -30,7 +30,7 @@ public class BuildingCave extends Building {
   public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
     rg.sprite(position, getTextureSheet(),
-        new IntRectangle(80 + (d == 1 ? 64 : 0), 0, 48, 48), color, position.y);
+        new IntRectangle(80 + (d == 1 ? 64 : 0), 0, 48, 48), color, position.getGameY());
   }
 
   @Override

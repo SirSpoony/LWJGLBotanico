@@ -7,5 +7,4 @@ public enum PositionType {
   GUI,
   WINDOW,
   GAME,
-  CHUNK,
 }

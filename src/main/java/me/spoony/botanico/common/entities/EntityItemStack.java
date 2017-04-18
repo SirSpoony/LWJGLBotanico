@@ -44,8 +44,8 @@ public class EntityItemStack extends Entity {
 
     Random posrand = new Random();
     if (randomPosInBlock) {
-      position.x += (1 - renderscale) * posrand.nextFloat();
-      position.y += (1 - renderscale) * posrand.nextFloat();
+      position.setGameX(position.getGameX() + (1 - renderscale) * posrand.nextFloat());
+      position.setGameY(position.getGameY() + (1 - renderscale) * posrand.nextFloat());
     }
     renderpos = (float) (posrand.nextFloat() * Math.PI) * 2;
 
@@ -88,10 +88,10 @@ public class EntityItemStack extends Entity {
           prog = 1;
         }
         OmniPosition target = new OmniPosition(PositionType.GAME,
-            collector.position.x + collector.collider.getCenter().x,
-            collector.position.y + collector.collider.getCenter().y + .5d);
-        position.x = BMath.lerp(position.x, target.x, prog);
-        position.y = BMath.lerp(position.y, target.y, prog);
+            collector.position.getGameX() + collector.collider.getCenter().x,
+            collector.position.getGameY() + collector.collider.getCenter().y + .5d);
+        position.setGameX(BMath.lerp(position.getGameX(), target.getGameX(), prog));
+        position.setGameY(BMath.lerp(position.getGameY(), target.getGameY(), prog));
 
         if (target.distance(PositionType.GAME, position) < .4) {
           ((ClientPlane) level).removeEntity(this);
@@ -107,7 +107,7 @@ public class EntityItemStack extends Entity {
     OmniPosition renderPosition = new OmniPosition(PositionType.GAME,
         position.getX(PositionType.GAME), position.getY(PositionType.GAME) + (offset + 1) / 16d);
     rg.sprite(renderPosition, renderscale, rg.getResourceManager().getTexture("items.png"),
-        stack.getItem().textureBounds, Color.WHITE, renderPosition.y);
+        stack.getItem().textureBounds, Color.WHITE, renderPosition.getGameY());
   }
 
   @Override
@@ -122,7 +122,8 @@ public class EntityItemStack extends Entity {
     }
     collectionProgress = 0;
     collector = GameView.getClientLevel().getEntity(state);
-    positionBeforeCollection = new OmniPosition(PositionType.GAME, position.getX(PositionType.GAME), position.getY(PositionType.GAME));
+    positionBeforeCollection = new OmniPosition(PositionType.GAME, position.getX(PositionType.GAME),
+        position.getY(PositionType.GAME));
   }
 
   public boolean isBeingCollected() {

@@ -54,13 +54,13 @@ public class DialogButton {
     }
 
     public void updateOffsetPosition(float offsetX, float offsetY) {
-        renderX = (float)position.x + offsetX;
-        renderY = (float)position.y + offsetY;
+        renderX = position.getGuiX() + offsetX;
+        renderY = position.getGuiY() + offsetY;
     }
 
     public void updateOffsetPosition(DialogRenderer dialogRenderer) {
-        renderX = (float)position.x + (float)dialogRenderer.dialogPosition().getX(PositionType.GUI);
-        renderY = (float)position.y + (float)dialogRenderer.dialogPosition().getY(PositionType.GUI);
+        renderX = position.getGuiX() + (float)dialogRenderer.dialogPosition().getX(PositionType.GUI);
+        renderY = position.getGuiY() + (float)dialogRenderer.dialogPosition().getY(PositionType.GUI);
     }
 
     public void checkClick(BinaryInput binaryInput) {

@@ -37,7 +37,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
   private Animation rightAnimation;
   private Animation upAnimation;
 
-  public BuildingDamageIndicator buildingDamageIndicator;
+  public BuildingDamageIndicator indicator;
 
   Timer timer;
   Timer footstepTimer;
@@ -114,30 +114,31 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (coorddir.y != 0) {
-      position.y += coorddir.y * movementSpeed * timeDiff;
+      position.setGameY(position.getGameY() + coorddir.y * movementSpeed * timeDiff);
       CollisionCheck check = new EntityCollider(plane, this).checkCollisionsChunk();
       if (check.collided) {
         if (coorddir.y > 0) {
-          position.y -= check.intersection.getHeight();
+          position.setGameY(position.getGameY() - check.intersection.getHeight());
         } else {
-          position.y += check.intersection.getHeight();
+          position.setGameY(position.getGameY() + check.intersection.getHeight());
         }
       }
     }
 
     if (coorddir.x != 0) {
-      position.x += coorddir.x * movementSpeed * timeDiff;
+      position.setGameX(position.getGameX() + coorddir.x * movementSpeed * timeDiff);
       CollisionCheck check = new EntityCollider(plane, this).checkCollisionsChunk();
       if (check.collided) {
         if (coorddir.x > 0) {
-          position.x -= check.intersection.getWidth();
+          position.setGameX(position.getGameX() - check.intersection.getWidth());
         } else {
-          position.x += check.intersection.getWidth();
+          position.setGameX(position.getGameX() + check.intersection.getWidth());
         }
       }
     }
 
-    if (getPosition().x == prevPos.x && getPosition().y == prevPos.y) {
+    if (getPosition().getGameX() == prevPos.getGameX() && getPosition().getGameY() == prevPos
+        .getGameY()) {
       if (animation > 3) {
         animation -= 4;
       }
@@ -162,48 +163,48 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (Input.BUTTON_RIGHT.isDown() && !client.gameView.hasDialogOpen()) {
-      OmniPosition tilePosition = getHighlightedBuildingPosition();
-      if (tilePosition != null) {
-        Building b = plane.getBuilding(tilePosition);
+      OmniPosition buildingPosition = getHighlightedBuildingPosition();
+      if (buildingPosition != null) {
+        Building b = plane.getBuilding(buildingPosition);
 
         if (b != null) {
-          if (buildingDamageIndicator == null) {
-            buildingDamageIndicator = new BuildingDamageIndicator(tilePosition,
-                b.getHardness(plane, tilePosition));
+          if (indicator == null) {
+            indicator = new BuildingDamageIndicator(buildingPosition,
+                b.getHardness(plane, buildingPosition));
           } else {
-            if (!(buildingDamageIndicator.tilePosition.equals(tilePosition))) {
-              buildingDamageIndicator = new BuildingDamageIndicator(tilePosition,
-                  b.getHardness(plane, tilePosition));
+            if (!(indicator.tilePosition.getTileX() == buildingPosition.getTileX() && indicator.tilePosition.getTileY() == buildingPosition.getTileY())) {
+              indicator = new BuildingDamageIndicator(buildingPosition,
+                  b.getHardness(plane, buildingPosition));
             }
 
-            buildingDamageIndicator.maxHealth = b.getHardness(plane, tilePosition);
+            indicator.maxHealth = b.getHardness(plane, buildingPosition);
 
-            buildingDamageIndicator.health -= timeDiff * (1f / getBuildingDamageModifier(b));
+            indicator.health -= timeDiff * (1f / getBuildingDamageModifier(b));
 
-            if (buildingDamageIndicator.health <= 0) {
+            if (indicator.health <= 0) {
               CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
-              cbi.x = tilePosition.getTileX();
-              cbi.y = tilePosition.getTileY();
+              cbi.x = buildingPosition.getTileX();
+              cbi.y = buildingPosition.getTileY();
               cbi.type = CPacketBuildingInteraction.DESTROY;
               client.sendPacket(cbi);
-              buildingDamageIndicator = null;
+              indicator = null;
             }
           }
         } else {
-          buildingDamageIndicator = null;
+          indicator = null;
         }
       } else {
-        buildingDamageIndicator = null;
+        indicator = null;
       }
     } else {
-      buildingDamageIndicator = null;
+      indicator = null;
     }
 
     if (timer.step(1f / 16f)) {
       if (!lastPacketPosition.equals(position)) {
         CPacketPlayerMove pem = new CPacketPlayerMove();
-        pem.x = this.position.x;
-        pem.y = this.position.y;
+        pem.x = this.position.getGameX();
+        pem.y = this.position.getGameY();
         client.sendPacket(pem);
 
         lastPacketPosition = new OmniPosition(position);
@@ -216,23 +217,27 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     if (!canReach(Input.CURSOR_POS)) {
       return null;
     }
-    OmniPosition directPos = cursor;
-    if (getPlane().getBuilding(directPos) != null) {
-      return directPos;
+
+    if (getPlane().getBuilding(cursor) != null) {
+      return new OmniPosition(PositionType.GAME, cursor.getTileX(), cursor.getTileY());
     } else {
       for (int xo = -3; xo <= 3; xo++) {
         for (int yo = -3; yo <= 3; yo++) {
-          Building b = getPlane().getBuilding(new OmniPosition(PositionType.GAME, directPos.getTileX() + xo, directPos.getTileY() + yo));
+          Building b = getPlane().getBuilding(
+              new OmniPosition(PositionType.GAME, cursor.getTileX() + xo,
+                  cursor.getTileY() + yo));
           if (b == null) {
             continue;
           }
           DoubleRectangle testRect = new DoubleRectangle(
-              directPos.x + xo + b.getCollisionBounds().getX(),
-              directPos.y + yo + b.getCollisionBounds().getY(),
+              cursor.getTileX() + xo + b.getCollisionBounds().getX(),
+              cursor.getTileY() + yo + b.getCollisionBounds().getY(),
               b.getCollisionBounds().getWidth(),
               b.getCollisionBounds().getHeight());
-          if (testRect.contains(Input.CURSOR_POS.getX(PositionType.GAME), Input.CURSOR_POS.getY(PositionType.GAME))) {
-            return new OmniPosition(PositionType.GAME, directPos.getTileX() + xo, directPos.getTileY() + yo);
+          if (testRect.contains(Input.CURSOR_POS.getGameX(),
+              Input.CURSOR_POS.getGameY())) {
+            return new OmniPosition(PositionType.GAME, cursor.getTileX() + xo,
+                cursor.getTileY() + yo);
           }
         }
       }
@@ -241,7 +246,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
   }
 
   public boolean isMining() {
-    return buildingDamageIndicator != null;
+    return indicator != null;
   }
 
   public float getBuildingDamageModifier(Building b) {
@@ -382,20 +387,20 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     rg.sprite(new OmniPosition(position).add(PositionType.GAME, 0, -2 / 16f), spritesheet,
-        new IntRectangle(64, 0, 16, 32), position.y);
+        new IntRectangle(64, 0, 16, 32), position.getGameY());
 
     if (animation == 1) {
-      rg.sprite(position, spritesheet, rightAnimation.getSource(), position.y);
+      rg.sprite(position, spritesheet, rightAnimation.getSource(), position.getGameY());
     } else if (animation == 0) {
-      rg.sprite(position, spritesheet, leftAnimation.getSource(), position.y);
+      rg.sprite(position, spritesheet, leftAnimation.getSource(), position.getGameY());
     } else if (animation == 2) {
-      rg.sprite(position, spritesheet, downAnimation.getSource(), position.y);
+      rg.sprite(position, spritesheet, downAnimation.getSource(), position.getGameY());
     } else if (animation == 3) {
-      rg.sprite(position, spritesheet, upAnimation.getSource(), position.y);
+      rg.sprite(position, spritesheet, upAnimation.getSource(), position.getGameY());
     }
 
-    if (buildingDamageIndicator != null) {
-      buildingDamageIndicator.render(rg);
+    if (indicator != null) {
+      indicator.render(rg);
     }
   }
 

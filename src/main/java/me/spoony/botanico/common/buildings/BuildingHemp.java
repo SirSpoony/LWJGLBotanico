@@ -47,7 +47,7 @@ public class BuildingHemp extends Building implements IBuildingEntityHost {
       Color color) {
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(80 + d * 16, 128, 16, 32), color,
-        position.y);
+        position.getGameY());
   }
 
   @Override

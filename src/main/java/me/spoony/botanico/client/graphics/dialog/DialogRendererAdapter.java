@@ -42,17 +42,17 @@ public abstract class DialogRendererAdapter<T extends Dialog> implements DialogR
   }
 
   public OmniPosition offsetByDialogBounds(OmniPosition pos) {
-    pos.x += dialogBounds.x;
-    pos.y += dialogBounds.y;
+    pos.setGameX(pos.getGameX() + dialogBounds.x);
+    pos.setGameY(pos.getGameY() + dialogBounds.y);
     return pos;
   }
 
   public float offsetXByDialogBounds(float x) {
-    return x + (float)dialogBounds.x;
+    return x + dialogBounds.x;
   }
 
   public float offsetYByDialogBounds(float y) {
-    return y + (float)dialogBounds.y;
+    return y + dialogBounds.y;
   }
 
   public GuiRectangle offsetByDialogBounds(GuiRectangle bounds) {

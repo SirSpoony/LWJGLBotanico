@@ -33,7 +33,7 @@ public class BuildingGrass extends Building {
     rg.sprite(position,
         getTextureSheet(),
         new IntRectangle(16 + 16 * val, 48, 16, 16),
-        color, position.y + 1);
+        color, position.getGameY() + 1);
   }
 
   private long OffsetBasis = 216613626;

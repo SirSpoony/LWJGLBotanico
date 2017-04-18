@@ -23,7 +23,7 @@ public class BuildingTreeCold extends Building {
     public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d, Color color) {
         position.setX(PositionType.GAME, position.getX(PositionType.GAME) - 1);
         rg.sprite(position, getTextureSheet(),
-                new IntRectangle(0, 0, 16, 16), color, position.y);
+                new IntRectangle(0, 0, 16, 16), color, position.getGameY());
     }
 
     @Override

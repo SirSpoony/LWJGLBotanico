@@ -47,7 +47,7 @@ public class BuildingWheat extends Building implements IBuildingEntityHost {
       Color color) {
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(160 + d * 16, 128, 16, 32), color,
-        position.y);
+        position.getGameY());
   }
 
   @Override

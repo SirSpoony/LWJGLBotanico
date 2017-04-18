@@ -90,7 +90,7 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
 
     OmniPosition playerPosition = client.getLocalPlayer().position;
     rendererGame
-        .centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(), -1);
+        .centerOn(new DoubleRectangle(playerPosition.getGameX(), playerPosition.getGameY(), 1, 2).getCenter(), -1);
   }
 
   @Override
@@ -100,7 +100,7 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
     client.getLocalLevel().update(delta);
 
     OmniPosition playerPosition = client.getLocalPlayer().position;
-    rendererGame.centerOn(new DoubleRectangle(playerPosition.x, playerPosition.y, 1, 2).getCenter(),
+    rendererGame.centerOn(new DoubleRectangle(playerPosition.getGameX(), playerPosition.getGameY(), 1, 2).getCenter(),
         delta * 16);
 
     if (waittime > 2) {
@@ -137,8 +137,8 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
           .text(0, rendererGUI.guiViewport.height, "FPS: " +
               Math.round(BotanicoGame.FPS), TextColors.YELLOW, CallAlign.TOP_LEFT);
 
-      double x = client.getLocalPlayer().position.x;
-      double y = client.getLocalPlayer().position.y;
+      double x = client.getLocalPlayer().position.getGameX();
+      double y = client.getLocalPlayer().position.getGameY();
 
       rendererGUI.text(0, rendererGUI.guiViewport.height - 10,
           "Player X: " +
@@ -209,8 +209,8 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
   }
 
   public void forceCenterCameraOnPlayer() {
-    rendererGame.centerOn(new DoubleRectangle(client.getLocalPlayer().getPosition().x,
-        client.getLocalPlayer().getPosition().y, 1, 2).getCenter(), 0);
+    rendererGame.centerOn(new DoubleRectangle(client.getLocalPlayer().getPosition().getGameX(),
+        client.getLocalPlayer().getPosition().getGameY(), 1, 2).getCenter(), 0);
   }
 
   public boolean hasDialogOpen() {

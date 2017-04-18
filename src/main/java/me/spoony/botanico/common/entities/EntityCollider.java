@@ -25,7 +25,7 @@ public class EntityCollider {
   public EntityCollider(IPlane level, Entity entity, DoubleRectangle aabounds) {
     this.level = level;
     entityBounds = new DoubleRectangle(
-        entity.position.x + aabounds.x, entity.position.y + aabounds.y,
+        entity.position.getGameX() + aabounds.x, entity.position.getGameY() + aabounds.y,
         aabounds.width, aabounds.height);
   }
 
@@ -46,8 +46,8 @@ public class EntityCollider {
         }
 
         DoubleRectangle buildingBounds = new DoubleRectangle(
-            offsetPosition.x + b.getCollisionBounds().x,
-            offsetPosition.y + b.getCollisionBounds().y,
+            offsetPosition.getTileX() + b.getCollisionBounds().x,
+            offsetPosition.getTileY() + b.getCollisionBounds().y,
             b.getCollisionBounds().width, b.getCollisionBounds().height);
         if (entityBounds.overlaps(buildingBounds)) {
           cc.intersection.set(buildingBounds.intersect(entityBounds));
@@ -70,7 +70,7 @@ public class EntityCollider {
           continue;
         }
 
-        DoubleRectangle tileBounds = new DoubleRectangle(offsetPosition.x, offsetPosition.y,
+        DoubleRectangle tileBounds = new DoubleRectangle(offsetPosition.getTileX(), offsetPosition.getTileY(),
             1, 1);
         if (entityBounds.overlaps(tileBounds)) {
           cc.intersection.set(tileBounds.intersect(entityBounds));
@@ -87,8 +87,8 @@ public class EntityCollider {
   public List<Entity> checkCollisionsEntities() {
     List<Entity> ret = Lists.newArrayList();
     for (Entity entity : level.getEntities()) {
-      DoubleRectangle collisionBounds = new DoubleRectangle(entity.position.x + entity.collider.x,
-          entity.position.y + entity.collider.y,
+      DoubleRectangle collisionBounds = new DoubleRectangle(entity.position.getGameX() + entity.collider.x,
+          entity.position.getGameY() + entity.collider.y,
           entity.collider.width, entity.collider.height);
       if (collisionBounds.overlaps(this.entityBounds)) {
         ret.add(entity);
@@ -102,7 +102,7 @@ public class EntityCollider {
       return false;
     }
     DoubleRectangle buildingBounds = new DoubleRectangle(
-        position.x + b.getCollisionBounds().x, position.y + b.getCollisionBounds().y,
+        position.getGameX() + b.getCollisionBounds().x, position.getGameY() + b.getCollisionBounds().y,
         b.getCollisionBounds().width, b.getCollisionBounds().height);
     return (entityBounds.overlaps(buildingBounds));
   }

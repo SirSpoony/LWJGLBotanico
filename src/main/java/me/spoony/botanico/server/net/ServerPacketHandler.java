@@ -74,8 +74,8 @@ public class ServerPacketHandler {
 
   public void sendTeleport(RemoteEntityPlayer player) {
     SPacketTeleport teleport = new SPacketTeleport();
-    teleport.x = player.getPosition().x;
-    teleport.y = player.getPosition().y;
+    teleport.x = player.getPosition().getGameX();
+    teleport.y = player.getPosition().getGameY();
     teleport.plane = player.getPlane().getID();
     server.getClientManager().sendPacket(teleport, player);
   }

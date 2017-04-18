@@ -103,7 +103,7 @@ public class Building {
   public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte extra,
       Color color) {
     rg.sprite(position, getTextureSheet(),
-        textureBounds, color, position.y + (alwaysBehindCharacter ? 1 : 0));
+        textureBounds, color, position.getGameY() + (alwaysBehindCharacter ? 1 : 0));
   }
 
   protected Texture getTextureSheet() {

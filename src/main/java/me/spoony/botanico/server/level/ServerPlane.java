@@ -2,6 +2,9 @@ package me.spoony.botanico.server.level;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.math.DoubleMath;
+import com.google.common.math.LongMath;
+import java.math.RoundingMode;
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.buildings.IBuildingEntityHost;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntity;
@@ -85,6 +88,14 @@ public class ServerPlane implements IPlane {
         .getTile(position.getXInChunk(), position.getYInChunk());
   }
 
+  @Override
+  public Tile getTile(long x, long y) {
+    return getChunk(
+        DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR),
+        DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR))
+        .getTile(LongMath.mod(x, 32), LongMath.mod(y, 32));
+  }
+
   public void setBuilding(OmniPosition position, Building b) {
     Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
 
@@ -125,13 +136,21 @@ public class ServerPlane implements IPlane {
         .getBuilding(position.getXInChunk(), position.getYInChunk());
   }
 
+  @Override
+  public Building getBuilding(long x, long y) {
+    return getChunk(
+        DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR),
+        DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR))
+        .getBuilding(LongMath.mod(x, 32), LongMath.mod(y, 32));
+  }
+
   public void addEntity(Entity e) {
     SPacketNewEntity pne = new SPacketNewEntity();
 
     pne.eid = e.eid;
     pne.type = e.getTypeID();
-    pne.x = e.position.x;
-    pne.y = e.position.y;
+    pne.x = e.position.getGameX();
+    pne.y = e.position.getGameY();
     if (e instanceof EntityItemStack && ((EntityItemStack) e).stack != null) {
       pne.misc = ((EntityItemStack) e).stack.getItem().getID();
     }
@@ -205,8 +224,9 @@ public class ServerPlane implements IPlane {
       ItemStack tempstack = ItemStack.clone(stack);
       tempstack.setCount(1);
       EntityItemStack eis = new EntityItemStack(
-          new OmniPosition(PositionType.GAME, position.x + ((-.5f + randpos.nextFloat()) / 2),
-              position.y + ((-.5f + randpos.nextFloat()) / 2)),
+          new OmniPosition(PositionType.GAME,
+              position.getGameX() + ((-.5f + randpos.nextFloat()) / 2),
+              position.getGameY() + ((-.5f + randpos.nextFloat()) / 2)),
           this,
           tempstack, false);
       addEntity(eis);
@@ -219,7 +239,7 @@ public class ServerPlane implements IPlane {
     if (ist != null) {
       for (ItemStack s : ist) {
         dropItemStack(new OmniPosition(PositionType.GAME, position.getX(PositionType.GAME) + .3f,
-            position.getX(PositionType.GAME) + .3f), s);
+            position.getY(PositionType.GAME) + .3f), s);
       }
     }
     setBuilding(position, null);
@@ -235,6 +255,14 @@ public class ServerPlane implements IPlane {
   public byte getBuildingData(OmniPosition position) {
     return getChunk(position.getChunkX(), position.getChunkY())
         .getBuildingData(position.getXInChunk(), position.getYInChunk());
+  }
+
+  @Override
+  public byte getBuildingData(long x, long y) {
+    return getChunk(
+        DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR),
+        DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR))
+        .getBuildingData(LongMath.mod(x, 32), LongMath.mod(y, 32));
   }
 
 /*    public NBTTag writeToNBT() {

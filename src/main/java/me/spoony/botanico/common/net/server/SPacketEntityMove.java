@@ -18,8 +18,8 @@ public class SPacketEntityMove extends AutoPacketAdapter implements IClientHandl
     public void onReceive(BotanicoClient client) {
         for (Entity e : client.getLocalLevel().getEntities()) {
             if (e.eid == eid) {
-                e.position.x = x;
-                e.position.y = y;
+                e.position.setGameX(x);
+                e.position.setGameY(y);
 
                 if (e == client.getLocalPlayer()) {
                     client.gameView.forceCenterCameraOnPlayer();

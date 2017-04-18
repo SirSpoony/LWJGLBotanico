@@ -37,71 +37,71 @@ public class BuildingFluidPipe extends Building implements IBuildingEntityHost {
 
     if (n && s && e && w) { // 1
       rg.sprite(position, getTextureSheet(), new IntRectangle(0, 0, 16, 16), color,
-          position.y);
+          position.getGameY());
       return;
     }
 
     // First try to render a left-right pipe
     if (e && w) { // 4
       rg.sprite(position, getTextureSheet(), new IntRectangle(0, 32, 16, 16), color,
-          position.y);//lr
+          position.getGameY());//lr
 
       if (n) {
         rg.sprite(position, getTextureSheet(), new IntRectangle(32, 0, 16, 16), color,
-            position.y);//n
+            position.getGameY());//n
       }
       if (s) {
         rg.sprite(position, getTextureSheet(), new IntRectangle(16, 0, 16, 16), color,
-            position.y);//s
+            position.getGameY());//s
       }
       return;
     }
 
     if (n && s) { // 4
       rg.sprite(position, getTextureSheet(), new IntRectangle(16, 32, 16, 16), color,
-          position.y); //ud
+          position.getGameY()); //ud
 
       if (e) {
         rg.sprite(position, getTextureSheet(), new IntRectangle(0, 16, 16, 16), color,
-            position.y);//s
+            position.getGameY());//s
       }
 
       if (w) {
         rg.sprite(position, getTextureSheet(), new IntRectangle(16, 16, 16, 16), color,
-            position.y);//s
+            position.getGameY());//s
       }
       return;
     }
 
     if (n && e) {
       rg.sprite(position, getTextureSheet(), new IntRectangle(48, 0, 16, 16), color,
-          position.y); //ud
+          position.getGameY()); //ud
       return;
     }
     if (n && w) {
       rg.sprite(position, getTextureSheet(), new IntRectangle(48, 16, 16, 16), color,
-          position.y); //ud
+          position.getGameY()); //ud
       return;
     }
     if (s && e) {
       rg.sprite(position, getTextureSheet(), new IntRectangle(48, 32, 16, 16), color,
-          position.y); //ud
+          position.getGameY()); //ud
       return;
     }
     if (s && w) {
       rg.sprite(position, getTextureSheet(), new IntRectangle(48, 48, 16, 16), color,
-          position.y); //ud
+          position.getGameY()); //ud
       return;
     }
 
     if (n || s) {
       rg.sprite(position, getTextureSheet(), new IntRectangle(16, 32, 16, 16), color,
-          position.y); //ud
+          position.getGameY()); //ud
       return;
     }
 
     rg.sprite(position, getTextureSheet(), new IntRectangle(0, 32, 16, 16), color,
-        position.y); //ud
+        position.getGameY()); //ud
   }
 
   @Override

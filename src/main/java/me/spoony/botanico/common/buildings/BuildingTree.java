@@ -25,7 +25,7 @@ public class BuildingTree extends Building {
       Color color) {
     position.setX(PositionType.GAME, position.getX(PositionType.GAME) - 1);
     rg.sprite(position, getTextureSheet(),
-        new IntRectangle(16, 208, 46, 64), color, position.y);
+        new IntRectangle(16, 208, 46, 64), color, position.getGameY());
   }
 
   @Override

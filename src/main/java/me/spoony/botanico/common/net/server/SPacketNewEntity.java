@@ -25,8 +25,8 @@ public class SPacketNewEntity extends AutoPacketAdapter implements IClientHandle
         if (type == EntityPlayer.ID) {
             EntityPlayer ep = new EntityPlayer(client.getLocalLevel());
             ep.eid = eid;
-            ep.position.x = x;
-            ep.position.y = y;
+            ep.position.setX(PositionType.GAME, x);
+            ep.position.setY(PositionType.GAME, y);
 
             client.getLocalLevel().addEntity(ep);
 
