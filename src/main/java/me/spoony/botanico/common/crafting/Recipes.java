@@ -14,13 +14,9 @@ public class Recipes {
     GENERAL_RECIPES = new RecipeRegistry();
     GENERAL_RECIPES.setMaxIngredientCount(4);
 
-    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ENERGY_PIPE),
-        new CraftingIngredient(Items.ROCK, 2)));
-    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.BUCKET),
-        new CraftingIngredient(Items.WOOD, 3)));
-
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.WALL),
-        new CraftingIngredient(Items.WOOD, 4)));
+        new CraftingIngredient(Items.WOOD, 4),
+        new CraftingIngredient(Items.ROCK, 1)));
 
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROCK_HOE),
         new CraftingIngredient(Items.WOOD, 2),

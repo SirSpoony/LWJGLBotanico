@@ -30,13 +30,11 @@ public class ServerPlane implements IPlane {
 
   private final Map<Integer, Entity> entities;
   private final Set<BuildingEntity> buildingEntities;
-  protected IChunkGenerator chunkGenerator;
   private final Set<Chunk> chunks;
-
   public int seed;
-
   public BotanicoServer server;
   public ServerLevel level;
+  protected IChunkGenerator chunkGenerator;
 
   public ServerPlane(BotanicoServer server, ServerLevel level, long seed) {
     entities = Maps.newConcurrentMap();

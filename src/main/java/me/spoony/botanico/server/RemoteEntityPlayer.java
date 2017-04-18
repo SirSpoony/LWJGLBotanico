@@ -158,7 +158,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
         this.inventory.addItem(new ItemStack(Items.MYSTIC_FLOWER, 9));
         this.inventory.addItem(new ItemStack(Items.BUCKET, 1));*/
 
-    this.inventory.addItem(new ItemStack(Items.WALL, 20));
+    this.inventory.addItem(new ItemStack(Items.WOOD, 40));
+    this.inventory.addItem(new ItemStack(Items.ROCK, 10));
   }
 
   public void onLeave() {
