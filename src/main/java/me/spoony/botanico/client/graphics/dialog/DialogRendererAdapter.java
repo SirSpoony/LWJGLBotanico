@@ -3,6 +3,7 @@ package me.spoony.botanico.client.graphics.dialog;
 import com.google.common.collect.Sets;
 import me.spoony.botanico.client.graphics.RendererGUI;
 import me.spoony.botanico.client.graphics.gui.RendererItemSlot;
+import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.util.position.GuiRectangle;
 import me.spoony.botanico.client.input.BinaryInput;
 import me.spoony.botanico.client.input.Input;
@@ -96,6 +97,13 @@ public abstract class DialogRendererAdapter<T extends Dialog> implements DialogR
             ((-row + 6) - 1) * 18 + offsety));
       }
     }
+
+    // RING SLOTS
+    RendererItemSlot ring1 = new RendererItemSlot(playerInventory.getSlot(EntityPlayer.SLOT_RING1), 4, 4);
+    RendererItemSlot ring2 = new RendererItemSlot(playerInventory.getSlot(EntityPlayer.SLOT_RING2), 4 + 18, 4);
+
+    rendererItemSlots.add(ring1);
+    rendererItemSlots.add(ring2);
   }
 
   protected void renderItemSlots(RendererGUI rendererGUI) {

@@ -1,5 +1,6 @@
 package me.spoony.botanico.common.buildings;
 
+import com.google.common.base.Preconditions;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntity;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntityFurnace;
 import me.spoony.botanico.common.entities.EntityPlayer;
@@ -15,16 +16,17 @@ import me.spoony.botanico.server.level.ServerPlane;
  * Created by Colten on 12/30/2016.
  */
 public class BuildingFurnace extends Building implements IBuildingEntityHost {
-    public BuildingFurnace(int id) {
-        super(id);
-        this.name = "furnace";
-        this.collisionBounds = new DoubleRectangle(0, 0, 1, 1);
-        this.setTextureBounds(32, 128, 16, 32);
-        this.hardness = 4f;
-    }
 
-    @Override
-    public ItemStack[] getDrops(IPlane level, OmniPosition position) {
+  public BuildingFurnace(int id) {
+    super(id);
+    this.name = "furnace";
+    this.collisionBounds = new DoubleRectangle(0, 0, 1, 1);
+    this.setTextureBounds(32, 128, 16, 32);
+    this.hardness = 4f;
+  }
+
+  @Override
+  public ItemStack[] getDrops(IPlane level, OmniPosition position) {
 /*        if (!(level instanceof ServerLevel)) return null;
         ServerLevel serverLevel = (ServerLevel) level;
         BuildingEntityKnappingStation bew = (BuildingEntityKnappingStation) serverLevel.getBuildingEntity(x, y);
@@ -37,30 +39,34 @@ public class BuildingFurnace extends Building implements IBuildingEntityHost {
         items.add(new ItemStack(Items.KNAPPING_STATION));
 
         return items.toArray(new ItemStack[items.size()]);*/
-        return new ItemStack[] {new ItemStack(Items.FURNACE)};
-    }
+    return new ItemStack[]{new ItemStack(Items.FURNACE)};
+  }
 
-    @Override
-    public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
-        if (!(level instanceof ServerPlane)) return false;
-        ServerPlane serverLevel = (ServerPlane) level;
-
-        BuildingEntityFurnace bef = (BuildingEntityFurnace) serverLevel.getBuildingEntity(position);
-        if (bef != null) {
-            if (player instanceof RemoteEntityPlayer) {
-                ((RemoteEntityPlayer) player).openDialog(bef.dialog);
-            }
-        }
-        return false;
+  @Override
+  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
+    if (!(level instanceof ServerPlane)) {
+      return false;
     }
+    ServerPlane serverLevel = (ServerPlane) level;
 
-    @Override
-    public BuildingBreakMaterial getBreakParticle() {
-        return BuildingBreakMaterial.ROCK;
+    BuildingEntityFurnace bef = (BuildingEntityFurnace) serverLevel.getBuildingEntity(position);
+    if (bef != null) {
+      if (player instanceof RemoteEntityPlayer) {
+        ((RemoteEntityPlayer) player).openDialog(bef.dialog);
+      }
+    } else {
+      System.out.println("Missing furnace entity");
     }
+    return false;
+  }
 
-    @Override
-    public BuildingEntity createNewEntity(IPlane plane, OmniPosition position) {
-        return new BuildingEntityFurnace(position, plane);
-    }
+  @Override
+  public BuildingBreakMaterial getBreakParticle() {
+    return BuildingBreakMaterial.ROCK;
+  }
+
+  @Override
+  public BuildingEntity createNewEntity(IPlane plane, OmniPosition position) {
+    return new BuildingEntityFurnace(position, plane);
+  }
 }

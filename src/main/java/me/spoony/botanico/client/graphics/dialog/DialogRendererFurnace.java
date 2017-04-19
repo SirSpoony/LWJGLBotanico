@@ -15,51 +15,54 @@ import me.spoony.botanico.common.util.IntRectangle;
  * Created by Colten on 11/12/2016.
  */
 public class DialogRendererFurnace extends DialogRendererAdapter<DialogFurnace> {
-    private static String TEXTURE_LOCATION = "dialog/furnace.png";
 
-    protected IntRectangle dialogTextureSource;
+  private static String TEXTURE_LOCATION = "dialog/furnace.png";
 
-    @Override
-    public void init(DialogFurnace dialog) {
-        super.init(dialog);
-        ClientEntityPlayer player = GameView.getClient().getLocalPlayer();
+  protected IntRectangle dialogTextureSource;
 
-        this.dialogTextureSource = new IntRectangle(0, 0, 232, 108);
-        this.dialogBounds.set(new GuiRectangle(0, 0, dialogTextureSource.width, dialogTextureSource.height));
+  @Override
+  public void init(DialogFurnace dialog) {
+    super.init(dialog);
+    ClientEntityPlayer player = GameView.getClient().getLocalPlayer();
 
-        this.initPlayerItemSlots(player.inventory, 6, 6);
+    dialogTextureSource = new IntRectangle(0, 0, 219, 135);
+    dialogBounds
+        .set(new GuiRectangle(0, 0, dialogTextureSource.width, dialogTextureSource.height));
 
-        rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(0), 142, 63));
-        rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(1), 176, 15));
+    initPlayerItemSlots(player.inventory, 4, 25);
 
-        rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(2), 210, 63));
-    }
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(0), 160, 76+18));
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(1), 160, 76));
 
-    @Override
-    public void update(float delta) {
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(2), 160+36, 76+18));
+  }
 
-    }
+  @Override
+  public void update(float delta) {
 
-    @Override
-    public void render(RendererGUI rendererGUI) {
-//        centerDialogBounds(rendererGUI.guiViewport);
-//
-//        if (!isOpen()) return;
-//
-//        rendererGUI.sprite(getDialogPosition(),
-//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
-//
-//        // Render smelting progress
-//        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(163, 67)),
-//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 128, (int)(42f*this.dialog.progress), 8));
-//
-//        // Render fuel progress
-//        rendererGUI.sprite(offsetByDialogBounds(new GuiPosition(156, 42)),
-//                rendererGUI.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 150, (int)(58f*this.dialog.burnProgress), 8));
-//
-//        this.renderItemSlots(rendererGUI);
-//
-//        rendererGUI.text(offsetByDialogBounds(new GuiPosition(dialogTextureSource.width / 2, dialogTextureSource.height - 12)), "Furnace",
-//                new TextColors(new Color(.33f, .33f, .33f, 1)), CallAlign.BOTTOM_CENTER);
-    }
+  }
+
+  @Override
+  public void render(RendererGUI rg) {
+        centerDialogBounds(rg.guiViewport);
+
+        if (!isOpen()) return;
+
+        rg.sprite(dialogBounds.x, dialogBounds.y,
+                rg.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
+
+/*        // Render smelting progress
+        rg.sprite(offsetByDialogBounds(new GuiPosition(163, 67)),
+                rg.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 128, (int)(42f*this.dialog.progress), 8));
+
+        // Render fuel progress
+        rg.sprite(offsetByDialogBounds(new GuiPosition(156, 42)),
+                rg.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 150, (int)(58f*this.dialog.burnProgress), 8));*/
+
+        this.renderItemSlots(rg);
+
+    rg.text(offsetXByDialogBounds(150 / 2), offsetYByDialogBounds(dialogTextureSource.height - 14),
+        "Furnace",
+        new TextColors(new Color(173 / 255f, 100 / 255f, 0 / 255f, 1)), CallAlign.BOTTOM_CENTER);
+  }
 }

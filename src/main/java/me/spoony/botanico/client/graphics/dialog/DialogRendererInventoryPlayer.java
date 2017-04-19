@@ -33,13 +33,6 @@ public class DialogRendererInventoryPlayer extends DialogRendererAdapter<DialogI
     Inventory inv = GameView.getClient().getLocalPlayer().inventory;
     this.initPlayerItemSlots(inv, 4, 25);
 
-    // RING SLOTS
-    RendererItemSlot ring1 = new RendererItemSlot(inv.getSlot(EntityPlayer.SLOT_RING1), 4, 4);
-    RendererItemSlot ring2 = new RendererItemSlot(inv.getSlot(EntityPlayer.SLOT_RING2), 4 + 18, 4);
-
-    rendererItemSlots.add(ring1);
-    rendererItemSlots.add(ring2);
-
     // CRAFTING SLOTS
     craftingInventory = dialog.inventory;
     craftingInventory.getSlot(2).setMode(ItemSlotMode.TAKE_ONLY);

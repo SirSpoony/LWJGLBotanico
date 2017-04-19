@@ -18,6 +18,9 @@ public class Recipes {
         new CraftingIngredient(Items.WOOD, 4),
         new CraftingIngredient(Items.ROCK, 1)));
 
+    GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.FURNACE),
+        new CraftingIngredient(Items.ROCK, 8)));
+
     GENERAL_RECIPES.register(new Recipe(new ItemStack(Items.ROCK_HOE),
         new CraftingIngredient(Items.WOOD, 2),
         new CraftingIngredient(Items.ROCK_HOE_HEAD, 1)));

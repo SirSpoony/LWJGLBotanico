@@ -186,7 +186,8 @@ public class ServerPlane implements IPlane {
 
   public BuildingEntity getBuildingEntity(OmniPosition position) {
     for (BuildingEntity e : buildingEntities) {
-      if (e.position.equals(position)) {
+      if (e.position.getGameX() == position.getGameX() &&
+          e.position.getGameY() == position.getGameY()) {
         return e;
       }
     }

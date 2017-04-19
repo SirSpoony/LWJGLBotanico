@@ -10,31 +10,32 @@ import me.spoony.botanico.common.net.PacketEncoder;
  * Created by Colten on 11/25/2016.
  */
 public class DialogFurnace extends Dialog implements IPacketInterpreter {
-    public static final int INGREDIENT_SLOT_ID = 0;
-    public static final int FUEL_SLOT_ID = 1;
-    public static final int PRODUCT_SLOT_ID = 2;
 
-    public float progress;
-    public float burnProgress;
+  public static final int INGREDIENT_SLOT_ID = 0;
+  public static final int FUEL_SLOT_ID = 1;
+  public static final int PRODUCT_SLOT_ID = 2;
 
-    public float initialBurnTime;
-    public float currentBurnTime;
+  public float progress;
+  public float burnProgress;
 
-    public DialogFurnace() {
-        super(Dialog.FURNACE_ID);
-        this.inventory = new Inventory(3, Dialog.FURNACE_ID);
-        this.inventory.getSlot(2).setMode(ItemSlotMode.TAKE_ONLY);
-    }
+  public float initialBurnTime;
+  public float currentBurnTime;
 
-    @Override
-    public void encodeToPacket(PacketEncoder encoder) {
-        encoder.writeFloat(progress);
-        encoder.writeFloat(burnProgress);
-    }
+  public DialogFurnace() {
+    super(Dialog.FURNACE_ID);
+    this.inventory = new Inventory(3, Dialog.FURNACE_ID);
+    this.inventory.getSlot(2).setMode(ItemSlotMode.TAKE_ONLY);
+  }
 
-    @Override
-    public void decodeFromPacket(PacketDecoder decoder) {
-        progress = decoder.readFloat();
-        burnProgress = decoder.readFloat();
-    }
+  @Override
+  public void encodeToPacket(PacketEncoder encoder) {
+    encoder.writeFloat(progress);
+    encoder.writeFloat(burnProgress);
+  }
+
+  @Override
+  public void decodeFromPacket(PacketDecoder decoder) {
+    progress = decoder.readFloat();
+    burnProgress = decoder.readFloat();
+  }
 }
