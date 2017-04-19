@@ -12,56 +12,53 @@ import me.spoony.botanico.common.util.IntRectangle;
 /**
  * Created by Colten on 11/11/2016.
  */
-public class MainMenuView extends MenuView
-{
-    @Override
-    public void loadContent()
-    {
-        super.loadContent();
+public class MainMenuView extends MenuView {
 
-        setBackground(BackgroundType.CLOUDS);
+  @Override
+  public void loadContent() {
+    super.loadContent();
 
-        GUITexture guiLogo;
-        guiLogo = new GUITexture(
-                BotanicoGame.getResourceManager().getTexture("logo.png"),
-                new IntRectangle(0,0,85,26));
-        guiLogo.setWidth(85*2);
-        guiLogo.setHeight(26*2);
-        guiLogo.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiLogo.setOffset(0,30);
+    setBackground(BackgroundType.CLOUDS);
 
-        GUILabel versionLabel = new GUILabel("Version "+ Botanico.VERSION);
-        versionLabel.setAlignment(GUIControlAlignmentType.TOP_LEFT);
+    GUITexture guiLogo;
+    guiLogo = new GUITexture(
+        BotanicoGame.getResourceManager().getTexture("logo.png"),
+        new IntRectangle(0, 0, 85, 26));
+    guiLogo.setWidth(85 * 2);
+    guiLogo.setHeight(26 * 2);
+    guiLogo.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
+    guiLogo.setOffset(0, 30);
 
-        GUIButton guiStartButton;
-        guiStartButton = new GUIButton("Start") {
-            @Override
-            public void onClick()
-            {
-                super.onClick();
-                BotanicoGame.setView(new GameView());
-            }
-        };
-        guiStartButton.setWidth(100);
-        guiStartButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiStartButton.setOffset(0,-20);
+    GUILabel versionLabel = new GUILabel("Version " + Botanico.VERSION);
+    versionLabel.setAlignment(GUIControlAlignmentType.TOP_LEFT);
 
-        GUIButton guiMultiplayerButton;
-        guiMultiplayerButton = new GUIButton("Multiplayer") {
-            @Override
-            public void onClick()
-            {
-                super.onClick();
-                BotanicoGame.setView(new MultiplayerConnectView());
-            }
-        };
-        guiMultiplayerButton.setWidth(100);
-        guiMultiplayerButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
-        guiMultiplayerButton.setOffset(0,-40);
+    GUIButton guiStartButton;
+    guiStartButton = new GUIButton("Start") {
+      @Override
+      public void onClick() {
+        super.onClick();
+        BotanicoGame.setView(new GameView());
+      }
+    };
+    guiStartButton.setWidth(128);
+    guiStartButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
+    guiStartButton.setOffset(0, -20);
 
-        addControl(guiLogo);
-        addControl(versionLabel);
-        addControl(guiStartButton);
-        addControl(guiMultiplayerButton);
-    }
+    GUIButton guiMultiplayerButton;
+    guiMultiplayerButton = new GUIButton("Multiplayer") {
+      @Override
+      public void onClick() {
+        super.onClick();
+        BotanicoGame.setView(new MultiplayerConnectView());
+      }
+    };
+    guiMultiplayerButton.setWidth(128);
+    guiMultiplayerButton.setAlignment(GUIControlAlignmentType.CENTER_CENTER);
+    guiMultiplayerButton.setOffset(0, -40);
+
+    addControl(guiLogo);
+    addControl(versionLabel);
+    addControl(guiStartButton);
+    addControl(guiMultiplayerButton);
+  }
 }

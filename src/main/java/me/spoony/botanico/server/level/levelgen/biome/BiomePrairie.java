@@ -21,7 +21,7 @@ public class BiomePrairie extends Biome {
     this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.FLOWER_CYAN, 2, Tiles.GROUND));
     this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.FLOWER_PURPLE, 2, Tiles.GROUND));
 
-    this.addBuildingFeature(new BuildingFeaturePlant(.2f, Buildings.GRASS, 0, Tiles.GROUND));
+    this.addBuildingFeature(new BuildingFeaturePlant(.05f, Buildings.GRASS, 0, Tiles.GROUND));
 
     this.addBuildingFeature(new BuildingFeatureRuin(Buildings.BUSH));
     this.addBuildingFeature(new BuildingFeatureRuin(Buildings.SMALL_BUSH));
