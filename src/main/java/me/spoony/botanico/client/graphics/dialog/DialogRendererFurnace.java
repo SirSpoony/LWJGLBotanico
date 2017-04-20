@@ -31,10 +31,10 @@ public class DialogRendererFurnace extends DialogRendererAdapter<DialogFurnace> 
 
     initPlayerItemSlots(player.inventory, 4, 25);
 
-    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(0), 160, 76+18));
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(0), 160, 76 + 18));
     rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(1), 160, 76));
 
-    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(2), 160+36, 76+18));
+    rendererItemSlots.add(new RendererItemSlot(dialog.inventory.getSlot(2), 160 + 36, 76 + 18));
   }
 
   @Override
@@ -44,22 +44,26 @@ public class DialogRendererFurnace extends DialogRendererAdapter<DialogFurnace> 
 
   @Override
   public void render(RendererGUI rg) {
-        centerDialogBounds(rg.guiViewport);
+    centerDialogBounds(rg.guiViewport);
 
-        if (!isOpen()) return;
+    if (!isOpen()) {
+      return;
+    }
 
-        rg.sprite(dialogBounds.x, dialogBounds.y,
-                rg.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
+    rg.sprite(dialogBounds.x, dialogBounds.y,
+        rg.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
 
-/*        // Render smelting progress
-        rg.sprite(offsetByDialogBounds(new GuiPosition(163, 67)),
-                rg.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 128, (int)(42f*this.dialog.progress), 8));
+    // Render smelting progress
+    rg.sprite(offsetXByDialogBounds(181), offsetYByDialogBounds(93),
+        rg.getResourceManager().getTexture(TEXTURE_LOCATION),
+        new IntRectangle(0, 141, (int) (12f * this.dialog.progress), 18));
 
-        // Render fuel progress
-        rg.sprite(offsetByDialogBounds(new GuiPosition(156, 42)),
-                rg.getResourceManager().getTexture(TEXTURE_LOCATION), new IntRectangle(0, 150, (int)(58f*this.dialog.burnProgress), 8));*/
+    // Render fuel progress
+    rg.sprite(offsetXByDialogBounds(180), offsetYByDialogBounds(75),
+        rg.getResourceManager().getTexture(TEXTURE_LOCATION),
+        new IntRectangle(0, 163, (int) (30f * this.dialog.burnProgress), 18));
 
-        this.renderItemSlots(rg);
+    this.renderItemSlots(rg);
 
     rg.text(offsetXByDialogBounds(150 / 2), offsetYByDialogBounds(dialogTextureSource.height - 14),
         "Furnace",

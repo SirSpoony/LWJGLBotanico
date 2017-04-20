@@ -1,5 +1,6 @@
 package me.spoony.botanico.common.dialog;
 
+import com.google.gson.Gson;
 import me.spoony.botanico.common.items.Inventory;
 import me.spoony.botanico.common.items.ItemSlotMode;
 import me.spoony.botanico.common.net.IPacketInterpreter;
@@ -27,18 +28,11 @@ public class DialogBoiler extends Dialog implements IPacketInterpreter {
     }
 
     @Override
-    public void encodeToPacket(PacketEncoder encoder) {
-        encoder.writeFloat(storedEnergy);
-        encoder.writeFloat(energyProduction);
-        encoder.writeFloat(burnProgress);
-        encoder.writeFloat(waterProgress);
+    public String toJson(Gson gson) {
+        return gson.toJson(this);
     }
 
     @Override
-    public void decodeFromPacket(PacketDecoder decoder) {
-        storedEnergy = decoder.readFloat();
-        energyProduction = decoder.readFloat();
-        burnProgress = decoder.readFloat();
-        waterProgress = decoder.readFloat();
+    public void fromJson(Gson gson, String json) {
     }
 }

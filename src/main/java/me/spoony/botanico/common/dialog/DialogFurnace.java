@@ -1,5 +1,7 @@
 package me.spoony.botanico.common.dialog;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import me.spoony.botanico.common.items.Inventory;
 import me.spoony.botanico.common.items.ItemSlotMode;
 import me.spoony.botanico.common.net.IPacketInterpreter;
@@ -28,14 +30,13 @@ public class DialogFurnace extends Dialog implements IPacketInterpreter {
   }
 
   @Override
-  public void encodeToPacket(PacketEncoder encoder) {
-    encoder.writeFloat(progress);
-    encoder.writeFloat(burnProgress);
+  public String toJson(Gson gson) {
+    return gson.toJson(this);
   }
 
   @Override
-  public void decodeFromPacket(PacketDecoder decoder) {
-    progress = decoder.readFloat();
-    burnProgress = decoder.readFloat();
+  public void fromJson(Gson gson, String json) {
+    progress = gson.fromJson(json, JsonObject.class).get("progress").getAsFloat();
+    burnProgress = gson.fromJson(json, JsonObject.class).get("burnProgress").getAsFloat();
   }
 }

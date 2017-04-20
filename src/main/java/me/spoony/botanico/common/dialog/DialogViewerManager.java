@@ -29,9 +29,7 @@ public class DialogViewerManager {
 
   public void closeDialogAll() {
     for (EntityPlayer viewer : viewers) {
-      if (viewer instanceof RemoteEntityPlayer) {
-        ((RemoteEntityPlayer) viewer).closeDialog();
-      }
+      ((RemoteEntityPlayer) viewer).closeDialog();
     }
   }
 }

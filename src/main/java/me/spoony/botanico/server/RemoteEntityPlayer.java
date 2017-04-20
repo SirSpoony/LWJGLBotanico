@@ -102,15 +102,6 @@ public class RemoteEntityPlayer extends EntityPlayer {
     getPlane().server.getClientManager().sendPacket(pd, this);
   }
 
-  public void updateDialogData() {
-    if (currentDialog == null) {
-      throw new RuntimeException("Attempted updateDialogData() without a dialog!");
-    }
-    SPacketDialogData dd = new SPacketDialogData();
-    dd.dialog = this.currentDialog;
-    getPlane().server.getClientManager().sendPacket(dd, this);
-  }
-
   public ItemStack giveItemStack(ItemStack stack, boolean ordrop) {
     if (ordrop) {
       ItemStack retstack = giveItemStack(stack, false);

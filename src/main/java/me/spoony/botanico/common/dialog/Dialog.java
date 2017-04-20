@@ -1,8 +1,10 @@
 package me.spoony.botanico.common.dialog;
 
+import com.google.gson.Gson;
 import me.spoony.botanico.ServerOnly;
 import me.spoony.botanico.common.entities.EntityPlayer;
 import me.spoony.botanico.common.items.Inventory;
+import me.spoony.botanico.common.net.server.SPacketDialogData;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 
 /**
@@ -17,9 +19,9 @@ public class Dialog {
   public static int FURNACE_ID = 6;
   public static int BOILER_ID = 7;
 
-  public int id;
-  public Inventory inventory;
-  public DialogViewerManager viewers;
+  public transient int id;
+  public transient Inventory inventory;
+  public transient DialogViewerManager viewers;
 
   public Dialog(int id) {
     this.id = id;
@@ -54,6 +56,7 @@ public class Dialog {
     viewers.addViewer(player);
     inventory.addViewer(player);
     onAddViewer(player);
+    updateViewers();
   }
 
   @ServerOnly
@@ -75,5 +78,15 @@ public class Dialog {
 
   public void onItemSlotInteraction(int slot, byte type) {
 
+  }
+
+  private static Gson gson = new Gson();
+  public void updateViewers() {
+    SPacketDialogData pdd = new SPacketDialogData();
+    pdd.dialogData = gson.toJson(this);
+
+    for (RemoteEntityPlayer player : viewers.viewers) {
+      player.sendPacket(pdd);
+    }
   }
 }
