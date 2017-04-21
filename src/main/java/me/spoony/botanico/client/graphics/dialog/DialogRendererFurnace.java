@@ -46,10 +46,6 @@ public class DialogRendererFurnace extends DialogRendererAdapter<DialogFurnace> 
   public void render(RendererGUI rg) {
     centerDialogBounds(rg.guiViewport);
 
-    if (!isOpen()) {
-      return;
-    }
-
     rg.sprite(dialogBounds.x, dialogBounds.y,
         rg.getResourceManager().getTexture(TEXTURE_LOCATION), dialogTextureSource);
 

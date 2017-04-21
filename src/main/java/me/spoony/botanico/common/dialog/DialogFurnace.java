@@ -4,14 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import me.spoony.botanico.common.items.Inventory;
 import me.spoony.botanico.common.items.ItemSlotMode;
-import me.spoony.botanico.common.net.IPacketInterpreter;
-import me.spoony.botanico.common.net.PacketDecoder;
-import me.spoony.botanico.common.net.PacketEncoder;
+import me.spoony.botanico.common.net.IPacketJsonInterpreter;
 
 /**
  * Created by Colten on 11/25/2016.
  */
-public class DialogFurnace extends Dialog implements IPacketInterpreter {
+public class DialogFurnace extends Dialog implements IPacketJsonInterpreter {
 
   public static final int INGREDIENT_SLOT_ID = 0;
   public static final int FUEL_SLOT_ID = 1;

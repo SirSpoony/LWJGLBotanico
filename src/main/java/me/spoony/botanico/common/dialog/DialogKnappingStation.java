@@ -1,10 +1,6 @@
 package me.spoony.botanico.common.dialog;
 
-import com.google.common.collect.Range;
 import me.spoony.botanico.common.items.*;
-import me.spoony.botanico.common.net.IPacketInterpreter;
-import me.spoony.botanico.common.net.PacketDecoder;
-import me.spoony.botanico.common.net.PacketEncoder;
 
 /**
  * Created by Colten on 11/27/2016.

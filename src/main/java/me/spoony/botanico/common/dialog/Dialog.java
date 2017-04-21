@@ -19,6 +19,8 @@ public class Dialog {
   public static int FURNACE_ID = 6;
   public static int BOILER_ID = 7;
 
+  private static Gson gson = new Gson();
+
   public transient int id;
   public transient Inventory inventory;
   public transient DialogViewerManager viewers;
@@ -80,7 +82,6 @@ public class Dialog {
 
   }
 
-  private static Gson gson = new Gson();
   public void updateViewers() {
     SPacketDialogData pdd = new SPacketDialogData();
     pdd.dialogData = gson.toJson(this);
