@@ -66,31 +66,39 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
   }
 
   public void loadAnimation() {
-    float speed = 10;
+    float speed = 15;
 
     downAnimation = new Animation(speed,
         new IntRectangle(0, 0, 16, 32),
         new IntRectangle(16, 0, 16, 32),
+        new IntRectangle(16, 0, 16, 32),
+        new IntRectangle(0, 0, 16, 32),
         new IntRectangle(32, 0, 16, 32),
-        new IntRectangle(48, 0, 16, 32));
+        new IntRectangle(32, 0, 16, 32));
 
     rightAnimation = new Animation(speed,
         new IntRectangle(0, 32, 16, 32),
         new IntRectangle(16, 32, 16, 32),
+        new IntRectangle(16, 32, 16, 32),
+        new IntRectangle(0, 32, 16, 32),
         new IntRectangle(32, 32, 16, 32),
-        new IntRectangle(48, 32, 16, 32));
+        new IntRectangle(32, 32, 16, 32));
 
     upAnimation = new Animation(speed,
         new IntRectangle(0, 64, 16, 32),
         new IntRectangle(16, 64, 16, 32),
+        new IntRectangle(16, 64, 16, 32),
+        new IntRectangle(0, 64, 16, 32),
         new IntRectangle(32, 64, 16, 32),
-        new IntRectangle(48, 64, 16, 32));
+        new IntRectangle(32, 64, 16, 32));
 
     leftAnimation = new Animation(speed,
         new IntRectangle(0, 96, 16, 32),
         new IntRectangle(16, 96, 16, 32),
+        new IntRectangle(16, 96, 16, 32),
+        new IntRectangle(0, 96, 16, 32),
         new IntRectangle(32, 96, 16, 32),
-        new IntRectangle(48, 96, 16, 32));
+        new IntRectangle(32, 96, 16, 32));
   }
 
   @Override
