@@ -2,30 +2,28 @@ package me.spoony.botanico.server.level.levelgen.layer;
 
 /**
  * Created by Colten on 12/22/2016.
+ *
+ * Terrain is generated layer by layer. The inner-most child is the LayerZeros.
  */
-public abstract class Layer
-{
-    public Layer child;
+public abstract class Layer {
 
-    public Layer(Layer child)
-    {
-        this.child = child;
-    }
+  public Layer child;
 
-    public abstract int[] getInts(int x, int y, int xsize, int ysize);
+  public Layer(Layer child) {
+    this.child = child;
+  }
 
-    public void resetRand(int x, int y)
-    {
-        child.resetRand(x, y);
-    }
+  public abstract int[] getInts(int x, int y, int xsize, int ysize);
 
-    public int getRandInt()
-    {
-        return child.getRandInt();
-    }
+  public void resetRand(int x, int y) {
+    child.resetRand(x, y);
+  }
 
-    public long getRandLong()
-    {
-        return child.getRandLong();
-    }
+  public int getRandInt() {
+    return child.getRandInt();
+  }
+
+  public long getRandLong() {
+    return child.getRandLong();
+  }
 }

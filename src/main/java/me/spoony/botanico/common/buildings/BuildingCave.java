@@ -23,14 +23,14 @@ public class BuildingCave extends Building {
     this.name = "cave";
     this.hardness = Float.MAX_VALUE;
     this.alwaysBehindCharacter = true;
-    this.collisionBounds = new DoubleRectangle(0, 0, 41 / 16f, 35 / 16f);
+    this.collisionBounds = new DoubleRectangle(0, 0, 1, 1);
   }
 
   @Override
   public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
     rg.sprite(position, getTextureSheet(),
-        new IntRectangle(80 + (d == 1 ? 64 : 0), 0, 48, 48), color, position.getGameY());
+        new IntRectangle(192 + (d == 1 ? 32 : 0), 0, 16, 32), color, position.getGameY());
   }
 
   @Override

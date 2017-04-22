@@ -107,7 +107,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
       ItemStack retstack = giveItemStack(stack, false);
       if (retstack != null) {
         ((ServerPlane) plane)
-            .dropItemStack(new OmniPosition(PositionType.GAME, position.getGameX() + .5d, position.getGameY()),
+            .dropItemStack(
+                new OmniPosition(PositionType.GAME, position.getGameX() + .5d, position.getGameY()),
                 retstack);
       }
       return null;
@@ -151,6 +152,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
 
     this.inventory.addItem(new ItemStack(Items.WOOD, 40));
     this.inventory.addItem(new ItemStack(Items.ROCK, 10));
+    this.inventory.addItem(new ItemStack(Items.ENERGY_PIPE, 10));
+    this.inventory.addItem(new ItemStack(Items.ROPE, 10));
   }
 
   public void onLeave() {

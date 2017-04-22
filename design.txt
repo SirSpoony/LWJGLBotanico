@@ -1,0 +1,20 @@
+
+MAJOR "GAME LOOP":
+  leave base -> explore -> collect product -> back to base -> use product to produce lower tier products
+
+
+PLACES TO EXPLORE:
+  - Cave
+  - Village (NPCs)
+  - Biomes
+  - Ruins
+
+PRODUCTS TO COLLECT:
+  - Metals/Jewels
+  - Crops
+  -
+
+MEANS OF PRODUCING PRODUCTS
+  - Farming
+  - Smelting
+  - Automation

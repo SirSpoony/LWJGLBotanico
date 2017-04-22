@@ -33,11 +33,11 @@ public class BuildingEnergyPipe extends Building implements IBuildingEntityHost 
   @Override
   public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    renderConPipe(rg, level, position, d, color);
+    renderPipe(rg, level, position, d, color);
     renderPipeConnections(rg, level, position, d, color);
   }
 
-  private void renderConPipe(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  private void renderPipe(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
     boolean u, dwn, l, r;
     u = dwn = l = r = false;
@@ -56,32 +56,32 @@ public class BuildingEnergyPipe extends Building implements IBuildingEntityHost 
 
     if (l && r && !u && !dwn) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(0, 48, 16, 16), color, position.getGameY());
+          new IntRectangle(0+32, 48+64, 16, 16), color, position.getGameY());
       return;
     }
     if (!l && !r && u && dwn) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(16, 48, 16, 16), color, position.getGameY());
+          new IntRectangle(16+32, 48+64, 16, 16), color, position.getGameY());
       return;
     }
 
     if (u) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(48, 32, 16, 16), color, position.getGameY());
+          new IntRectangle(48+32, 32+64, 16, 16), color, position.getGameY());
     }
     rg.sprite(position, getTextureSheet(),
-        new IntRectangle(0, 16, 16, 16), color, position.getGameY());
+        new IntRectangle(0+32, 16+64, 16, 16), color, position.getGameY());
     if (dwn) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(16, 32, 16, 16), color, position.getGameY());
+          new IntRectangle(16+32, 32+64, 16, 16), color, position.getGameY());
     }
     if (l) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(0, 32, 16, 16), color, position.getGameY());
+          new IntRectangle(0+32, 32+64, 16, 16), color, position.getGameY());
     }
     if (r) {
       rg.sprite(position, getTextureSheet(),
-          new IntRectangle(32, 32, 16, 16), color, position.getGameY());
+          new IntRectangle(32+32, 32+64, 16, 16), color, position.getGameY());
     }
   }
 
