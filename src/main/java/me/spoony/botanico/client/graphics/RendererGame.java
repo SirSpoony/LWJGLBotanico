@@ -195,6 +195,16 @@ public class RendererGame {
         texture));
   }
 
+  public void sprite(double x, double y, Texture texture, IntRectangle source, double layer) {
+    orderedRenderables.add(new R(layer,
+        (float) gameXToWindow(x), (float) gameYToWindow(y),
+        source.getWidth() * this.scale,
+        source.getHeight() * this.scale,
+        Color.WHITE,
+        source.getX(), source.getY(), source.getWidth(), source.getHeight(),
+        texture));
+  }
+
   public void particleBuildingBreak(OmniPosition position, BuildingBreakMaterial particles) {
     effect.start(position, particles);
   }

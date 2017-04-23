@@ -31,7 +31,6 @@ public class EntityPlayer extends Entity {
   public EntityPlayer(IPlane plane) {
     super(plane);
     this.typeID = EntityPlayer.ID;
-    this.position = new OmniPosition(PositionType.GAME, 0, 0);
     this.collider = new DoubleRectangle(.1f, 0, .8f, .4f);
   }
 
@@ -39,13 +38,13 @@ public class EntityPlayer extends Entity {
   public void render(RendererGame rg) {
     Texture texture = rg.getResourceManager().getTexture("foreign_character_sheet.png");
     if (animation == 1) {
-      rg.sprite(position, texture, new IntRectangle(0, 32, 16, 32), position.getGameY());
+      rg.sprite(posX, posY, texture, new IntRectangle(0, 32, 16, 32), posY);
     } else if (animation == 0) {
-      rg.sprite(position, texture, new IntRectangle(0, 96, 16, 32), position.getGameY());
+      rg.sprite(posX, posY, texture, new IntRectangle(0, 96, 16, 32), posY);
     } else if (animation == 2) {
-      rg.sprite(position, texture, new IntRectangle(0, 0, 16, 32), position.getGameY());
+      rg.sprite(posX, posY, texture, new IntRectangle(0, 0, 16, 32), posY);
     } else if (animation == 3) {
-      rg.sprite(position, texture, new IntRectangle(0, 64, 16, 32), position.getGameY());
+      rg.sprite(posX, posY, texture, new IntRectangle(0, 64, 16, 32), posY);
     }
   }
 }

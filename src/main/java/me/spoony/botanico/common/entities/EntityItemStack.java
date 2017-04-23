@@ -39,7 +39,8 @@ public class EntityItemStack extends Entity {
 
     this.typeID = EntityItemStack.ID;
     this.renderscale = .4f;
-    this.position = position;
+    this.posX = position.getGameX();
+    this.posY = position.getGameY();
     this.collider = new DoubleRectangle(.1f, .1f, renderscale, renderscale);
 
     Random posrand = new Random();
@@ -87,13 +88,12 @@ public class EntityItemStack extends Entity {
         if (prog > 1) {
           prog = 1;
         }
-        OmniPosition target = new OmniPosition(PositionType.GAME,
-            collector.position.getGameX() + collector.collider.getCenter().x,
-            collector.position.getGameY() + collector.collider.getCenter().y + .5d);
-        position.setGameX(BMath.lerp(position.getGameX(), target.getGameX(), prog));
-        position.setGameY(BMath.lerp(position.getGameY(), target.getGameY(), prog));
+        double targetX = collector.posX + collector.collider.getCenter().x;
+        double targetY = collector.posY + collector.collider.getCenter().y + .5d;
+        posX = (BMath.lerp(posX, targetX, prog));
+        posY = (BMath.lerp(posY, targetY, prog));
 
-        if (target.distance(PositionType.GAME, position) < .4) {
+        if (Math.pow(targetX-posX, 2) + Math.pow(targetY-posY, 2) < .16) {
           ((ClientPlane) level).removeEntity(this);
         }
       }
@@ -103,11 +103,9 @@ public class EntityItemStack extends Entity {
   @ClientOnly
   @Override
   public void render(RendererGame rg) {
-    float offset = (float) Math.sin(renderpos);
-    OmniPosition renderPosition = new OmniPosition(PositionType.GAME,
-        position.getX(PositionType.GAME), position.getY(PositionType.GAME) + (offset + 1) / 16d);
-    rg.sprite(renderPosition, renderscale, rg.getResourceManager().getTexture("items.png"),
-        stack.getItem().textureBounds, Color.WHITE, renderPosition.getGameY());
+    float offset = (float)(Math.sin(renderpos) + 1) / 16f;
+    rg.sprite(posX, posY+offset, renderscale, rg.getResourceManager().getTexture("items.png"),
+        stack.getItem().textureBounds, Color.WHITE, posY+offset);
   }
 
   @Override
@@ -122,8 +120,7 @@ public class EntityItemStack extends Entity {
     }
     collectionProgress = 0;
     collector = GameView.getClientLevel().getEntity(state);
-    positionBeforeCollection = new OmniPosition(PositionType.GAME, position.getX(PositionType.GAME),
-        position.getY(PositionType.GAME));
+    positionBeforeCollection = new OmniPosition(PositionType.GAME, posX, posY);
   }
 
   public boolean isBeingCollected() {

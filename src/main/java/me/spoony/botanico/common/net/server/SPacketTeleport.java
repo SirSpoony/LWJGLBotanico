@@ -18,7 +18,7 @@ public class SPacketTeleport extends AutoPacketAdapter implements IClientHandler
     public void onReceive(BotanicoClient client) {
         client.getLocalLevel().planeID = plane;
         System.out.println(x+", "+y);
-        client.getLocalPlayer().position.set(PositionType.GAME, x, y);
+        client.getLocalPlayer().setPosition(x, y);
 
         client.gameView.forceCenterCameraOnPlayer();
     }

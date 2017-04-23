@@ -78,8 +78,8 @@ public class BotanicoServerChannelInitializer extends ChannelInitializer<SocketC
               SPacketNewEntity temppne = new SPacketNewEntity();
               temppne.type = ent.getTypeID();
               temppne.eid = ent.eid;
-              temppne.x = ent.position.getGameX();
-              temppne.y = ent.position.getGameY();
+              temppne.x = ent.posX;
+              temppne.y = ent.posY;
               manager.sendPacket(temppne, ctx.channel());
             }
 

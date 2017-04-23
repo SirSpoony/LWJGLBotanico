@@ -2,6 +2,8 @@ package me.spoony.botanico.server;
 
 import com.google.common.collect.Range;
 import com.google.common.collect.Sets;
+import com.google.common.math.DoubleMath;
+import java.math.RoundingMode;
 import me.spoony.botanico.common.net.Packet;
 import me.spoony.botanico.common.dialog.Dialog;
 import me.spoony.botanico.common.entities.EntityPlayer;
@@ -64,8 +66,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
 
     for (int ox = -1; ox <= 1; ox++) {
       for (int oy = -1; oy <= 1; oy++) {
-        long x = position.getChunkX() + ox;
-        long y = position.getChunkY() + oy;
+        long x = DoubleMath.roundToLong(getTileX() / 32d, RoundingMode.FLOOR) + ox;
+        long y = DoubleMath.roundToLong(getTileY() / 32d, RoundingMode.FLOOR) + oy;
         shouldBeCommonChunks.add(plane.getChunk(x, y));
       }
     }
@@ -108,7 +110,7 @@ public class RemoteEntityPlayer extends EntityPlayer {
       if (retstack != null) {
         ((ServerPlane) plane)
             .dropItemStack(
-                new OmniPosition(PositionType.GAME, position.getGameX() + .5d, position.getGameY()),
+                new OmniPosition(PositionType.GAME, posX + .5d, posY),
                 retstack);
       }
       return null;
@@ -186,7 +188,8 @@ public class RemoteEntityPlayer extends EntityPlayer {
 
       this.forceUpdateCommonChunks();
     }
-    this.position.set(position);
+    this.posX = position.getGameX();
+    this.posY = position.getGameY();
 
     getPlane().server.getClientManager().getPacketHandler().sendTeleport(this);
   }

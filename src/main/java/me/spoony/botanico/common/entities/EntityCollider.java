@@ -25,7 +25,7 @@ public class EntityCollider {
   public EntityCollider(IPlane level, Entity entity, DoubleRectangle aabounds) {
     this.level = level;
     entityBounds = new DoubleRectangle(
-        entity.position.getGameX() + aabounds.x, entity.position.getGameY() + aabounds.y,
+        entity.posX + aabounds.x, entity.posY + aabounds.y,
         aabounds.width, aabounds.height);
   }
 
@@ -87,8 +87,8 @@ public class EntityCollider {
   public List<Entity> checkCollisionsEntities() {
     List<Entity> ret = Lists.newArrayList();
     for (Entity entity : level.getEntities()) {
-      DoubleRectangle collisionBounds = new DoubleRectangle(entity.position.getGameX() + entity.collider.x,
-          entity.position.getGameY() + entity.collider.y,
+      DoubleRectangle collisionBounds = new DoubleRectangle(entity.posX + entity.collider.x,
+          entity.posY + entity.collider.y,
           entity.collider.width, entity.collider.height);
       if (collisionBounds.overlaps(this.entityBounds)) {
         ret.add(entity);

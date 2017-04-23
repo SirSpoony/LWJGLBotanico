@@ -27,6 +27,7 @@ public abstract class Layer {
     layer = new LayerSmooth(layer);
     layer = new LayerSmooth(layer);
     layer = LayerZoom.magnify(layer, 2);
+    layer = new LayerSmooth(layer);
     layer = new LayerShore(layer);
     layer = LayerZoom.magnify(layer, 3);
     layer = new LayerSmooth(layer);
@@ -95,7 +96,7 @@ public abstract class Layer {
     return chunkseed;
   }
 
-  public void initChunkSeed(int x, int y) {
+  public void initChunkSeed(long x, long y) {
     this.chunkseed = this.worldseed;
     this.chunkseed *= this.chunkseed * 6364136223846793005L + 1442695040888963407L;
     this.chunkseed += x;
@@ -108,13 +109,13 @@ public abstract class Layer {
   }
 
   public void initWorldGenSeed(long seed) {
+    this.worldseed = seed;
     this.worldseed *= this.worldseed * 6364136223846793005L + 1442695040888963407L;
     this.worldseed += this.baseseed;
     this.worldseed *= this.worldseed * 6364136223846793005L + 1442695040888963407L;
     this.worldseed += this.baseseed;
     this.worldseed *= this.worldseed * 6364136223846793005L + 1442695040888963407L;
     this.worldseed += this.baseseed;
-
 
     if (child != null) {
       child.initWorldGenSeed(seed);

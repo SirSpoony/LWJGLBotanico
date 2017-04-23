@@ -147,8 +147,8 @@ public class ServerPlane implements IPlane {
 
     pne.eid = e.eid;
     pne.type = e.getTypeID();
-    pne.x = e.position.getGameX();
-    pne.y = e.position.getGameY();
+    pne.x = e.posX;
+    pne.y = e.posY;
     if (e instanceof EntityItemStack && ((EntityItemStack) e).stack != null) {
       pne.misc = ((EntityItemStack) e).stack.getItem().getID();
     }

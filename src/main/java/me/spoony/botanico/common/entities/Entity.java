@@ -1,5 +1,7 @@
 package me.spoony.botanico.common.entities;
 
+import com.google.common.math.DoubleMath;
+import java.math.RoundingMode;
 import me.spoony.botanico.ClientOnly;
 import me.spoony.botanico.ServerOnly;
 import me.spoony.botanico.client.ClientPlane;
@@ -18,7 +20,9 @@ import java.util.Random;
  */
 public class Entity {
 
-  public OmniPosition position;
+  public double posX;
+  public double posY;
+
   public IPlane plane;
 
   public DoubleRectangle collider;
@@ -31,7 +35,8 @@ public class Entity {
   }
 
   public Entity(IPlane plane) {
-    this.position = new OmniPosition(PositionType.GAME, 0, 0);
+    this.posX = 0;
+    this.posY = 0;
     this.plane = plane;
     this.collider = new DoubleRectangle(0, 0, 1, 1);
     this.eid = new Random().nextInt();
@@ -47,7 +52,12 @@ public class Entity {
   }
 
   public OmniPosition getPosition() {
-    return position;
+    return new OmniPosition(PositionType.GAME, this.posX, this.posY);
+  }
+
+  public void setPosition(double x, double y) {
+    this.posX = x;
+    this.posY = y;
   }
 
   @ClientOnly
@@ -74,5 +84,17 @@ public class Entity {
 
   public IPlane getPlane() {
     return plane;
+  }
+
+  public void onUpdate() {
+
+  }
+
+  public long getTileX() {
+    return DoubleMath.roundToLong(posX, RoundingMode.FLOOR);
+  }
+
+  public long getTileY() {
+    return DoubleMath.roundToLong(posY, RoundingMode.FLOOR);
   }
 }

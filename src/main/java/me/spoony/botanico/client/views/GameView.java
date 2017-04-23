@@ -88,9 +88,8 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
     rendererGame = new RendererGame();
     rendererGUI = new RendererGUI();
 
-    OmniPosition playerPosition = client.getLocalPlayer().position;
     rendererGame
-        .centerOn(new DoubleRectangle(playerPosition.getGameX(), playerPosition.getGameY(), 1, 2).getCenter(), -1);
+        .centerOn(new DoubleRectangle(client.getLocalPlayer().posX, client.getLocalPlayer().posY, 1, 2).getCenter(), -1);
   }
 
   @Override
@@ -99,8 +98,7 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
 
     client.getLocalLevel().update(delta);
 
-    OmniPosition playerPosition = client.getLocalPlayer().position;
-    rendererGame.centerOn(new DoubleRectangle(playerPosition.getGameX(), playerPosition.getGameY(), 1, 2).getCenter(),
+    rendererGame.centerOn(new DoubleRectangle(client.getLocalPlayer().posX, client.getLocalPlayer().posY, 1, 2).getCenter(),
         delta * 16);
 
     if (waittime > 2) {
@@ -137,8 +135,8 @@ public class GameView extends ViewAdapter implements IView, BinaryInputListener 
           .text(0, rendererGUI.guiViewport.height, "FPS: " +
               Math.round(BotanicoGame.FPS), TextColors.YELLOW, CallAlign.TOP_LEFT);
 
-      double x = client.getLocalPlayer().position.getGameX();
-      double y = client.getLocalPlayer().position.getGameY();
+      double x = client.getLocalPlayer().posX;
+      double y = client.getLocalPlayer().posY;
 
       rendererGUI.text(0, rendererGUI.guiViewport.height - 10,
           "Player X: " +

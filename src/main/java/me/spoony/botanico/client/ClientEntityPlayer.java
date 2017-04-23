@@ -125,25 +125,25 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (coorddir.y != 0) {
-      position.setGameY(position.getGameY() + coorddir.y * movementSpeed * timeDiff);
+      posY += coorddir.y * movementSpeed * timeDiff;
       CollisionCheck check = new EntityCollider(plane, this).checkCollisionsChunk();
       if (check.collided) {
         if (coorddir.y > 0) {
-          position.setGameY(position.getGameY() - check.intersection.getHeight());
+          posY -= check.intersection.getHeight();
         } else {
-          position.setGameY(position.getGameY() + check.intersection.getHeight());
+          posY += check.intersection.getHeight();
         }
       }
     }
 
     if (coorddir.x != 0) {
-      position.setGameX(position.getGameX() + coorddir.x * movementSpeed * timeDiff);
+      posX += coorddir.x * movementSpeed * timeDiff;
       CollisionCheck check = new EntityCollider(plane, this).checkCollisionsChunk();
       if (check.collided) {
         if (coorddir.x > 0) {
-          position.setGameX(position.getGameX() - check.intersection.getWidth());
+          posX -= check.intersection.getWidth();
         } else {
-          position.setGameX(position.getGameX() + check.intersection.getWidth());
+          posX += check.intersection.getWidth();
         }
       }
     }
@@ -166,7 +166,7 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
       downAnimation.update(timeDiff);
 
       if (footstepTimer.step(timeDiff)) {
-        Tile tile = plane.getTile(new OmniPosition(position));
+        Tile tile = plane.getTile(getTileX(), getTileY());
         if (tile != null) {
           //tile.getFootStepMaterial().getRandomSound(Botanico.INSTANCE.getResourceManager()).play(.5f); todo footstep
         }
@@ -183,7 +183,8 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
             indicator = new BuildingDamageIndicator(buildingPosition,
                 b.getHardness(plane, buildingPosition));
           } else {
-            if (!(indicator.tilePosition.getTileX() == buildingPosition.getTileX() && indicator.tilePosition.getTileY() == buildingPosition.getTileY())) {
+            if (!(indicator.tilePosition.getTileX() == buildingPosition.getTileX()
+                && indicator.tilePosition.getTileY() == buildingPosition.getTileY())) {
               indicator = new BuildingDamageIndicator(buildingPosition,
                   b.getHardness(plane, buildingPosition));
             }
@@ -212,13 +213,13 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (timer.step(1f / 16f)) {
-      if (!lastPacketPosition.equals(position)) {
+      if (lastPacketPosition.getGameX() != posX || lastPacketPosition.getGameY() != posY) {
         CPacketPlayerMove pem = new CPacketPlayerMove();
-        pem.x = this.position.getGameX();
-        pem.y = this.position.getGameY();
+        pem.x = posX;
+        pem.y = posY;
         client.sendPacket(pem);
 
-        lastPacketPosition = new OmniPosition(position);
+        lastPacketPosition = new OmniPosition(PositionType.GAME, posX, posY);
       }
     }
   }
@@ -397,17 +398,17 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
       loadAnimation();
     }
 
-    rg.sprite(new OmniPosition(position).add(PositionType.GAME, 0, -2 / 16f), spritesheet,
-        new IntRectangle(64, 0, 16, 32), position.getGameY());
+    rg.sprite(posX, posY - 2 / 16f, spritesheet,
+        new IntRectangle(64, 0, 16, 32), posY);
 
     if (animation == 1) {
-      rg.sprite(position, spritesheet, rightAnimation.getSource(), position.getGameY());
+      rg.sprite(posX, posY, spritesheet, rightAnimation.getSource(), posY);
     } else if (animation == 0) {
-      rg.sprite(position, spritesheet, leftAnimation.getSource(), position.getGameY());
+      rg.sprite(posX, posY, spritesheet, leftAnimation.getSource(), posY);
     } else if (animation == 2) {
-      rg.sprite(position, spritesheet, downAnimation.getSource(), position.getGameY());
+      rg.sprite(posX, posY, spritesheet, downAnimation.getSource(), posY);
     } else if (animation == 3) {
-      rg.sprite(position, spritesheet, upAnimation.getSource(), position.getGameY());
+      rg.sprite(posX, posY, spritesheet, upAnimation.getSource(), posY);
     }
 
     if (indicator != null) {
@@ -439,6 +440,9 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
   }
 
   public boolean canReach(OmniPosition position) {
-    return (this.position.distance(PositionType.GAME, position) < 5);
+    float reachDistance = 5;
+    double dx = position.getGameX() - posX;
+    double dy = position.getGameY() - posY;
+    return dx*dx + dy*dy < reachDistance*reachDistance;
   }
 }

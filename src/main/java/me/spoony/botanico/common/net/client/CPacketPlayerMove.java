@@ -11,23 +11,23 @@ import me.spoony.botanico.server.RemoteEntityPlayer;
 /**
  * Created by Colten on 11/20/2016.
  */
-public class CPacketPlayerMove extends AutoPacketAdapter implements IServerHandler
-{
-    public double x;
-    public double y;
+public class CPacketPlayerMove extends AutoPacketAdapter implements IServerHandler {
 
-    @Override
-    public void onReceive(BotanicoServer server, RemoteEntityPlayer player) {
-        Preconditions.checkNotNull(player, "Client does not have a player entity yet.");
+  public double x;
+  public double y;
 
-        Entity ent = player;
-        ent.position.setGameX(x);
-        ent.position.setGameY(y);
+  @Override
+  public void onReceive(BotanicoServer server, RemoteEntityPlayer player) {
+    Preconditions.checkNotNull(player, "Client does not have a player entity yet.");
 
-        SPacketEntityMove pem = new SPacketEntityMove();
-        pem.eid = ent.eid;
-        pem.x = ent.position.getGameX();
-        pem.y = ent.position.getGameY();
-        server.getClientManager().sendPacketToAll(pem, p -> p != player);
-    }
+    Entity ent = player;
+    ent.posX = x;
+    ent.posY = y;
+
+    SPacketEntityMove pem = new SPacketEntityMove();
+    pem.eid = ent.eid;
+    pem.x = ent.posX;
+    pem.y = ent.posY;
+    server.getClientManager().sendPacketToAll(pem, p -> p != player);
+  }
 }
