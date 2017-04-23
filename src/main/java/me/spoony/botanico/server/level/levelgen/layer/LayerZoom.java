@@ -7,81 +7,58 @@ import me.spoony.botanico.common.util.BMath;
  * Created by Colten on 12/22/2016.
  */
 public class LayerZoom extends Layer {
-    boolean offset;
 
-    public LayerZoom(Layer child, boolean offset) {
-        super(child);
-        this.offset = offset;
+  public LayerZoom(Layer child) {
+    super(child);
+  }
+
+  @Override
+  public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
+    int childAreaX = areaX >> 1;
+    int childAreaY = areaY >> 1;
+    int childAreaWidth = (areaWidth >> 1) + 2;
+    int childAreaHeight = (areaHeight >> 1) + 2;
+    int[] childInts = this.child.getInts(childAreaX, childAreaY, childAreaWidth, childAreaHeight);
+    int mAreaWidth = childAreaWidth - 1 << 1; // = areaWidth + 2
+    int mAreaHeight = childAreaHeight - 1 << 1; // = areaHeight + 2
+    int[] mInts = new int[mAreaWidth * mAreaHeight];
+
+    // x + (y * width)
+    for (int yi = 0; yi < childAreaHeight - 1; ++yi) { // yi iterates from 0 to height-1
+      int mYPos = (yi << 1) * mAreaWidth; // yi but in terms of mInts
+      int xi = 0;
+      int childInt = childInts[xi + 0 + (yi + 0) * childAreaWidth];
+
+      for (int k2 = childInts[xi + 0 + (yi + 1) * childAreaWidth]; xi < childAreaWidth - 1; ++xi) {
+        this.resetRand((xi + childAreaX << 1), (yi + childAreaY << 1));
+
+        int childIntRight = childInts[xi + 1 + (yi + 0) * childAreaWidth];
+        int childIntDownRight = childInts[xi + 1 + (yi + 1) * childAreaWidth];
+        mInts[mYPos] = childInt;
+        mInts[mYPos++ + mAreaWidth] = this.selectRandom(new int[]{childInt, k2});
+        mInts[mYPos] = this.selectRandom(new int[]{childInt, childIntRight});
+        mInts[mYPos++ + mAreaWidth] = this
+            .selectModeOrRandom(childInt, childIntRight, k2, childIntDownRight);
+        childInt = childIntRight;
+        k2 = childIntDownRight;
+      }
     }
 
-    @Override
-    public int[] getInts(int x, int y, int xsize, int ysize) {
-        int childxsize = xsize;
-        int childysize = ysize;
+    int[] ret = new int[areaWidth * areaHeight];
 
-        int[] childInts = child.getInts(x / 2, y / 2, childxsize, childysize);
-        int[] ret = new int[xsize * ysize];
-
-        for (int xi = 0; xi < xsize; xi++) {
-            for (int yi = 0; yi < xsize; yi++) {
-                resetRand(x + xi, y + yi);
-
-                int a = childInts[(xi / 2 + 0) + ((yi / 2 + 0) * childysize)];
-                int b = childInts[(xi / 2 + 1) + ((yi / 2 + 0) * childysize)];
-                int c = childInts[(xi / 2 + 0) + ((yi / 2 + 1) * childysize)];
-                int d = childInts[(xi / 2 + 1) + ((yi / 2 + 1) * childysize)];
-                if (offset) {
-                    ret[xi + yi * ysize] = getRandomOf4(getRandLong(), a, b, c, d);
-                    //ret[xi + yi * ysize] = getRandomInArray(rand,a,b,c,d);
-                } else {
-                    ret[xi + yi * ysize] = getRandomInArray(getRandLong(), a);
-                }
-            }
-        }
-
-        return ret;
+    for (int yi = 0; yi < areaHeight; ++yi) {
+      System.arraycopy(mInts, (yi + (areaY & 1)) * mAreaWidth + (areaX & 1),
+          ret, yi * areaWidth, areaWidth);
     }
 
-    protected int getRandomInArray(long rand, int... biomes) {
-        return biomes[IntMath.mod((int) BMath.scramble(rand), biomes.length)];
-    }
+    return ret;
+  }
 
-    protected int getRandomOf4(long rand, int par1, int par2, int par3, int par4) {
-        if (par2 == par3 && par3 == par4) {
-            return par2;
-        } else if (par1 == par2 && par1 == par3) {
-            return par1;
-        } else if (par1 == par2 && par1 == par4) {
-            return par1;
-        } else if (par1 == par3 && par1 == par4) {
-            return par1;
-        } else if (par1 == par2 && par3 != par4) {
-            return par1;
-        } else if (par1 == par3 && par2 != par4) {
-            return par1;
-        } else if (par1 == par4 && par2 != par3) {
-            return par1;
-        } else if (par2 == par1 && par3 != par4) {
-            return par2;
-        } else if (par2 == par3 && par1 != par4) {
-            return par2;
-        } else if (par2 == par4 && par1 != par3) {
-            return par2;
-        } else if (par3 == par1 && par2 != par4) {
-            return par3;
-        } else if (par3 == par2 && par1 != par4) {
-            return par3;
-        } else if (par3 == par4 && par1 != par2) {
-            return par3;
-        } else if (par4 == par1 && par2 != par3) {
-            return par3;
-        } else if (par4 == par2 && par1 != par3) {
-            return par3;
-        } else if (par4 == par3 && par1 != par2) {
-            return par3;
-        } else {
-            int var5 = IntMath.mod((int) BMath.scramble(rand), 4);
-            return var5 == 0 ? par1 : (var5 == 1 ? par2 : (var5 == 2 ? par3 : par4));
-        }
+  public static Layer magnify(Layer child, int times) {
+    Layer ret = child;
+    for (int i = 0; i < times; ++i) {
+      ret = new LayerZoom(ret);
     }
+    return ret;
+  }
 }

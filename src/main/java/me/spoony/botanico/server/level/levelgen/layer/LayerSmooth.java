@@ -4,42 +4,50 @@ package me.spoony.botanico.server.level.levelgen.layer;
  * Created by Colten on 12/22/2016.
  */
 public class LayerSmooth extends Layer {
-    public LayerSmooth(Layer child) {
-        super(child);
-    }
 
-    @Override
-    public int[] getInts(int x, int y, int xsize, int ysize) {
-        int childsize = xsize*2;
-        int[] childInts = child.getInts(x, y, childsize, childsize);
-        int[] ret = new int[xsize*ysize];
+  public LayerSmooth(Layer child) {
+    super(child);
+  }
 
-        for (int xi = 0; xi < xsize; xi++) {
-            for (int yi = 0; yi < xsize; yi++) {
-                int northCheck = childInts[xi + 1 + (yi + 0) * childsize];
-                int southCheck = childInts[xi + 1 + (yi + 2) * childsize];
-                int eastCheck = childInts[xi + 2 + (yi + 1) * childsize];
-                int westCheck = childInts[xi + 0 + (yi + 1) * childsize];
+  @Override
+  public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
+    int childAreaX = areaX - 1;
+    int childAreaY = areaY - 1;
+    int childAreaWidth = areaWidth + 2;
+    int childAreaHeight = areaHeight + 2;
+    int[] childInts = this.child.getInts(childAreaX, childAreaY, childAreaWidth, childAreaHeight);
+    int[] aint1 = new int[areaWidth * areaHeight];
 
-                int centerCheck = childInts[xi + 1 + (yi + 1) * childsize];
+    for (int i1 = 0; i1 < areaHeight; ++i1) {
+      for (int j1 = 0; j1 < areaWidth; ++j1) {
+        int k1 = childInts[j1 + 0 + (i1 + 1) * childAreaWidth];
+        int l1 = childInts[j1 + 2 + (i1 + 1) * childAreaWidth];
+        int i2 = childInts[j1 + 1 + (i1 + 0) * childAreaWidth];
+        int j2 = childInts[j1 + 1 + (i1 + 2) * childAreaWidth];
+        int k2 = childInts[j1 + 1 + (i1 + 1) * childAreaWidth];
 
-                if (westCheck == eastCheck && northCheck == southCheck) {
-                    if ((getRandInt() & 1) == 0)
-                        centerCheck = westCheck;
-                    else
-                        centerCheck = northCheck;
-                } else {
-                    if (westCheck == eastCheck)
-                        centerCheck = westCheck;
+        if (k1 == l1 && i2 == j2) {
+          this.resetRand((j1 + areaX), (i1 + areaY));
 
-                    if (northCheck == southCheck)
-                        centerCheck = northCheck;
-                }
+          if (this.nextInt(2) == 0) {
+            k2 = k1;
+          } else {
+            k2 = i2;
+          }
+        } else {
+          if (k1 == l1) {
+            k2 = k1;
+          }
 
-                ret[xi + yi * xsize] = centerCheck;
-            }
+          if (i2 == j2) {
+            k2 = i2;
+          }
         }
 
-        return ret;
+        aint1[j1 + i1 * areaWidth] = k2;
+      }
     }
+
+    return aint1;
+  }
 }

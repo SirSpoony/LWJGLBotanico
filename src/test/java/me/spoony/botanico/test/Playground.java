@@ -6,6 +6,11 @@ package me.spoony.botanico.test;
 public class Playground {
 
   public static void main(String[] args) {
-    System.out.println("Shift: "+(16>>1));
+
+    int k = (64 >> 1) + 2;
+    int i1 = k - 1 << 1;
+
+
+    System.out.println(32 | 1);
   }
 }

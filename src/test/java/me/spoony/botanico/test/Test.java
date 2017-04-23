@@ -15,32 +15,26 @@ import java.io.IOException;
 public class Test {
 
   public static void main(String[] args) throws ExceptionInvalidParam {
-    writeChunk();
+    writeChunk(0, 0, 512, "chunk_0_0");
+    writeChunk(512, 0, 512, "chunk_1_0");
   }
 
-  public static void writeChunk() {
-    Layer layer = new LayerZeros(11);
-    layer = new LayerLand(layer);
-    layer = new LayerZoom(layer, true);
-    layer = new LayerZoom(layer, true);
-    layer = new LayerBiome(layer);
-    layer = new LayerZoom(layer, true);
-    layer = new LayerZoom(layer, true);
-    layer = new LayerZoom(layer, true);
-    layer = new LayerZoom(layer, true);
-    layer = new LayerZoom(layer, true);
-    layer = new LayerSmooth(layer);
+  public static void writeChunk(int chunkx, int chunky, int size, String name) {
+    Layer layer = Layer.getDefaultLayers();
+    int[] ints = layer.getInts(chunkx, chunky, size, size);
 
-    int[] ints = layer.getInts(0, 0, 1024, 1024);
-
-    BufferedImage bi = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_ARGB);
-    for (int x = 0; x < 1024; x++) {
-      for (int y = 0; y < 1024; y++) {
+    BufferedImage bi = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+    for (int x = 0; x < size; x++) {
+      for (int y = 0; y < size; y++) {
         float r, g, b;
         r = g = b = 0;
 
-        if ((ints[x + y * 1024] & 1) == 1) {
+        if ((ints[x + y * size]) == 1) {
           r = g = b = .5f;
+        }
+
+        if ((ints[x + y * size]) == 3) {
+          r = g = b = 1f;
         }
 
         bi.setRGB(x, y, new Color(r, g, b).getRGB());
@@ -48,7 +42,7 @@ public class Test {
     }
 
     try {
-      ImageIO.write(bi, "PNG", new File("chunk_test0.png"));
+      ImageIO.write(bi, "PNG", new File(name + ".png"));
     } catch (IOException e) {
       e.printStackTrace();
     }
