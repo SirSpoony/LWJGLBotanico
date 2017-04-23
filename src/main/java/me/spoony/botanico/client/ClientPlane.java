@@ -3,12 +3,11 @@ package me.spoony.botanico.client;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.math.DoubleMath;
 import com.google.common.math.LongMath;
 import java.math.RoundingMode;
-import me.spoony.botanico.client.graphics.renderers.PlaneRenderer;
+import me.spoony.botanico.client.graphics.renderers.RendererPlane;
 import me.spoony.botanico.client.views.GameView;
 import me.spoony.botanico.common.buildings.Building;
 import me.spoony.botanico.common.buildings.BuildingBreakMaterial;
@@ -33,7 +32,7 @@ public class ClientPlane implements IPlane {
   private BiMap<Integer, Entity> entities;
   private Set<Chunk> chunks;
 
-  private PlaneRenderer renderer;
+  private RendererPlane renderer;
 
   public int LOCAL_PLAYER_EID = 0;
   public int planeID;
@@ -48,7 +47,7 @@ public class ClientPlane implements IPlane {
 
     this.localPlayer = new ClientEntityPlayer(client, this);
 
-    this.renderer = new PlaneRenderer(this);
+    this.renderer = new RendererPlane(this);
   }
 
   public ClientEntityPlayer getLocalPlayer() {

@@ -10,6 +10,7 @@ import me.spoony.botanico.common.level.IPlane;
 import me.spoony.botanico.common.util.DoubleRectangle;
 import me.spoony.botanico.common.util.IntRectangle;
 import me.spoony.botanico.common.util.position.OmniPosition;
+import me.spoony.botanico.common.util.position.PositionType;
 import me.spoony.botanico.server.RemoteEntityPlayer;
 import me.spoony.botanico.server.level.ServerPlane;
 
@@ -29,8 +30,8 @@ public class BuildingCave extends Building {
   @Override
   public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
       Color color) {
-    rg.sprite(position, getTextureSheet(),
-        new IntRectangle(192 + (d == 1 ? 32 : 0), 0, 16, 32), color, position.getGameY());
+    rg.sprite(position.add(PositionType.GAME,-1,-1), getTextureSheet(),
+        new IntRectangle(192 + (d == 1 ? 48 : 0), 0, 48, 48), color, position.getGameY()+3);
   }
 
   @Override

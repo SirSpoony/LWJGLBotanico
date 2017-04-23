@@ -12,11 +12,11 @@ import java.util.Random;
 /**
  * Created by Colten on 1/2/2017.
  */
-public class BuildingFeatureRuin implements BuildingFeature {
+public class BuildingFeatureCave implements BuildingFeature {
 
   Building building;
 
-  public BuildingFeatureRuin(Building building) {
+  public BuildingFeatureCave(Building building) {
     this.building = building;
   }
 
@@ -27,12 +27,12 @@ public class BuildingFeatureRuin implements BuildingFeature {
 
     for (int xi = 3; xi < 28; xi++) {
       for (int yi = 3; yi < 28; yi++) {
-        if (biome[xi * 32 + yi] == false) {
+        if (biome[xi  + yi* 32] == false) {
           continue;
         }
 
-        if (random.nextFloat() < .05f) {
-          if (clearSpace[xi * 32 + yi]) {
+        if (random.nextFloat() < .01f) {
+          if (clearSpace[xi  + yi* 32]) {
             boolean valid = true;
             for (int offx = -1; offx <= 1; offx++) {
               for (int offy = -1; offy <= 1; offy++) {

@@ -24,11 +24,11 @@ import java.util.List;
 /**
  * Created by Colten on 12/17/2016.
  */
-public class PlaneRenderer implements GameRenderable {
+public class RendererPlane implements GameRenderable {
 
   public ClientPlane level;
 
-  public PlaneRenderer(ClientPlane level) {
+  public RendererPlane(ClientPlane level) {
     this.level = level;
   }
 
@@ -120,7 +120,7 @@ public class PlaneRenderer implements GameRenderable {
         adjtiles.setTile(Direction.LEFT, tiles[x - firstTileX - 1][y - firstTileY]);
         adjtiles.setTile(Direction.DOWN_LEFT, tiles[x - firstTileX - 1][y - firstTileY - 1]);
 
-        final int randtexture = Tile.perm[Math.abs(5 * x + y) & 255];
+        final int randtexture = Tile.perm[Math.abs(99 * x + y) & 255];
         final TileRenderRule relevantRule = tile.renderRules.findRenderRule(adjtiles);
 
         IntRectangle foreground = tile.foregroundRegion(adjtiles, relevantRule, randtexture);

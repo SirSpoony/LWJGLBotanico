@@ -13,11 +13,14 @@ import java.util.Random;
  * Created by Colten on 11/26/2016.
  */
 public class Biome {
+  public int id;
 
   private ArrayList<BuildingFeature> buildingFeatures;
   private Tile tile;
 
-  public Biome() {
+  public Biome(int id) {
+    this.id = id;
+
     this.buildingFeatures = Lists.newArrayList();
     this.tile = Tiles.GROUND;
   }
@@ -25,10 +28,10 @@ public class Biome {
   public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
     for (int xi = 0; xi < 32; xi++) {
       for (int yi = 0; yi < 32; yi++) {
-        if (!biome[xi * 32 + yi]) {
+        if (!biome[xi + yi * 32]) {
           continue;
         }
-        chunk.tiles[xi * 32 + yi] = tile;
+        chunk.tiles[xi + yi * 32] = tile;
       }
     }
 

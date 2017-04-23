@@ -27,19 +27,19 @@ public class BuildingFeaturePlant implements BuildingFeature {
 
   @Override
   public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
-    for (int xi = 0; xi < Chunk.CHUNK_SIZE; xi++) {
-      for (int yi = 0; yi < Chunk.CHUNK_SIZE; yi++) {
-        if (biome[xi * 32 + yi] == false) {
+    for (int xi = 0; xi < 32; xi++) {
+      for (int yi = 0; yi < 32; yi++) {
+        if (biome[xi + yi * 32] == false) {
           continue;
         }
 
         float val = random.nextFloat();
-        if (val < popularity && chunk.tiles[xi * 32 + yi] == allowedTile) {
-          if (chunk.buildings[xi * 32 + yi] != null) {
+        if (val < popularity && chunk.tiles[xi + yi * 32] == allowedTile) {
+          if (chunk.buildings[xi + yi * 32] != null) {
             continue;
           }
           if (allowAdjacentsRange <= 0) {
-            chunk.buildings[xi * 32 + yi] = plant;
+            chunk.buildings[xi + yi * 32] = plant;
             continue;
           } else {
             boolean make = true;
@@ -49,13 +49,13 @@ public class BuildingFeaturePlant implements BuildingFeature {
                     .contains(yi + yo)) {
                   continue;
                 }
-                if (chunk.buildings[(xi + xo) * 32 + (yi + yo)] == plant) {
+                if (chunk.buildings[(xi + xo) + (yi + yo) * 32] == plant) {
                   make = false;
                 }
               }
             }
             if (make) {
-              chunk.buildings[xi * 32 + yi] = plant;
+              chunk.buildings[xi + yi * 32] = plant;
             }
           }
         }

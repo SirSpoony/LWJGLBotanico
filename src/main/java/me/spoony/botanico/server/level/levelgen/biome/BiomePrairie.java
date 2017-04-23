@@ -3,7 +3,8 @@ package me.spoony.botanico.server.level.levelgen.biome;
 import me.spoony.botanico.common.buildings.Buildings;
 import me.spoony.botanico.common.tiles.Tiles;
 import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureBlob;
-import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureRuin;
+import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureBush;
+import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureCave;
 import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeaturePlant;
 
 /**
@@ -11,7 +12,9 @@ import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureP
  */
 public class BiomePrairie extends Biome {
 
-  public BiomePrairie() {
+  public BiomePrairie(int id) {
+    super(id);
+
     this.setTile(Tiles.GROUND);
 
     this.addBuildingFeature(new BuildingFeatureBlob(.005f, Buildings.DIRT_MOUND, Tiles.GROUND, 3));
@@ -23,8 +26,9 @@ public class BiomePrairie extends Biome {
 
     this.addBuildingFeature(new BuildingFeaturePlant(.05f, Buildings.GRASS, 0, Tiles.GROUND));
 
-    this.addBuildingFeature(new BuildingFeatureRuin(Buildings.BUSH));
-    this.addBuildingFeature(new BuildingFeatureRuin(Buildings.SMALL_BUSH));
-    this.addBuildingFeature(new BuildingFeatureRuin(Buildings.CAVE));
+    this.addBuildingFeature(new BuildingFeatureBush(.01f, Buildings.BUSH));
+    this.addBuildingFeature(new BuildingFeatureBush(.01f, Buildings.SMALL_BUSH));
+
+    this.addBuildingFeature(new BuildingFeatureCave(Buildings.CAVE));
   }
 }

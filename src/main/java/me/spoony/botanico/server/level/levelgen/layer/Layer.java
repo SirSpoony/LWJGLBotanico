@@ -17,7 +17,7 @@ public abstract class Layer {
     this.child = child;
   }
 
-  public static Layer getDefaultLayers() {
+  public static Layer getDefaultLayers(long worldSeed) {
     Layer layer = new LayerIsland();
     layer = new LayerFuzzyZoom(layer);
     layer = new LayerAddIsland(layer);
@@ -25,12 +25,14 @@ public abstract class Layer {
     layer = new LayerAddIsland(layer);
     layer = new LayerAddIsland(layer);
     layer = new LayerSmooth(layer);
+    layer = new LayerSmooth(layer);
     layer = LayerZoom.magnify(layer, 2);
     layer = new LayerShore(layer);
-    layer = LayerZoom.magnify(layer, 2);
+    layer = LayerZoom.magnify(layer, 3);
     layer = new LayerSmooth(layer);
+    layer = new LayerShore(layer); // shore should be last to ensure that there is always a shore.
 
-    layer.initWorldGenSeed(23);
+    layer.initWorldGenSeed(worldSeed);
 
     return layer;
   }

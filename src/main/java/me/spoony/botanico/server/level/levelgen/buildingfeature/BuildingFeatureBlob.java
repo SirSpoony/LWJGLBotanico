@@ -28,17 +28,17 @@ public class BuildingFeatureBlob implements BuildingFeature {
   public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
     for (int xi = 0; xi < Chunk.CHUNK_SIZE; xi++) {
       for (int yi = 0; yi < Chunk.CHUNK_SIZE; yi++) {
-        if (biome[xi * 32 + yi] == false) {
+        if (biome[xi + yi * 32] == false) {
           continue;
         }
 
         float val = random.nextFloat();
-        if (val < popularity && chunk.tiles[xi * 32 + yi] == allowedTile) {
+        if (val < popularity && chunk.tiles[xi + yi * 32] == allowedTile) {
           int chainlength = size;
 
-          if ((chunk.tiles[xi * 32 + yi] == allowedTile || allowedTile == null) && (
-              chunk.buildings[xi * 32 + yi] == null)) {
-            chunk.buildings[xi * 32 + yi] = building;
+          if ((chunk.tiles[xi + yi * 32] == allowedTile || allowedTile == null) && (
+              chunk.buildings[xi + yi * 32] == null)) {
+            chunk.buildings[xi + yi * 32] = building;
           }
 
           for (int i = 0; i < chainlength; i++) {
@@ -49,9 +49,9 @@ public class BuildingFeatureBlob implements BuildingFeature {
               continue;
             }
 
-            if ((chunk.tiles[xmod * 32 + ymod] == allowedTile || allowedTile == null) && (
-                chunk.buildings[xmod * 32 + ymod] == null)) {
-              chunk.buildings[xmod * 32 + ymod] = building;
+            if ((chunk.tiles[xmod + ymod * 32] == allowedTile || allowedTile == null) && (
+                chunk.buildings[xmod + ymod * 32] == null)) {
+              chunk.buildings[xmod + ymod * 32] = building;
             }
           }
         }

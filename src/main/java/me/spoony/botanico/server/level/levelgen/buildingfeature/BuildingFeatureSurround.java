@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * Created by Colten on 11/26/2016.
  */
-public class BuildingFeatureSuround implements BuildingFeature {
+public class BuildingFeatureSurround implements BuildingFeature {
 
   Building toSurround;
   float popularity;
@@ -18,7 +18,7 @@ public class BuildingFeatureSuround implements BuildingFeature {
   Tile allowedTile;
   int size;
 
-  public BuildingFeatureSuround(Building toSurround, float popularity, Building building,
+  public BuildingFeatureSurround(Building toSurround, float popularity, Building building,
       Tile allowedTile, int size) {
     this.toSurround = toSurround;
     this.popularity = popularity;
@@ -31,13 +31,13 @@ public class BuildingFeatureSuround implements BuildingFeature {
   public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
     for (int xi = 0; xi < Chunk.CHUNK_SIZE; xi++) {
       for (int yi = 0; yi < Chunk.CHUNK_SIZE; yi++) {
-        if (biome[xi*32+yi] == false) {
+        if (biome[xi+yi*32] == false) {
           continue;
         }
 
         float val = random.nextFloat();
-        if (val < popularity && chunk.tiles[xi * 32 + yi] == allowedTile
-            && chunk.buildings[xi * 32 + yi] == toSurround) {
+        if (val < popularity && chunk.tiles[xi  + yi * 32] == allowedTile
+            && chunk.buildings[xi+yi*32] == toSurround) {
           int chainlength = size;
 
           for (int i = 0; i < chainlength; i++) {
@@ -48,9 +48,9 @@ public class BuildingFeatureSuround implements BuildingFeature {
               continue;
             }
 
-            if ((chunk.tiles[xmod*32+ymod] == allowedTile || allowedTile == null) && (
-                chunk.buildings[xmod*32+ymod] == null)) {
-              chunk.buildings[xmod*32+ymod] = building;
+            if ((chunk.tiles[xmod+ymod*32] == allowedTile || allowedTile == null) && (
+                chunk.buildings[xmod+ymod*32] == null)) {
+              chunk.buildings[xmod+ymod*32] = building;
             }
           }
         }

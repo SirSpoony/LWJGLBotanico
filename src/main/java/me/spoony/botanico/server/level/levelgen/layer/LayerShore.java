@@ -1,5 +1,7 @@
 package me.spoony.botanico.server.level.levelgen.layer;
 
+import me.spoony.botanico.server.level.levelgen.biome.Biomes;
+
 /**
  * Created by Colten on 4/23/2017.
  */
@@ -28,7 +30,7 @@ public class LayerShore extends Layer {
               !isBiomeOceanic(j3) && !isBiomeOceanic(i4)) {
             ret[j + i * areaWidth] = k;
           } else {
-            ret[j + i * areaWidth] = 3; // 3 is beach
+            ret[j + i * areaWidth] = Biomes.BEACH.id; // 3 is beach
           }
         } else {
           ret[j + i * areaWidth] = k;
@@ -40,6 +42,6 @@ public class LayerShore extends Layer {
   }
 
   public boolean isBiomeOceanic(int biome) {
-    return biome == 0;
+    return biome == Biomes.OCEAN.id;
   }
 }

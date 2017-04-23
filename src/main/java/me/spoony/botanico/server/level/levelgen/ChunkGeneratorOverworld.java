@@ -13,11 +13,9 @@ import me.spoony.botanico.server.level.levelgen.layer.Layer;
 public class ChunkGeneratorOverworld implements IChunkGenerator {
 
   protected long seed;
-  protected Noise noise;
 
   public ChunkGeneratorOverworld(long seed) {
     this.seed = seed;
-    noise = new Noise(256, (int) seed);
   }
 
   @Override
@@ -26,39 +24,32 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
     Tile[] tiles = new Tile[32 * 32];
     Building[] buildings = new Building[32 * 32];
     byte[] buildingData = new byte[32 * 32];
+    Chunk ret = new Chunk(x, y, tiles, buildings, buildingData);
 
-    Layer layer = Layer.getDefaultLayers();
+    Layer layer = Layer.getDefaultLayers(seed);
     int[] ints = layer.getInts((int) x * 32, (int) y * 32, 32, 32);
 
-    for (int iy = 0; iy < 32; iy++) {
-      for (int ix = 0; ix < 32; ix++) {
-        int pos = ix + iy * 32;
-        int intspos = ix + iy * 32;
+    for (Biome b : Biomes.BIOME_SET) {
+      boolean[] biomeMap = new boolean[32 * 32];
 
-        int currentbiome = ints[intspos];
+      for (int iy = 0; iy < 32; iy++) {
+        for (int ix = 0; ix < 32; ix++) {
+          int pos = ix + iy * 32;
+          int currentbiome = ints[pos];
 
-        if (currentbiome == 1) {
-          tiles[pos] = Tiles.GROUND;
-        } else if (currentbiome == 3) {
-          tiles[pos] = Tiles.SAND;
-        } else {
-          tiles[pos] = Tiles.WATER;
+          biomeMap[pos] = (currentbiome == b.id);
         }
       }
+
+      b.generate(rand, seed, biomeMap, ret);
     }
 
-    System.out.println(x + " " + y);
-
-    return new Chunk(x, y, tiles, buildings, buildingData);
+    return ret;
   }
 
   @Override
   public long getSeed() {
     return seed;
-  }
-
-  public void generateBiome(Random rand, Chunk chunk, int id, Biome biome) {
-
   }
 
   static long smear(long a, long b) {
