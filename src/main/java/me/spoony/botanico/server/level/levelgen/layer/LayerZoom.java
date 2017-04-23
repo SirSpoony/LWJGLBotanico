@@ -1,8 +1,5 @@
 package me.spoony.botanico.server.level.levelgen.layer;
 
-import com.google.common.math.IntMath;
-import me.spoony.botanico.common.util.BMath;
-
 /**
  * Created by Colten on 12/22/2016.
  */
@@ -30,7 +27,7 @@ public class LayerZoom extends Layer {
       int childInt = childInts[xi + 0 + (yi + 0) * childAreaWidth];
 
       for (int k2 = childInts[xi + 0 + (yi + 1) * childAreaWidth]; xi < childAreaWidth - 1; ++xi) {
-        this.resetRand((xi + childAreaX << 1), (yi + childAreaY << 1));
+        this.initChunkSeed((xi + childAreaX << 1), (yi + childAreaY << 1));
 
         int childIntRight = childInts[xi + 1 + (yi + 0) * childAreaWidth];
         int childIntDownRight = childInts[xi + 1 + (yi + 1) * childAreaWidth];

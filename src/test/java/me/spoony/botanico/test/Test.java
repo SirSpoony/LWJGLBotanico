@@ -15,8 +15,16 @@ import java.io.IOException;
 public class Test {
 
   public static void main(String[] args) throws ExceptionInvalidParam {
-    writeChunk(0, 0, 512, "chunk_0_0");
-    writeChunk(512, 0, 512, "chunk_1_0");
+    int x = 0;
+    writeChunk(0+x, 0, 32, "chunk_0_0");
+    writeChunk(32+x, 0, 32, "chunk_1_0");
+    writeChunk(64+x, 0, 32, "chunk_2_0");
+    writeChunk(96+x, 0, 32, "chunk_3_0");
+    writeChunk(128+x, 0, 32, "chunk_4_0");
+    writeChunk(160+x, 0, 32, "chunk_5_0");
+    writeChunk(192+x, 0, 32, "chunk_6_0");
+    writeChunk(224+x, 0, 32, "chunk_7_0");
+    writeChunk(256+x, 0, 32, "chunk_8_0");
   }
 
   public static void writeChunk(int chunkx, int chunky, int size, String name) {

@@ -29,7 +29,7 @@ public class LayerAddIsland extends Layer {
         int i2 = childInts[xi + 0 + (yi + 2) * childAreaWidth];
         int j2 = childInts[xi + 2 + (yi + 2) * childAreaWidth];
         int k2 = childInts[xi + 1 + (yi + 1) * childAreaWidth];
-        this.resetRand((xi + areaX), (yi + areaY));
+        this.initChunkSeed((xi + areaX), (yi + areaY));
 
         if (k2 != 0 || k1 == 0 && l1 == 0 && i2 == 0 && j2 == 0) {
           if (k2 > 0 && (k1 == 0 || l1 == 0 || i2 == 0 || j2 == 0)) {

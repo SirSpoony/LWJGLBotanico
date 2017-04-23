@@ -9,54 +9,33 @@ public abstract class Layer {
 
   public Layer child;
 
+  long baseseed = 2342342342326786788L;
+  long worldseed;
+  long chunkseed;
+
+  public Layer(Layer child) {
+    this.child = child;
+  }
+
   public static Layer getDefaultLayers() {
-    Layer layer = new LayerIsland(11);
+    Layer layer = new LayerIsland();
     layer = new LayerFuzzyZoom(layer);
     layer = new LayerAddIsland(layer);
     layer = new LayerZoom(layer);
     layer = new LayerAddIsland(layer);
     layer = new LayerAddIsland(layer);
     layer = new LayerSmooth(layer);
-    layer = LayerZoom.magnify(layer, 3);
+    layer = LayerZoom.magnify(layer, 2);
     layer = new LayerShore(layer);
-    layer = LayerZoom.magnify(layer, 3);
+    layer = LayerZoom.magnify(layer, 2);
     layer = new LayerSmooth(layer);
+
+    layer.initWorldGenSeed(23);
 
     return layer;
   }
 
-  public Layer(Layer child) {
-    this.child = child;
-  }
-
   public abstract int[] getInts(int x, int y, int xsize, int ysize);
-
-  public void resetRand(int x, int y) {
-    child.resetRand(x, y);
-  }
-
-  public int nextInt() {
-    return child.nextInt();
-  }
-
-  /**
-   * Generates a random number using nextInt()
-   *
-   * @param max Highest value, exclusive
-   * @return Random value between 0 (inclusive) and max (exclusive)
-   */
-  public int nextInt(int max) {
-    int ret = child.nextInt() % max;
-    if (ret < 0) {
-      ret += max;
-    }
-    return ret;
-  }
-
-  public long nextLong() {
-    return child.nextLong();
-  }
-
 
   /**
    * Selects a random integer from a set of provided integers
@@ -87,5 +66,56 @@ public abstract class Layer {
                                         : (c == d && a != b
                                             ? c : this.selectRandom(
                                             new int[]{a, b, c, d}))))))))));
+  }
+
+  public int nextInt() {
+    return (int) nextLong();
+  }
+
+  /**
+   * Generates a random number using nextInt()
+   *
+   * @param max Highest value, exclusive
+   * @return Random value between 0 (inclusive) and max (exclusive)
+   */
+  public int nextInt(int max) {
+    int ret = nextInt() % max;
+    if (ret < 0) {
+      ret += max;
+    }
+    return ret;
+  }
+
+  public long nextLong() {
+    chunkseed ^= (chunkseed << 21);
+    chunkseed ^= (chunkseed >>> 35);
+    chunkseed ^= (chunkseed << 4);
+    return chunkseed;
+  }
+
+  public void initChunkSeed(int x, int y) {
+    this.chunkseed = this.worldseed;
+    this.chunkseed *= this.chunkseed * 6364136223846793005L + 1442695040888963407L;
+    this.chunkseed += x;
+    this.chunkseed *= this.chunkseed * 6364136223846793005L + 1442695040888963407L;
+    this.chunkseed += y;
+    this.chunkseed *= this.chunkseed * 6364136223846793005L + 1442695040888963407L;
+    this.chunkseed += x;
+    this.chunkseed *= this.chunkseed * 6364136223846793005L + 1442695040888963407L;
+    this.chunkseed += y;
+  }
+
+  public void initWorldGenSeed(long seed) {
+    this.worldseed *= this.worldseed * 6364136223846793005L + 1442695040888963407L;
+    this.worldseed += this.baseseed;
+    this.worldseed *= this.worldseed * 6364136223846793005L + 1442695040888963407L;
+    this.worldseed += this.baseseed;
+    this.worldseed *= this.worldseed * 6364136223846793005L + 1442695040888963407L;
+    this.worldseed += this.baseseed;
+
+
+    if (child != null) {
+      child.initWorldGenSeed(seed);
+    }
   }
 }

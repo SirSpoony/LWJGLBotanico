@@ -27,7 +27,7 @@ public class LayerSmooth extends Layer {
         int k2 = childInts[j1 + 1 + (i1 + 1) * childAreaWidth];
 
         if (k1 == l1 && i2 == j2) {
-          this.resetRand((j1 + areaX), (i1 + areaY));
+          this.initChunkSeed((j1 + areaX), (i1 + areaY));
 
           if (this.nextInt(2) == 0) {
             k2 = k1;

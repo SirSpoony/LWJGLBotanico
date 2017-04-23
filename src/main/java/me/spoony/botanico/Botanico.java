@@ -6,6 +6,6 @@ package me.spoony.botanico;
 public class Botanico {
 
   public static final String VERSION = "0.0.1";
-  public static final boolean DEBUG = false;
+  public static final boolean DEBUG = true;
   public static int FPS_CAP = 200;
 }

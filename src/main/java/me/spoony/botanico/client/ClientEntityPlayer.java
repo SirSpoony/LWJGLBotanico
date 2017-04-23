@@ -120,6 +120,9 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     } else if (coorddir.y > 0) {
       animation = 3;
     }
+    if (Input.SHIFT.isDown()) {
+      coorddir.mult(5);
+    }
 
     if (coorddir.y != 0) {
       position.setGameY(position.getGameY() + coorddir.y * movementSpeed * timeDiff);

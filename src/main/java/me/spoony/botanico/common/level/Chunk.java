@@ -27,30 +27,30 @@ public class Chunk {
     if (x >= 32 || y >= 32 || x < 0 || y < 0) {
       return null;
     }
-    return tiles[x*32+y];
+    return tiles[x+y*32];
   }
 
   public void setTile(int x, int y, Tile tile) {
-    this.tiles[x*32+y] = tile;
+    this.tiles[x+y*32] = tile;
   }
 
   public Building getBuilding(int x, int y) {
-    return buildings[x*32+y];
+    return buildings[x+y*32];
   }
 
   public void setBuilding(int x, int y, Building b) {
-    this.buildings[x*32+y] = b;
+    this.buildings[x+y*32] = b;
     if (b == null) {
       setBuildingData(x, y, (byte) 0);
     }
   }
 
   public void setBuildingData(int x, int y, byte b) {
-    this.buildingData[x*32+y] = b;
+    this.buildingData[x+y*32] = b;
   }
 
   public byte getBuildingData(int x, int y) {
-    return buildingData[x*32+y];
+    return buildingData[x+y*32];
   }
 
 

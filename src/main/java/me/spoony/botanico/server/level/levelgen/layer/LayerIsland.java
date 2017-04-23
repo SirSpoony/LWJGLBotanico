@@ -7,52 +7,27 @@ import java.util.Random;
  */
 public class LayerIsland extends Layer {
 
-  long worldseed;
-  Random worldrand;
-
-  long current = 0;
-
-  @Override
-  public int nextInt() {
-    return (int) nextLong();
-  }
-
-  @Override
-  public int nextInt(int max) {
-    return nextInt() % max;
-  }
-
-  @Override
-  public long nextLong() {
-    current ^= (current << 21);
-    current ^= (current >>> 35);
-    current ^= (current << 4);
-    return current;
-  }
-
-  @Override
-  public void resetRand(int x, int y) {
-    current = new Random((x * 1000000000L + y) + worldseed).nextLong();
-  }
-
-  public LayerIsland(long worldseed) {
+  public LayerIsland() {
     super(null);
-
-    this.worldseed = worldseed;
-    worldrand = new Random(worldseed);
-    resetRand(0, 0);
   }
 
   @Override
-  public int[] getInts(int x, int y, int xsize, int ysize) {
-    int[] ret = new int[xsize * ysize];
-    resetRand(x, y);
+  public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
+    int[] ret = new int[areaWidth * areaHeight];
 
-    System.out.println("base " + xsize + " " + ysize);
+    for (int xi = 0; xi < areaWidth; xi++) {
+      for (int yi = 0; yi < areaHeight; yi++) {
+        this.initChunkSeed((xi + areaX), (yi + areaY));
 
-    for (int i = 0; i < ret.length; i++) {
-      ret[i] = nextInt(5) == 1 ? 1 : 0;
+        ret[xi + yi * areaWidth] = nextInt(5) == 1 ? 1 : 0;
+      }
     }
+
+    if (areaX > -areaWidth && areaX <= 0 &&
+        areaY > -areaHeight && areaY <= 0) {
+      ret[-areaX + -areaY * areaWidth] = 1;
+    }
+
     return ret;
   }
 }
