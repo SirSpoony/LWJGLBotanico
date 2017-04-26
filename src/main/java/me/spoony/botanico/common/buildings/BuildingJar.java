@@ -26,26 +26,25 @@ public class BuildingJar extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
+  public void onClick(IPlane level, EntityPlayer player, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
-      return false;
+      return;
     }
     ServerPlane serverLevel = (ServerPlane) level;
 
     BuildingEntity be = serverLevel.getBuildingEntity(position);
     if (!(be instanceof BuildingEntityJar)) {
-      return false;
+      return;
     }
     BuildingEntityJar bej = (BuildingEntityJar) be;
 
     ((RemoteEntityPlayer) player)
         .sendMessage("Jar Contents: " + bej.getEnergyStored() + "/" + bej.getEnergyCapacity());
 
-    return false;
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(0, 160, 16, 16),

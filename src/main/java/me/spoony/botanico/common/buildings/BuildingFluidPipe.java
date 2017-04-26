@@ -26,7 +26,7 @@ public class BuildingFluidPipe extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte extra,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int extra,
       Color color) {
     boolean n =
         level.getBuilding(position.getTileNeighbor(TileDirection.NORTH)) == Buildings.FLUID_PIPE;

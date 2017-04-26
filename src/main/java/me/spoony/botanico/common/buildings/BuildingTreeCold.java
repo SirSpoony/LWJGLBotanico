@@ -20,7 +20,7 @@ public class BuildingTreeCold extends Building {
     }
 
     @Override
-    public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d, Color color) {
+    public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d, Color color) {
         position.setX(PositionType.GAME, position.getX(PositionType.GAME) - 1);
         rg.sprite(position, getTextureSheet(),
                 new IntRectangle(0, 0, 16, 16), color, position.getGameY());

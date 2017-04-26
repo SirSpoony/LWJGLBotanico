@@ -12,9 +12,9 @@ public class Chunk {
 
   public final Tile[] tiles;
   public final Building[] buildings;
-  public final byte[] buildingData;
+  public final int[] buildingData;
 
-  public Chunk(long x, long y, Tile[] ts, Building[] bs, byte[] bd) {
+  public Chunk(long x, long y, Tile[] ts, Building[] bs, int[] bd) {
     this.x = x;
     this.y = y;
 
@@ -45,11 +45,11 @@ public class Chunk {
     }
   }
 
-  public void setBuildingData(int x, int y, byte b) {
-    this.buildingData[x+y*32] = b;
+  public void setBuildingData(int x, int y, int data) {
+    this.buildingData[x+y*32] = data;
   }
 
-  public byte getBuildingData(int x, int y) {
+  public int getBuildingData(int x, int y) {
     return buildingData[x+y*32];
   }
 

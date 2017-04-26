@@ -6,6 +6,7 @@ import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureB
 import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureBush;
 import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureCave;
 import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeaturePlant;
+import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureSurround;
 
 /**
  * Created by Colten on 11/26/2016.
@@ -17,7 +18,9 @@ public class BiomePrairie extends Biome {
 
     this.setTile(Tiles.GROUND);
 
-    this.addBuildingFeature(new BuildingFeatureBlob(.005f, Buildings.DIRT_MOUND, Tiles.GROUND, 3));
+    //this.addBuildingFeature(new BuildingFeatureBlob(.005f, Buildings.DIRT_MOUND, Tiles.GROUND, 3));
+
+    this.addBuildingFeature(new BuildingFeaturePlant(.05f, Buildings.TREE, 3, Tiles.GROUND));
 
     this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.FLOWER_ORANGE, 2, Tiles.GROUND));
     this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.FLOWER_RED, 2, Tiles.GROUND));

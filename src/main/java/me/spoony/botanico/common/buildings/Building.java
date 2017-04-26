@@ -100,7 +100,7 @@ public class Building {
     return "[" + name + "]";
   }
 
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte extra,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int extra,
       Color color) {
     rg.sprite(position, getTextureSheet(),
         textureBounds, color, position.getGameY() + (alwaysBehindCharacter ? 1 : 0));
@@ -131,8 +131,7 @@ public class Building {
 
   }
 
-  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
-    return false;
+  public void onClick(IPlane level, EntityPlayer player, OmniPosition position) {
   }
 
   public ItemStack[] getDrops(IPlane level, OmniPosition position) {

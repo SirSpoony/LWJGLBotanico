@@ -19,8 +19,8 @@ public interface IPlane
     Tile getTile(long x, long y);
     Building getBuilding(OmniPosition position);
     Building getBuilding(long x, long y);
-    byte getBuildingData(OmniPosition position);
-    byte getBuildingData(long x, long y);
+    int getBuildingData(OmniPosition position);
+    int getBuildingData(long x, long y);
     Collection<Entity> getEntities();
     Entity getEntity(int eid);
     boolean isLocal();

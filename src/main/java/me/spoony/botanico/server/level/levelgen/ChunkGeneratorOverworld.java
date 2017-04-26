@@ -23,7 +23,7 @@ public class ChunkGeneratorOverworld implements IChunkGenerator {
     Random rand = new Random(smear(x, y) + seed);
     Tile[] tiles = new Tile[32 * 32];
     Building[] buildings = new Building[32 * 32];
-    byte[] buildingData = new byte[32 * 32];
+    int[] buildingData = new int[32 * 32];
     Chunk ret = new Chunk(x, y, tiles, buildings, buildingData);
 
     Layer layer = Layer.getDefaultLayers(seed);

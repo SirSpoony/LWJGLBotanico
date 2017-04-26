@@ -52,7 +52,7 @@ public class RendererPlane implements GameRenderable {
     for (int x = firstTileX; x < lastTileX; x++) {
       for (int y = firstTileY; y < lastTileY; y++) {
         Building b = level.getBuilding(x, y);
-        byte d = level.getBuildingData(x, y);
+        int d = level.getBuildingData(x, y);
 
         boolean shouldHighlight = false;
         if (highlightedBuilding != null) {

@@ -43,7 +43,7 @@ public class ServerPacketHandler {
     server.getClientManager().sendPacketToAll(pbc, p -> p.getPlane() == plane);
   }
 
-  public void sendBuildingDataChange(OmniPosition position, ServerPlane plane, byte data) {
+  public void sendBuildingDataChange(OmniPosition position, ServerPlane plane, int data) {
     SPacketBuildingData pbd = new SPacketBuildingData();
     pbd.x = (long) position.getX(PositionType.GAME);
     pbd.y = (long) position.getY(PositionType.GAME);

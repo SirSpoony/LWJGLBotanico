@@ -31,13 +31,13 @@ public class BuildingEnergyPipe extends Building implements IBuildingEntityHost 
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
     renderPipe(rg, level, position, d, color);
     renderPipeConnections(rg, level, position, d, color);
   }
 
-  private void renderPipe(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  private void renderPipe(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
     boolean u, dwn, l, r;
     u = dwn = l = r = false;
@@ -86,7 +86,7 @@ public class BuildingEnergyPipe extends Building implements IBuildingEntityHost 
   }
 
   private void renderPipeConnections(RendererGame rg, ClientPlane level, OmniPosition position,
-      byte d, Color color) {
+      int d, Color color) {
     boolean u, dwn, l, r;
     u = dwn = l = r = false;
     if (level.getBuilding(position.getTileNeighbor(TileDirection.NORTH)) == Buildings.JAR) {
@@ -124,22 +124,21 @@ public class BuildingEnergyPipe extends Building implements IBuildingEntityHost 
   }
 
   @Override
-  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
+  public void onClick(IPlane level, EntityPlayer player, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
-      return false;
+      return;
     }
     ServerPlane serverLevel = (ServerPlane) level;
 
     BuildingEntity be = serverLevel.getBuildingEntity(position);
     if (!(be instanceof BuildingEntityEnergyPipe)) {
-      return false;
+      return;
     }
     BuildingEntityEnergyPipe beep = (BuildingEntityEnergyPipe) be;
 
     ((RemoteEntityPlayer) player)
         .sendMessage("Pipe Contents: " + beep.getEnergyStored() + "/" + beep.getEnergyCapacity());
 
-    return false;
   }
 
   @Override

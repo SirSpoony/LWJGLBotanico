@@ -32,7 +32,7 @@ public class ChunkGeneratorUnderworld implements IChunkGenerator {
 
     Building[] buildings = new Building[32*32];
     Tile[] tiles = new Tile[32*32];
-    byte[] buildingData = new byte[32*32];
+    int[] buildingData = new int[32*32];
 
     for (int x = 0; x < 32; x++) {
       for (int y = 0; y < 32; y++) {

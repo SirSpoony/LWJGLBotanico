@@ -18,7 +18,7 @@ public class SPacketChunk implements Packet, IClientHandler {
   public long y;
   public Tile[] tiles;
   public Building[] buildings;
-  public byte[] buildingdata;
+  public int[] buildingdata;
 
   @Override
   public void encode(PacketEncoder encoder) {
@@ -30,9 +30,10 @@ public class SPacketChunk implements Packet, IClientHandler {
       int[] ibuildingdata = new int[32 * 32];
       for (int x = 0; x < 32; x++) {
         for (int y = 0; y < 32; y++) {
-          itiles[x * 32 + y] = (tiles[x*32+y] != null ? tiles[x*32+y].getID() : -1);
-          ibuildings[x * 32 + y] = (buildings[x*32+y] != null ? buildings[x*32+y].getID() : -1);
-          ibuildingdata[x * 32 + y] = buildingdata[x*32+y];
+          itiles[x * 32 + y] = (tiles[x * 32 + y] != null ? tiles[x * 32 + y].getID() : -1);
+          ibuildings[x * 32 + y] = (buildings[x * 32 + y] != null ? buildings[x * 32 + y].getID()
+              : -1);
+          ibuildingdata[x * 32 + y] = buildingdata[x * 32 + y];
         }
       }
       encoder.writeIntArray(itiles);
@@ -50,14 +51,14 @@ public class SPacketChunk implements Packet, IClientHandler {
     int[] itiles = decoder.readIntArray();
     int[] ibuildings = decoder.readIntArray();
     int[] ibuildingdata = decoder.readIntArray();
-    tiles = new Tile[32*32];
-    buildings = new Building[32*32];
-    buildingdata = new byte[32*32];
+    tiles = new Tile[32 * 32];
+    buildings = new Building[32 * 32];
+    buildingdata = new int[32 * 32];
     for (int x = 0; x < 32; x++) {
       for (int y = 0; y < 32; y++) {
-        tiles[x*32+y] = Tile.REGISTRY.get(itiles[x * 32 + y]);
-        buildings[x*32+y] = Building.REGISTRY.getBuilding(ibuildings[x * 32 + y]);
-        buildingdata[x*32+y] = (byte) ibuildingdata[x * 32 + y];
+        tiles[x * 32 + y] = Tile.REGISTRY.get(itiles[x * 32 + y]);
+        buildings[x * 32 + y] = Building.REGISTRY.getBuilding(ibuildings[x * 32 + y]);
+        buildingdata[x * 32 + y] = ibuildingdata[x * 32 + y];
       }
     }
   }

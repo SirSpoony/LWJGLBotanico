@@ -43,7 +43,7 @@ public class BuildingHemp extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(80 + d * 16, 128, 16, 32), color,

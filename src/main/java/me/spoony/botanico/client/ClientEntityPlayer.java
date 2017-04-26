@@ -328,37 +328,37 @@ public class ClientEntityPlayer extends EntityPlayer implements EntityContainer 
     }
 
     if (binaryInput == Input.BUTTON_LEFT) {
-      OmniPosition tilePosition = Input.CURSOR_POS;
-      Building b = GameView.getClientLevel().getBuilding(tilePosition);
+      OmniPosition rawTilePosition = Input.CURSOR_POS;
+      OmniPosition buildingPosition = getHighlightedBuildingPosition();
 
-      if (b != null && this.canReach(tilePosition)) {
+      if (buildingPosition != null) {
         CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
-        cbi.x = tilePosition.getTileX();
-        cbi.y = tilePosition.getTileY();
+        cbi.x = buildingPosition.getTileX();
+        cbi.y = buildingPosition.getTileY();
         cbi.type = CPacketBuildingInteraction.CLICK;
         client.sendPacket(cbi);
         return false;
       }
 
       ItemStack cursorStack = GameView.getCursor().getStack();
-      if (this.canReach(tilePosition)) {
+      if (this.canReach(rawTilePosition)) {
         if (cursorStack != null && cursorStack.getItem() instanceof ItemBuilding) {
           Building hypotheticalBuilding = ((ItemBuilding) cursorStack.getItem()).getBuilding();
 
           EntityCollider ec = new EntityCollider(client.getLocalLevel(), this);
-          if (ec.wouldCollide(tilePosition, hypotheticalBuilding)) {
+          if (ec.wouldCollide(rawTilePosition, hypotheticalBuilding)) {
             return false;
           }
 
           CPacketBuildingInteraction cbi = new CPacketBuildingInteraction();
-          cbi.x = tilePosition.getTileX();
-          cbi.y = tilePosition.getTileY();
+          cbi.x = rawTilePosition.getTileX();
+          cbi.y = rawTilePosition.getTileY();
           cbi.type = CPacketBuildingInteraction.CREATE;
           client.sendPacket(cbi);
 
           return false;
         } else if (cursorStack != null) {
-          client.packetHandler.sendUseItem(tilePosition);
+          client.packetHandler.sendUseItem(rawTilePosition);
           return false;
         }
       }

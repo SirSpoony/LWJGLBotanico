@@ -44,9 +44,9 @@ public class BuildingBoiler extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
+  public void onClick(IPlane level, EntityPlayer player, OmniPosition position) {
       if (!(level instanceof ServerPlane)) {
-        return false;
+        return;
       }
     ServerPlane serverLevel = (ServerPlane) level;
     BuildingEntityBoiler entity = (BuildingEntityBoiler) serverLevel.getBuildingEntity(position);
@@ -57,16 +57,14 @@ public class BuildingBoiler extends Building implements IBuildingEntityHost {
       entity.dialog.waterProgress += .25f;
       entity.dialog.waterProgress = BMath.clamp(entity.dialog.waterProgress, 0, 1);
       heldStack.setItem(Items.BUCKET);
-      return true;
+      return;
     }
 
     if (entity != null) {
       if (player instanceof RemoteEntityPlayer) {
         ((RemoteEntityPlayer) player).openDialog(entity.dialog);
-        return true;
       }
     }
-    return false;
   }
 
   @Override

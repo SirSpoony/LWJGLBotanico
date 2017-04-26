@@ -79,6 +79,8 @@ public class Item {
     REGISTRY.register(new Item(25, itemBounds(31), "copper_ore", 50));
 
     REGISTRY.register(new ItemBuilding(26, itemBounds(32), "wall", Buildings.WALL, 50));
+
+    REGISTRY.register(new Item(27, itemBounds(33), "blueberry", 50));
   }
 
   public String getName() {

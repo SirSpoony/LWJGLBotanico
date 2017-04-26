@@ -48,9 +48,9 @@ public class BuildingKnappingStation extends Building implements IBuildingEntity
   }
 
   @Override
-  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
+  public void onClick(IPlane level, EntityPlayer player, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
-      return false;
+      return;
     }
     ServerPlane serverLevel = (ServerPlane) level;
 
@@ -61,7 +61,6 @@ public class BuildingKnappingStation extends Building implements IBuildingEntity
         ((RemoteEntityPlayer) player).openDialog(beks.dialog);
       }
     }
-    return false;
   }
 
   @Override

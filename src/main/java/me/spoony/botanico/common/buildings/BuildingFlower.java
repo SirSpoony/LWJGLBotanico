@@ -24,7 +24,7 @@ public class BuildingFlower extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
     rg.sprite(position, getTextureSheet(),
         new IntRectangle(48 + subid * 16, 192, 16, 16),

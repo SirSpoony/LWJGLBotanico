@@ -23,7 +23,7 @@ public class BuildingWall extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte extra,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int extra,
       Color color) {
     boolean e = level.getBuilding(position.getTileNeighbor(TileDirection.EAST)) == Buildings.WALL;
     boolean n = level.getBuilding(position.getTileNeighbor(TileDirection.NORTH)) == Buildings.WALL;

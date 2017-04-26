@@ -21,11 +21,18 @@ public class BuildingTree extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
-    position.setX(PositionType.GAME, position.getX(PositionType.GAME) - 1);
-    rg.sprite(position, getTextureSheet(),
-        new IntRectangle(16, 208, 46, 64), color, position.getGameY());
+    if (d == 1) {
+      position.setX(PositionType.GAME, position.getX(PositionType.GAME) - 1);
+      rg.sprite(position, getTextureSheet(),
+          new IntRectangle(16, 208, 48, 64), color, position.getGameY());
+    } else {
+      position.setX(PositionType.GAME, position.getX(PositionType.GAME) - 1);
+      rg.sprite(position, getTextureSheet(),
+          new IntRectangle(128, 208, 48, 64), color, position.getGameY());
+    }
+
   }
 
   @Override

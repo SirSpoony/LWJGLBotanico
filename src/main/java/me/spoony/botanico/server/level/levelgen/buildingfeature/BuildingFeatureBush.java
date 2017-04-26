@@ -20,5 +20,6 @@ public class BuildingFeatureBush extends BuildingFeatureRandom {
   @Override
   public void place(int x, int y, Chunk chunk) {
     chunk.setBuilding(x, y, bush);
+    chunk.setBuildingData(x, y, 1);
   }
 }

@@ -42,8 +42,9 @@ public class BuildingToolStation extends Building implements IBuildingEntityHost
     }
 
     @Override
-    public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
-        if (!(level instanceof ServerPlane)) return false;
+    public void onClick(IPlane level, EntityPlayer player, OmniPosition position) {
+        if (!(level instanceof ServerPlane))
+          return;
         ServerPlane serverLevel = (ServerPlane) level;
 
         BuildingEntityToolStation bew = (BuildingEntityToolStation) serverLevel.getBuildingEntity(position);
@@ -52,7 +53,6 @@ public class BuildingToolStation extends Building implements IBuildingEntityHost
                 ((RemoteEntityPlayer) player).openDialog(bew.dialog);
             }
         }
-        return false;
     }
 
     @Override

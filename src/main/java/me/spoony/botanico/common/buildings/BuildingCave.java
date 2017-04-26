@@ -28,42 +28,35 @@ public class BuildingCave extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
-    rg.sprite(position.add(PositionType.GAME,-1,-1), getTextureSheet(),
-        new IntRectangle(192 + (d == 1 ? 48 : 0), 0, 48, 48), color, position.getGameY()+3);
+    rg.sprite(position.add(PositionType.GAME, -1, -1), getTextureSheet(),
+        new IntRectangle(192 + (d == 1 ? 48 : 0), 0, 48, 48), color, position.getGameY() + 3);
   }
 
   @Override
-  public boolean onClick(IPlane plane, EntityPlayer player, OmniPosition position) {
+  public void onClick(IPlane plane, EntityPlayer player, OmniPosition position) {
     if (plane.isLocal()) {
-      return true;
+      return;
     }
-    if (player == null) {
-      return true;
-    }
+
     ServerPlane serverPlane = (ServerPlane) plane;
+    int data = serverPlane.getBuildingData(position);
     ItemStack heldStack = ((RemoteEntityPlayer) player).getHeldSlot().getStack();
 
-    if (heldStack != null && heldStack.getItem() == Items.ROPE) {
-      if (plane.getBuildingData(position) == 1) {
-        return true;
-      }
-      serverPlane.setBuildingData(position, (byte) 1);
-      serverPlane.getLevel().getUnderworld().setBuilding(position, Buildings.CAVE_ROPE);
-      heldStack.increaseCount(-1);
-      return true;
-    }
-
-    if (serverPlane.getBuildingData(position) == (byte) 1) {
+    if (data == 1) {
       ((RemoteEntityPlayer) player)
           .teleport(position, serverPlane.getLevel().getUnderworld());
-      return true;
     } else {
-      ((RemoteEntityPlayer) player).sendMessage("You need rope first!");
+      if (heldStack != null && heldStack.getItem() == Items.ROPE) {
+        serverPlane.setBuildingData(position, 1);
+        serverPlane.getLevel().getUnderworld().setBuilding(position, Buildings.CAVE_ROPE);
+        heldStack.increaseCount(-1);
+      } else {
+        ((RemoteEntityPlayer) player).sendMessage("You need rope first!");
+      }
     }
 
-    return true;
   }
 
   @Override

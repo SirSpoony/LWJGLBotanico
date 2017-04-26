@@ -22,18 +22,17 @@ public class BuildingCaveRope extends Building {
   }
 
   @Override
-  public boolean onClick(IPlane plane, EntityPlayer player, OmniPosition position) {
+  public void onClick(IPlane plane, EntityPlayer player, OmniPosition position) {
     if (plane.isLocal()) {
-      return true;
+      return;
     }
     if (player == null) {
-      return true;
+      return;
     }
 
     ((RemoteEntityPlayer) player).teleport(position.add(PositionType.GAME, 0, 2.5f),
         ((ServerPlane) plane).getLevel().getOverworld());
 
-    return true;
   }
 
   @Override

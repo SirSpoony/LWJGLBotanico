@@ -24,7 +24,7 @@ public class BuildingSticksPile extends Building {
   }
 
   @Override
-  public void render(RendererGame rg, ClientPlane level, OmniPosition position, byte d,
+  public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
     int val = hash(position.getTileX(), position.getTileY()) % 4;
     rg.sprite(position, getTextureSheet(),

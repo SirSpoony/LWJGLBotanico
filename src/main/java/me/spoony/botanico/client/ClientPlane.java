@@ -109,7 +109,7 @@ public class ClientPlane implements IPlane {
   }
 
   @Override
-  public byte getBuildingData(OmniPosition position) {
+  public int getBuildingData(OmniPosition position) {
     Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
     if (chunk == null) {
       return -1;
@@ -119,7 +119,7 @@ public class ClientPlane implements IPlane {
   }
 
   @Override
-  public byte getBuildingData(long x, long y) {
+  public int getBuildingData(long x, long y) {
     Chunk chunk = getChunk(DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR), DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR));
     if (chunk == null) {
       return -1;
@@ -200,7 +200,7 @@ public class ClientPlane implements IPlane {
     addEntity(localPlayer);
   }
 
-  public void receiveBuildingDataUpdate(OmniPosition position, byte data) {
+  public void receiveBuildingDataUpdate(OmniPosition position, int data) {
     Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
     chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
   }

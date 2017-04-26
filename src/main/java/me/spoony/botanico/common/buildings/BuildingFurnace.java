@@ -1,6 +1,5 @@
 package me.spoony.botanico.common.buildings;
 
-import com.google.common.base.Preconditions;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntity;
 import me.spoony.botanico.common.buildings.buildingentity.BuildingEntityFurnace;
 import me.spoony.botanico.common.entities.EntityPlayer;
@@ -43,9 +42,9 @@ public class BuildingFurnace extends Building implements IBuildingEntityHost {
   }
 
   @Override
-  public boolean onClick(IPlane level, EntityPlayer player, OmniPosition position) {
+  public void onClick(IPlane level, EntityPlayer player, OmniPosition position) {
     if (!(level instanceof ServerPlane)) {
-      return false;
+      return;
     }
     ServerPlane serverLevel = (ServerPlane) level;
 
@@ -57,7 +56,6 @@ public class BuildingFurnace extends Building implements IBuildingEntityHost {
     } else {
       System.out.println("Missing furnace entity");
     }
-    return false;
   }
 
   @Override

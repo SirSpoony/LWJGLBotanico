@@ -128,6 +128,11 @@ public class ServerPlane implements IPlane {
     }
   }
 
+  public void setBuilding(OmniPosition pos, Building b, int data) {
+    setBuilding(pos, b);
+    setBuildingData(pos, data);
+  }
+
   @Override
   public Building getBuilding(OmniPosition position) {
     return getChunk(position.getChunkX(), position.getChunkY())
@@ -244,20 +249,20 @@ public class ServerPlane implements IPlane {
     setBuilding(position, null);
   }
 
-  public void setBuildingData(OmniPosition position, byte data) {
+  public void setBuildingData(OmniPosition position, int data) {
     Chunk chunk = getChunk(position.getChunkX(), position.getChunkY());
     chunk.setBuildingData(position.getXInChunk(), position.getYInChunk(), data);
 
     server.getClientManager().getPacketHandler().sendBuildingDataChange(position, this, data);
   }
 
-  public byte getBuildingData(OmniPosition position) {
+  public int getBuildingData(OmniPosition position) {
     return getChunk(position.getChunkX(), position.getChunkY())
         .getBuildingData(position.getXInChunk(), position.getYInChunk());
   }
 
   @Override
-  public byte getBuildingData(long x, long y) {
+  public int getBuildingData(long x, long y) {
     return getChunk(
         DoubleMath.roundToLong(x / 32d, RoundingMode.FLOOR),
         DoubleMath.roundToLong(y / 32d, RoundingMode.FLOOR))

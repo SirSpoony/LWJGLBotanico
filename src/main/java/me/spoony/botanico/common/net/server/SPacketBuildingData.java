@@ -12,7 +12,7 @@ import me.spoony.botanico.common.util.position.PositionType;
 public class SPacketBuildingData extends AutoPacketAdapter implements IClientHandler {
     public long x;
     public long y;
-    public byte data;
+    public int data;
 
     @Override
     public void onReceive(BotanicoClient client) {
