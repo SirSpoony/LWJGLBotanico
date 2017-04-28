@@ -11,23 +11,19 @@ import me.spoony.botanico.common.util.position.OmniPosition;
  */
 public class BuildingFlower extends Building {
 
-  int subid;
-
-  public BuildingFlower(int id, String name, int subid) {
+  public BuildingFlower(int id, String name) {
     super(id);
     this.name = name;
     shouldCollide = false;
 
     this.hardness = .1f;
-
-    this.subid = subid;
   }
 
   @Override
   public void render(RendererGame rg, ClientPlane level, OmniPosition position, int d,
       Color color) {
     rg.sprite(position, getTextureSheet(),
-        new IntRectangle(48 + subid * 16, 192, 16, 16),
+        new IntRectangle(48 + d * 16, 192, 16, 16),
         color, position.getGameY());
   }
 

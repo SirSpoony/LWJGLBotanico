@@ -45,6 +45,11 @@ public class Chunk {
     }
   }
 
+  public void setBuilding(int x, int y, Building b, int d) {
+    setBuilding(x, y, b);
+    setBuildingData(x, y, d);
+  }
+
   public void setBuildingData(int x, int y, int data) {
     this.buildingData[x+y*32] = data;
   }

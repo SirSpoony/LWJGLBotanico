@@ -39,8 +39,7 @@ public class Building {
   public static void initRegistry() {
     REGISTRY.registerBuilding(new BuildingWorkbench(0));
 
-    REGISTRY.registerBuilding(new BuildingFlower(1, "flower_orange", 0));
-    REGISTRY.registerBuilding(new BuildingFlower(2, "flower_red", 1));
+    REGISTRY.registerBuilding(new BuildingFlower(1, "flower"));
 
     REGISTRY.registerBuilding(new BuildingGrass(3));
     REGISTRY.registerBuilding(new BuildingDirtMound(4));
@@ -81,9 +80,6 @@ public class Building {
 
     REGISTRY.registerBuilding(new BuildingWall(27));
     REGISTRY.registerBuilding(new BuildingSmallBush(28));
-
-    REGISTRY.registerBuilding(new BuildingFlower(29, "flower_cyan", 2));
-    REGISTRY.registerBuilding(new BuildingFlower(30, "flower_purple", 3));
   }
 
   public Building(int id) {

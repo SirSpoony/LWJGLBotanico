@@ -28,7 +28,7 @@ public class ChunkGeneratorUnderworld implements IChunkGenerator {
   public Chunk generateChunk(long chunkx, long chunky) {
     Random rand = new Random(BMath.smear(chunkx, chunky) + seed);
 
-    boolean[] clearSpace = genClearSpace(chunkx, chunky, getSeed());
+    boolean[] clearSpace = genClearSpace(chunkx, chunky, getOverworldSeed());
 
     Building[] buildings = new Building[32*32];
     Tile[] tiles = new Tile[32*32];
@@ -56,7 +56,7 @@ public class ChunkGeneratorUnderworld implements IChunkGenerator {
   }
 
   @Override
-  public long getSeed() {
+  public long getOverworldSeed() {
     return seed;
   }
 

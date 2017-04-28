@@ -1,10 +1,7 @@
 package me.spoony.botanico.server.level.levelgen.buildingfeature;
 
-import com.google.common.collect.Range;
 import me.spoony.botanico.common.buildings.Building;
-import me.spoony.botanico.common.buildings.Buildings;
 import me.spoony.botanico.common.level.Chunk;
-import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.server.level.levelgen.ChunkGeneratorUnderworld;
 
 import java.util.Random;
@@ -12,7 +9,7 @@ import java.util.Random;
 /**
  * Created by Colten on 1/2/2017.
  */
-public class BuildingFeatureCave implements BuildingFeature {
+public class BuildingFeatureCave implements IBuildingFeature {
 
   Building building;
 
@@ -21,8 +18,8 @@ public class BuildingFeatureCave implements BuildingFeature {
   }
 
   @Override
-  public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
-    boolean[] clearSpace = ChunkGeneratorUnderworld
+  public void generate(long worldSeed, int x, int y, Chunk chunk) {
+    /*boolean[] clearSpace = ChunkGeneratorUnderworld
         .genClearSpace(chunk.x, chunk.y, seed);
 
     for (int xi = 3; xi < 28; xi++) {
@@ -47,6 +44,6 @@ public class BuildingFeatureCave implements BuildingFeature {
           }
         }
       }
-    }
+    }*/
   }
 }

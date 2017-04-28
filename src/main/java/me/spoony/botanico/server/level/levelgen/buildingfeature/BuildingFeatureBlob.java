@@ -10,50 +10,41 @@ import java.util.Random;
 /**
  * Created by Colten on 11/13/2016.
  */
-public class BuildingFeatureBlob implements BuildingFeature {
+public class BuildingFeatureBlob extends BuildingFeature {
 
   float popularity;
   Building building;
-  Tile allowedTile;
   int size;
 
-  public BuildingFeatureBlob(float popularity, Building building, Tile allowedTile, int size) {
+  public BuildingFeatureBlob(float popularity, Building building, int size) {
     this.popularity = popularity;
     this.building = building;
-    this.allowedTile = allowedTile;
     this.size = size;
   }
 
   @Override
-  public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
-    for (int xi = 0; xi < Chunk.CHUNK_SIZE; xi++) {
-      for (int yi = 0; yi < Chunk.CHUNK_SIZE; yi++) {
-        if (biome[xi + yi * 32] == false) {
+  public void generate(long tileSeed, int x, int y, Chunk chunk) {
+    initSeed(tileSeed);
+    float val = nextFloat();
+
+    if (val < popularity) {
+      int chainlength = size;
+
+      if (chunk.getBuilding(x, y) == null) {
+        chunk.setBuilding(x, y, building);
+      }
+
+      for (int i = 0; i < chainlength; i++) {
+        int xmod = nextInt(3) - 1 + x;
+        int ymod = nextInt(3) - 1 + y;
+
+        if (xmod > 31 || xmod < 0 ||
+            ymod > 31 || ymod < 0) {
           continue;
         }
 
-        float val = random.nextFloat();
-        if (val < popularity && chunk.tiles[xi + yi * 32] == allowedTile) {
-          int chainlength = size;
-
-          if ((chunk.tiles[xi + yi * 32] == allowedTile || allowedTile == null) && (
-              chunk.buildings[xi + yi * 32] == null)) {
-            chunk.buildings[xi + yi * 32] = building;
-          }
-
-          for (int i = 0; i < chainlength; i++) {
-            int xmod = random.nextInt(3) - 1 + xi;
-            int ymod = random.nextInt(3) - 1 + yi;
-
-            if (!Range.closed(0, 31).contains(xmod) || !Range.closed(0, 31).contains(ymod)) {
-              continue;
-            }
-
-            if ((chunk.tiles[xmod + ymod * 32] == allowedTile || allowedTile == null) && (
-                chunk.buildings[xmod + ymod * 32] == null)) {
-              chunk.buildings[xmod + ymod * 32] = building;
-            }
-          }
+        if (chunk.getBuilding(xmod, ymod) == null) {
+          chunk.setBuilding(xmod, ymod, building);
         }
       }
     }

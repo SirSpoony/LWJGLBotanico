@@ -120,7 +120,7 @@ public class RendererPlane implements GameRenderable {
         adjtiles.setTile(Direction.LEFT, tiles[x - firstTileX - 1][y - firstTileY]);
         adjtiles.setTile(Direction.DOWN_LEFT, tiles[x - firstTileX - 1][y - firstTileY - 1]);
 
-        final int randtexture = Tile.perm[Math.abs(99 * x + y) & 255];
+        final int randtexture = perm(x, y);
         final TileRenderRule relevantRule = tile.renderRules.findRenderRule(adjtiles);
 
         IntRectangle foreground = tile.foregroundRegion(adjtiles, relevantRule, randtexture);
@@ -137,5 +137,18 @@ public class RendererPlane implements GameRenderable {
         }
       }
     }
+  }
+
+  public int perm(long x, long y) {
+    long seed = 100_114_101_97_109L;
+    seed *= seed * 6364136223846793005L + 1442695040888963407L;
+    seed += x;
+    seed *= seed * 6364136223846793005L + 1442695040888963407L;
+    seed += y;
+    seed *= seed * 6364136223846793005L + 1442695040888963407L;
+    seed += x;
+    seed *= seed * 6364136223846793005L + 1442695040888963407L;
+    seed += y;
+    return (int) (seed & 255 + 128);
   }
 }

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import me.spoony.botanico.common.level.Chunk;
 import me.spoony.botanico.common.tiles.Tile;
 import me.spoony.botanico.common.tiles.Tiles;
-import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeature;
+import me.spoony.botanico.server.level.levelgen.buildingfeature.IBuildingFeature;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,8 +15,8 @@ import java.util.Random;
 public class Biome {
   public int id;
 
-  private ArrayList<BuildingFeature> buildingFeatures;
-  private Tile tile;
+  public ArrayList<IBuildingFeature> buildingFeatures;
+  public Tile tile;
 
   public Biome(int id) {
     this.id = id;
@@ -25,22 +25,7 @@ public class Biome {
     this.tile = Tiles.GROUND;
   }
 
-  public void generate(Random random, long seed, boolean[] biome, Chunk chunk) {
-    for (int xi = 0; xi < 32; xi++) {
-      for (int yi = 0; yi < 32; yi++) {
-        if (!biome[xi + yi * 32]) {
-          continue;
-        }
-        chunk.tiles[xi + yi * 32] = tile;
-      }
-    }
-
-    for (BuildingFeature bf : buildingFeatures) {
-      bf.generate(random, seed, biome, chunk);
-    }
-  }
-
-  public void addBuildingFeature(BuildingFeature bf) {
+  public void addBuildingFeature(IBuildingFeature bf) {
     buildingFeatures.add(bf);
   }
 

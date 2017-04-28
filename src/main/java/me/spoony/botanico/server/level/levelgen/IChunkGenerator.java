@@ -7,5 +7,5 @@ import me.spoony.botanico.common.level.Chunk;
  */
 public interface IChunkGenerator {
     Chunk generateChunk(long x, long y);
-    long getSeed();
+    long getOverworldSeed();
 }

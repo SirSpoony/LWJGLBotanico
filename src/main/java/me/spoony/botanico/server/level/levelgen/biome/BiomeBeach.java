@@ -3,7 +3,7 @@ package me.spoony.botanico.server.level.levelgen.biome;
 import me.spoony.botanico.common.buildings.Buildings;
 import me.spoony.botanico.common.tiles.Tiles;
 import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureBlob;
-import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeaturePlant;
+import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureRandomPoint;
 import me.spoony.botanico.server.level.levelgen.buildingfeature.BuildingFeatureSurround;
 
 /**
@@ -16,12 +16,12 @@ public class BiomeBeach extends Biome {
 
     setTile(Tiles.SAND);
 
-    this.addBuildingFeature(new BuildingFeatureBlob(.005f, Buildings.ROCKS, Tiles.SAND, 3));
-    this.addBuildingFeature(new BuildingFeaturePlant(.005f, Buildings.BOULDER, 3, Tiles.SAND));
+    this.addBuildingFeature(new BuildingFeatureBlob(.005f, Buildings.ROCKS, 3));
+    this.addBuildingFeature(new BuildingFeatureRandomPoint(.005f, 3, Buildings.BOULDER, 0));
     this.addBuildingFeature(
-        new BuildingFeatureSurround(Buildings.BOULDER, 1, Buildings.ROCKS, Tiles.SAND, 3));
+        new BuildingFeatureSurround(Buildings.BOULDER, 1, Buildings.ROCKS, 3));
 
-    this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.REEDS, 2, Tiles.SAND));
-    this.addBuildingFeature(new BuildingFeaturePlant(.01f, Buildings.SEASHELL, 2, Tiles.SAND));
+    this.addBuildingFeature(new BuildingFeatureRandomPoint(.01f, 2, Buildings.REEDS, 0));
+    this.addBuildingFeature(new BuildingFeatureRandomPoint(.01f, 2, Buildings.SEASHELL, 0));
   }
 }
